@@ -1,8 +1,8 @@
-# [PROJECT NAME]
+# Battleship
 
-## [PROJECT LOGLINE]
+## A deadly game of war on the high seas
 
-[A MORE DETAIED DESCRIPTION OF THE PROJECT, IF NECESSARY]
+Play by yourself or with a friend! Place your ships, attack your opponent, and try to sink the enemy's fleet before they can sink yours.
 
 #### TO-DO NEXT
 
@@ -15,6 +15,17 @@
 ##### Style
 
 #### DONE
+
+_0.1.0_
+
+- write func to create Ship objects
+- write Ship.hit()
+- write Ship.isSunk()
+- test Ship
+- write func to create Gameboard objects
+- write Gameboard.placeShip()
+- write Gameboard.receiveAttack()
+- test Gameboard
 
 _0.0.1_
 
