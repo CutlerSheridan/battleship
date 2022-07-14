@@ -1,3 +1,4 @@
+/* eslint-disable no-plusplus */
 const Ship = (length) => {
   const isHorizontal = true;
   const hitSpaces = [];
@@ -49,7 +50,23 @@ const Gameboard = () => {
     }
     target.hasBeenHit = true;
   };
-  return { board, placeShip, receiveAttack };
+  const allShipsAreSunk = () => {
+    const ships = [];
+    board.forEach((row) => {
+      row.forEach((item) => {
+        if (item.position === 0) {
+          ships.push(item.ship);
+        }
+      });
+    });
+    return ships.every((ship) => ship.isSunk());
+  };
+  return {
+    board,
+    placeShip,
+    receiveAttack,
+    allShipsAreSunk,
+  };
 };
 
 export { Ship, Gameboard };

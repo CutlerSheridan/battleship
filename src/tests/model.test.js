@@ -43,3 +43,20 @@ test('Gameboard.receiveAttack() inflicts hit on ship in correct location', () =>
   expect(testBoard.board[3][3].hasBeenHit).toBe(true);
   expect(testShip.hitSpaces).toEqual([false, true, false, false]);
 });
+test('Gameboard.allShipsAreSunk() detects when two ships are not sunk', () => {
+  const testBoard = model.Gameboard();
+  const ship1 = model.Ship(3);
+  const ship2 = model.Ship(4);
+  testBoard.placeShip(ship1, [2, 1]);
+  testBoard.placeShip(ship2, [6, 6]);
+  expect(testBoard.allShipsAreSunk()).toBe(false);
+});
+test('Gameboard.allShipsAreSunk() detects when one ship is sunk', () => {
+  const testBoard = model.Gameboard();
+  const ship1 = model.Ship(3);
+  testBoard.placeShip(ship1, [2, 1]);
+  for (let i = 0; i < ship1.length; i++) {
+    testBoard.receiveAttack([2 + i, 1]);
+  }
+  expect(testBoard.allShipsAreSunk()).toBe(true);
+});

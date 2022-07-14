@@ -16,6 +16,11 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 #### DONE
 
+_0.1.1_
+
+- write func to check if all ships on gameboard have been sunk
+- test it
+
 _0.1.0_
 
 - write func to create Ship objects
