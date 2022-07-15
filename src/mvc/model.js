@@ -1,5 +1,5 @@
 /* eslint-disable no-plusplus */
-const Ship = (length) => {
+const Ship = (length, shipName = 'unnamed') => {
   const isHorizontal = true;
   const hitSpaces = [];
   for (let i = 0; i < length; i++) {
@@ -17,6 +17,7 @@ const Ship = (length) => {
   return {
     isHorizontal,
     length,
+    shipName,
     hitSpaces,
     hit,
     isSunk,
@@ -31,7 +32,7 @@ const Gameboard = () => {
       board[i].push({ hasBeenHit: false });
     }
   }
-  const placeShip = (ship, [x, y]) => {
+  const placeShip = (ship, [y, x]) => {
     let row = y;
     let col = x;
     for (let i = 0; i < ship.length; i++) {
@@ -43,7 +44,7 @@ const Gameboard = () => {
       board[row][col] = { ship, position: i, hasBeenHit: false };
     }
   };
-  const receiveAttack = ([x, y]) => {
+  const receiveAttack = ([y, x]) => {
     const target = board[y][x];
     if (target.ship) {
       target.ship.hit(target.position);
@@ -68,5 +69,33 @@ const Gameboard = () => {
     allShipsAreSunk,
   };
 };
+const Player = (name) => {
+  const gameboard = Gameboard();
+  let isHuman = true;
+  const togglePlayerController = () => {
+    isHuman = !isHuman;
+  };
+  const ships = [
+    Ship(5, 'aircraft carrier'),
+    Ship(4, 'battleship'),
+    Ship(3, 'cruiser'),
+    Ship(3, 'submarine'),
+    Ship(2, 'destroyer'),
+  ];
+  const attack = (enemyBoard, [y, x]) => {
+    enemyBoard.receiveAttack([y, x]);
+  };
 
-export { Ship, Gameboard };
+  return {
+    gameboard,
+    name,
+    togglePlayerController,
+    get isHuman() {
+      return isHuman;
+    },
+    ships,
+    attack,
+  };
+};
+
+export { Ship, Gameboard, Player };
