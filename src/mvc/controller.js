@@ -1,3 +1,3 @@
-const sum = (a, b) => a + b;
+import * as model from './model';
 
-export default { sum };
+export default {};

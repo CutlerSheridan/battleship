@@ -16,6 +16,12 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 #### DONE
 
+_0.2.1_
+
+- remove accidental destructuring in method parameters
+- get Player.isHuman funcitoning correctly since Player has an internal method that has to change each instance's own property
+- clean up model.js
+
 _0.2.0_
 
 - add another test for receiveAttack()

@@ -25,14 +25,14 @@ const Ship = (length, shipName = 'unnamed') => {
 };
 
 const Gameboard = () => {
-  const board = [];
+  const grid = [];
   for (let i = 0; i < 10; i++) {
-    board.push([]);
+    grid.push([]);
     for (let n = 0; n < 10; n++) {
-      board[i].push({ hasBeenHit: false });
+      grid[i].push({ hasBeenHit: false });
     }
   }
-  const placeShip = (ship, [y, x]) => {
+  const placeShip = (ship, y, x) => {
     let row = y;
     let col = x;
     for (let i = 0; i < ship.length; i++) {
@@ -41,11 +41,11 @@ const Gameboard = () => {
       } else {
         row = y + i;
       }
-      board[row][col] = { ship, position: i, hasBeenHit: false };
+      grid[row][col] = { ship, position: i, hasBeenHit: false };
     }
   };
-  const receiveAttack = ([y, x]) => {
-    const target = board[y][x];
+  const receiveAttack = (y, x) => {
+    const target = grid[y][x];
     if (target.ship) {
       target.ship.hit(target.position);
     }
@@ -53,17 +53,17 @@ const Gameboard = () => {
   };
   const allShipsAreSunk = () => {
     const ships = [];
-    board.forEach((row) => {
-      row.forEach((item) => {
-        if (item.position === 0) {
-          ships.push(item.ship);
+    grid.forEach((row) => {
+      row.forEach((space) => {
+        if (space.position === 0) {
+          ships.push(space.ship);
         }
       });
     });
     return ships.every((ship) => ship.isSunk());
   };
   return {
-    board,
+    grid,
     placeShip,
     receiveAttack,
     allShipsAreSunk,
@@ -82,8 +82,21 @@ const Player = (name) => {
     Ship(3, 'submarine'),
     Ship(2, 'destroyer'),
   ];
-  const attack = (enemyBoard, [y, x]) => {
-    enemyBoard.receiveAttack([y, x]);
+  const pickComputerSpace = (enemyGrid) => {
+    const y = Math.floor(Math.random() * 10);
+    const x = Math.floor(Math.random() * 10);
+    if (enemyGrid[y][x].hasBeenHit) {
+      return pickComputerSpace(enemyGrid);
+    }
+    return [y, x];
+  };
+  const attack = (enemy, y, x) => {
+    const enemyBoard = enemy.gameboard;
+    if (isHuman) {
+      enemyBoard.receiveAttack(y, x);
+    } else {
+      enemyBoard.receiveAttack(...pickComputerSpace(enemyBoard.grid));
+    }
   };
 
   return {
