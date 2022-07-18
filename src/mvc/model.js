@@ -1,6 +1,9 @@
 /* eslint-disable no-plusplus */
-const Ship = (length, shipName = 'unnamed') => {
-  const isHorizontal = true;
+const Ship = (length, name = 'unnamed') => {
+  let isHorizontal = true;
+  const turnShip = () => {
+    isHorizontal = !isHorizontal;
+  };
   const hitSpaces = [];
   for (let i = 0; i < length; i++) {
     hitSpaces.push(false);
@@ -15,9 +18,12 @@ const Ship = (length, shipName = 'unnamed') => {
     return false;
   };
   return {
-    isHorizontal,
+    get isHorizontal() {
+      return isHorizontal;
+    },
+    turnShip,
     length,
-    shipName,
+    name,
     hitSpaces,
     hit,
     isSunk,
@@ -83,8 +89,8 @@ const Player = (name) => {
     Ship(2, 'destroyer'),
   ];
   const pickComputerSpace = (enemyGrid) => {
-    const y = Math.floor(Math.random() * 10);
-    const x = Math.floor(Math.random() * 10);
+    const y = Math.floor(Math.random() * gameboard.grid.length);
+    const x = Math.floor(Math.random() * gameboard.grid.length);
     if (enemyGrid[y][x].hasBeenHit) {
       return pickComputerSpace(enemyGrid);
     }

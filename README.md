@@ -6,15 +6,27 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 #### TO-DO NEXT
 
+- start on UI; make p1's board display
+
 #### TO-DO LATER
 
 ##### Features
+
+- add ability to place ships
+- add ability to remove ship and replace it
 
 ##### Behavior
 
 ##### Style
 
 #### DONE
+
+_0.3.0_
+
+- write function to randomly place a ship if enough free spots are available in the correct direction
+- write function to randomly place all of a player's ships
+- write function to randomly decide if ship should be horizontal or vertical
+- fix areSpacesAvailableForShip() to work with vertical ships
 
 _0.2.1_
 

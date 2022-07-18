@@ -6,6 +6,11 @@ test('Ship() creates ship of correct length', () => {
   expect(testShip.length).toBe(4);
   expect(testShip.hitSpaces).toEqual([false, false, false, false]);
 });
+test('Ship.turnShip() turns ship', () => {
+  const testShip = model.Ship(4);
+  testShip.turnShip();
+  expect(testShip.isHorizontal).toBe(false);
+});
 test('Ship.hit() works for 1 hit', () => {
   const testShip = model.Ship(3);
   testShip.hit(0);
