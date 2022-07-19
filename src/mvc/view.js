@@ -15,17 +15,13 @@ const createGrid = () => {
       space.classList.add('grid-space');
       const spaceContent = document.createElement('div');
       spaceContent.classList.add('grid-spaceContent');
-      if (i === -1 && n === -1) {
-        // do nothing
-      } else if (i === -1 && n > -1) {
+      if (i === -1 && n > -1) {
         spaceContent.textContent = numArray[n];
       } else if (i > -1 && n === -1) {
         spaceContent.textContent = charArray[i];
-      } else {
-        space.dataset.row = i;
-        space.dataset.col = n;
-        spaceContent.textContent = '_';
       }
+      space.dataset.row = i;
+      space.dataset.col = n;
       space.append(spaceContent);
       gridInnerContainer.append(space);
     }
@@ -53,10 +49,11 @@ const displayOneShip = (y, x, ship, gridElement) => {
       row = y + i;
     }
     const shipSpace = gridElement.querySelector(
-      `.grid-space[data-row="${row}"][data-col="${col}"] > .grid-spaceContent`
+      `.grid-space[data-row="${row}"][data-col="${col}"]`
     );
-    shipSpace.textContent = ship.name.charAt(0).toUpperCase();
-    shipSpace.classList.add('grid-spaceContent-occupied');
+    const shipSpaceContent = shipSpace.querySelector('.grid-spaceContent');
+    shipSpaceContent.textContent = ship.name.charAt(0).toUpperCase();
+    shipSpace.classList.add('grid-space-occupied');
   }
 };
 

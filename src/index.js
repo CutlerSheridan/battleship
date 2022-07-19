@@ -10,6 +10,7 @@ controller.placeAllShips(p1);
 controller.placeAllShips(p2);
 
 const { body } = document;
+
 const p1Grid = view.createGrid();
 body.append(p1Grid);
 view.displayShipsOnGrid(p1, p1Grid);

@@ -21,6 +21,12 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 #### DONE
 
+_0.4.1_
+
+- make ships on board identifiable
+- make occupied spaces more visually distinct
+- add holes to empty spaces
+
 _0.4.0_
 
 - write function to create game board DOM element

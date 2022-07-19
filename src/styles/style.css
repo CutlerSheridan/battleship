@@ -15,6 +15,7 @@ body {
 }
 
 .grid-outerContainer {
+  margin-bottom: 1rem;
   padding: 2rem;
   height: 60rem;
   width: 60rem;
@@ -26,20 +27,31 @@ body {
   display: grid;
   grid-template: repeat(11, 1fr) / repeat(11, 1fr);
   gap: 0.5rem;
-  background: darkgrey;
+  background: lightblue;
 }
 .grid-space {
+  position: relative;
   display: grid;
   justify-content: center;
   align-items: center;
   background: white;
 }
-.grid-space:hover {
+.grid-space:not([data-row='-1'], [data-col='-1']):hover {
   background: pink;
 }
-.grid-spaceContent {
-  border: 1px solid pink;
-}
-.grid-spaceContent-occupied {
+.grid-space-occupied {
   font-weight: bold;
+  background: grey;
+  color: white;
+}
+.grid-space:not(.grid-space-occupied, [data-row='-1'], [data-col='-1'])
+  > .grid-spaceContent::after {
+  content: '';
+  position: absolute;
+  left: 35%;
+  top: 35%;
+  width: 30%;
+  height: 30%;
+  background: black;
+  border-radius: 1rem;
 }
