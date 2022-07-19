@@ -6,6 +6,7 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 #### TO-DO NEXT
 
+- add ability to display opponent board
 - add ability to click a ship to attack it
 
 #### TO-DO LATER
@@ -20,6 +21,10 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 ##### Style
 
 #### DONE
+
+_0.4.2_
+
+- add function to display pegs for where attacks have occured that convey if it was a hit
 
 _0.4.1_
 

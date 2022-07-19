@@ -52,9 +52,30 @@ const displayOneShip = (y, x, ship, gridElement) => {
       `.grid-space[data-row="${row}"][data-col="${col}"]`
     );
     const shipSpaceContent = shipSpace.querySelector('.grid-spaceContent');
-    shipSpaceContent.textContent = ship.name.charAt(0).toUpperCase();
     shipSpace.classList.add('grid-space-occupied');
+    console.log(ship);
+    if (ship.hitSpaces[i]) {
+      // shipSpace.classList.add('grid-space-hit');
+    } else {
+      shipSpaceContent.textContent = ship.name.charAt(0).toUpperCase();
+    }
+  }
+};
+const displayHits = (player, gridElement) => {
+  const gridObj = player.gameboard.grid;
+  for (let i = 0; i < gridObj.length; i++) {
+    for (let n = 0; n < gridObj[0].length; n++) {
+      if (gridObj[i][n].hasBeenHit) {
+        const space = gridElement.querySelector(`[data-row="${i}"][data-col="${n}"]`);
+        space.classList.add('grid-space-hit');
+
+        console.log('has been hit:');
+        console.log(`coords:  ${i}, ${n}`);
+        console.log(gridObj[i][n]);
+        console.log(space);
+      }
+    }
   }
 };
 
-export { createGrid, displayShipsOnGrid };
+export { createGrid, displayShipsOnGrid, displayHits };

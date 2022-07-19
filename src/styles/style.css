@@ -41,7 +41,7 @@ body {
 }
 .grid-space-occupied {
   font-weight: bold;
-  background: grey;
+  background: rgb(88, 87, 87);
   color: white;
 }
 .grid-space:not(.grid-space-occupied, [data-row='-1'], [data-col='-1'])
@@ -54,4 +54,17 @@ body {
   height: 30%;
   background: black;
   border-radius: 1rem;
+}
+.grid-space-hit::after {
+  content: '';
+  position: absolute;
+  left: 25%;
+  top: 25%;
+  width: 50%;
+  height: 50%;
+  background: goldenrod;
+  border-radius: 1rem;
+}
+.grid-space-hit.grid-space-occupied::after {
+  background: red;
 }
