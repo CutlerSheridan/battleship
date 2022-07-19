@@ -6,7 +6,7 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 #### TO-DO NEXT
 
-- start on UI; make p1's board display
+- add ability to click a ship to attack it
 
 #### TO-DO LATER
 
@@ -20,6 +20,12 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 ##### Style
 
 #### DONE
+
+_0.4.0_
+
+- write function to create game board DOM element
+- write function to display one ship
+- write function to display all of a player's ships
 
 _0.3.0_
 

@@ -13,3 +13,33 @@ body {
   width: 100%;
   font-size: 2rem;
 }
+
+.grid-outerContainer {
+  padding: 2rem;
+  height: 60rem;
+  width: 60rem;
+  background: black;
+}
+.grid-innerContainer {
+  height: 100%;
+  width: 100%;
+  display: grid;
+  grid-template: repeat(11, 1fr) / repeat(11, 1fr);
+  gap: 0.5rem;
+  background: darkgrey;
+}
+.grid-space {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  background: white;
+}
+.grid-space:hover {
+  background: pink;
+}
+.grid-spaceContent {
+  border: 1px solid pink;
+}
+.grid-spaceContent-occupied {
+  font-weight: bold;
+}

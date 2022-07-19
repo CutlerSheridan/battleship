@@ -9,6 +9,9 @@ module.exports = {
   devtool: 'inline-source-map',
   devServer: {
     static: './dist',
+    client: {
+      overlay: false,
+    },
   },
   plugins: [
     new HtmlWebpackPlugin({
