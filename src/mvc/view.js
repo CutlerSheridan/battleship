@@ -19,6 +19,8 @@ const createGrid = () => {
         spaceContent.textContent = numArray[n];
       } else if (i > -1 && n === -1) {
         spaceContent.textContent = charArray[i];
+      } else if (i > -1 && n > -1) {
+        space.classList.add('grid-space-empty');
       }
       space.dataset.row = i;
       space.dataset.col = n;
@@ -53,10 +55,8 @@ const displayOneShip = (y, x, ship, gridElement) => {
     );
     const shipSpaceContent = shipSpace.querySelector('.grid-spaceContent');
     shipSpace.classList.add('grid-space-occupied');
-    console.log(ship);
-    if (ship.hitSpaces[i]) {
-      // shipSpace.classList.add('grid-space-hit');
-    } else {
+    shipSpace.classList.remove('grid-space-empty');
+    if (!ship.hitSpaces[i]) {
       shipSpaceContent.textContent = ship.name.charAt(0).toUpperCase();
     }
   }
@@ -68,11 +68,11 @@ const displayHits = (player, gridElement) => {
       if (gridObj[i][n].hasBeenHit) {
         const space = gridElement.querySelector(`[data-row="${i}"][data-col="${n}"]`);
         space.classList.add('grid-space-hit');
-
-        console.log('has been hit:');
-        console.log(`coords:  ${i}, ${n}`);
-        console.log(gridObj[i][n]);
-        console.log(space);
+        if (gridObj[i][n].ship) {
+          if (!space.classList.contains('grid-space-occupied')) {
+            space.classList.add('grid-space-secretlyOccupied');
+          }
+        }
       }
     }
   }

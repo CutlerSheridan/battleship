@@ -13,9 +13,12 @@ body {
   width: 100%;
   font-size: 2rem;
 }
+.game-container {
+  display: flex;
+}
 
 .grid-outerContainer {
-  margin-bottom: 1rem;
+  margin: 1rem;
   padding: 2rem;
   height: 60rem;
   width: 60rem;
@@ -39,13 +42,12 @@ body {
 .grid-space:not([data-row='-1'], [data-col='-1']):hover {
   background: pink;
 }
-.grid-space-occupied {
+.grid-space-occupied:not(.grid-space-secretlyOccupied) {
   font-weight: bold;
   background: rgb(88, 87, 87);
   color: white;
 }
-.grid-space:not(.grid-space-occupied, [data-row='-1'], [data-col='-1'])
-  > .grid-spaceContent::after {
+.grid-space-empty > .grid-spaceContent::after {
   content: '';
   position: absolute;
   left: 35%;
@@ -65,6 +67,7 @@ body {
   background: goldenrod;
   border-radius: 1rem;
 }
-.grid-space-hit.grid-space-occupied::after {
+.grid-space-hit.grid-space-occupied::after,
+.grid-space-hit.grid-space-secretlyOccupied::after {
   background: red;
 }

@@ -6,21 +6,26 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 #### TO-DO NEXT
 
-- add ability to display opponent board
-- add ability to click a ship to attack it
+- add ability to click a space to attack it
 
 #### TO-DO LATER
 
 ##### Features
 
+- add basic opponent AI
 - add ability to place ships
 - add ability to remove ship and replace it
+- add complex opponent AI
 
 ##### Behavior
 
 ##### Style
 
 #### DONE
+
+_0.4.3_
+
+- add ability to display opponent board with invisible ships
 
 _0.4.2_
 
