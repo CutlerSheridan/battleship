@@ -6,11 +6,17 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 #### TO-DO NEXT
 
+- add button to go to next turn
+- add turns with computer
+- add basic opponent AI
+
 #### TO-DO LATER
 
 ##### Features
 
-- add basic opponent AI
+- add win detection
+- add turns with human
+- display opponent's ship statuses
 - add ability to place ships
 - add ability to remove ship and replace it
 - add complex opponent AI
@@ -25,6 +31,11 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 - maybe add sounds for hits and misses?
 
 #### DONE
+
+_0.5.3_
+
+- write function to create player name elements
+- move game setup to view.js
 
 _0.5.2_
 

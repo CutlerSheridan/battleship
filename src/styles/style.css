@@ -122,3 +122,22 @@ body {
 .grid-sunkSpace-verticalEnd::after {
   left: calc(calc(var(--grid-space-width) * 0.25) - var(--sunk-border-width));
 }
+
+.ui-playerNames {
+  margin: 1.5rem;
+  max-width: 50rem;
+  display: flex;
+  justify-content: space-around;
+  border: 3px solid pink;
+}
+.ui-name {
+  width: 15rem;
+  height: 7rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: orange;
+}
+.ui-name-current {
+  border: 3px solid purple;
+}

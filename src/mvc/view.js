@@ -1,3 +1,29 @@
+import * as controller from './controller';
+import * as model from './model';
+
+let currentTurn;
+
+const setupGame = () => {
+  const p1 = model.Player('P1');
+  const p2 = model.Player('P2');
+  controller.placeAllShips(p1);
+  controller.placeAllShips(p2);
+  currentTurn = p1.name;
+  const p1Grid = createGrid();
+  const p2Grid = createGrid();
+
+  const gameContainer = document.createElement('div');
+  gameContainer.classList.add('game-container');
+  gameContainer.append(p1Grid, p2Grid);
+  displayShipsOnGrid(p1, p1Grid);
+  const nameElementsContainer = createNameElements(p1, p2);
+
+  const { body } = document;
+  body.append(gameContainer, nameElementsContainer);
+
+  addAttackListeners(p2Grid, p1, p2);
+};
+
 const createGrid = () => {
   const gridOuterContainer = document.createElement('div');
   gridOuterContainer.classList.add('grid-outerContainer');
@@ -77,6 +103,22 @@ const displayHits = (player, gridElement) => {
     }
   }
 };
+const createNameElements = (p1, p2) => {
+  const names = [p1.name, p2.name];
+  const playerNamesElement = document.createElement('div');
+  playerNamesElement.classList.add('ui-playerNames');
+  names.forEach((name) => {
+    const nameElement = document.createElement('div');
+    nameElement.classList.add('ui-name');
+    nameElement.textContent = name;
+    if (name === currentTurn) {
+      nameElement.classList.add('ui-name-current');
+    }
+    playerNamesElement.append(nameElement);
+  });
+  return playerNamesElement;
+};
+
 const addAttackListeners = (gridElement, player, enemy) => {
   for (let i = 0; i < enemy.gameboard.grid.length; i++) {
     for (let n = 0; n < enemy.gameboard.grid[0].length; n++) {
@@ -129,10 +171,12 @@ const deleteGridElements = () => {
 };
 
 export {
+  setupGame,
   createGrid,
   displayShipsOnGrid,
   displayHits,
   addAttackListeners,
   launchAttack,
   deleteGridElements,
+  createNameElements,
 };
