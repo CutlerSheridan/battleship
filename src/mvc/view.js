@@ -81,7 +81,8 @@ const addAttackListeners = (gridElement, player, enemy) => {
   for (let i = 0; i < enemy.gameboard.grid.length; i++) {
     for (let n = 0; n < enemy.gameboard.grid[0].length; n++) {
       const space = gridElement.querySelector(`.grid-space[data-row="${i}"][data-col="${n}"]`);
-      space.addEventListener('click', () => {
+      space.addEventListener('click', (e) => {
+        e.preventDefault();
         launchAttack(space, player, enemy);
         displayNewHit(space, enemy, gridElement);
       });
@@ -101,12 +102,24 @@ const displayNewHit = (space, enemy, gridElement) => {
   if (ship) {
     space.classList.add('grid-space-secretlyOccupied');
     if (ship.isSunk()) {
-      ship.coordinates.forEach((coord) => {
+      const coords = ship.coordinates;
+      const orientation = ship.isHorizontal ? 'horizontal' : 'vertical';
+      for (let i = 0; i < coords.length; i++) {
         const sunkSpace = gridElement.querySelector(
-          `.grid-space[data-row="${coord.row}"][data-col="${coord.col}"]`
+          `.grid-space[data-row="${coords[i].row}"][data-col="${coords[i].col}"]`
         );
-        sunkSpace.classList.add('grid-space-sunk');
-      });
+        switch (i) {
+          case 0:
+            sunkSpace.classList.add(`grid-sunkSpace-${orientation}Start`);
+            break;
+          case coords.length - 1:
+            sunkSpace.classList.add(`grid-sunkSpace-${orientation}End`);
+            break;
+          default:
+            sunkSpace.classList.add(`grid-sunkSpace-${orientation}Middle`);
+            break;
+        }
+      }
     }
   }
 };

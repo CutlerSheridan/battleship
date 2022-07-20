@@ -6,8 +6,6 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 #### TO-DO NEXT
 
-- make function to find edges and ends of ships so I can tailor their look accordingly instead of just having each occupied space look the same
-
 #### TO-DO LATER
 
 ##### Features
@@ -19,11 +17,18 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 ##### Behavior
 
+- get ios touches to respond better when zoomed out
+
 ##### Style
 
+- figure out how to display on mobile
 - maybe add sounds for hits and misses?
 
 #### DONE
+
+_0.5.2_
+
+- make function to find edges and ends of ships so I can tailor their look accordingly instead of just having each sunk space look the same
 
 _0.5.1_
 

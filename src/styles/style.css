@@ -1,4 +1,7 @@
 :root {
+  --sunk-border-width: 5px;
+  --sunk-borders: var(--sunk-border-width) solid red;
+  --grid-space-width: 5rem;
   font-size: 62.5%;
 }
 * {
@@ -20,15 +23,15 @@ body {
 .grid-outerContainer {
   margin: 1rem;
   padding: 2rem;
-  height: 60rem;
-  width: 60rem;
+  /* height: 60rem;
+  width: 60rem; */
   background: black;
 }
 .grid-innerContainer {
   height: 100%;
   width: 100%;
   display: grid;
-  grid-template: repeat(11, 1fr) / repeat(11, 1fr);
+  grid-template: repeat(11, var(--grid-space-width)) / repeat(11, var(--grid-space-width));
   gap: 0.5rem;
   background: lightblue;
 }
@@ -38,9 +41,12 @@ body {
   justify-content: center;
   align-items: center;
   background: white;
+  -webkit-tap-highlight-color: rgb(0, 0, 0, 0);
 }
-.grid-space:not([data-row='-1'], [data-col='-1']):hover {
-  background: pink;
+@media (hover: hover) {
+  .grid-space:not([data-row='-1'], [data-col='-1']):hover {
+    background: pink;
+  }
 }
 .grid-space-occupied:not(.grid-space-secretlyOccupied) {
   font-weight: bold;
@@ -60,17 +66,59 @@ body {
 .grid-space-hit::after {
   content: '';
   position: absolute;
+  /* left: calc(var(--grid-space-width) * 0.25);
+  top: calc(var(--grid-space-width) * 0.25); */
+  width: calc(var(--grid-space-width) * 0.5);
+  height: calc(var(--grid-space-width) * 0.5);
   left: 25%;
   top: 25%;
-  width: 50%;
-  height: 50%;
+  /* width: 50%;
+  height: 50%; */
   background: goldenrod;
-  border-radius: 1rem;
+  border-radius: 5rem;
 }
 .grid-space-hit.grid-space-occupied::after,
 .grid-space-hit.grid-space-secretlyOccupied::after {
   background: red;
 }
-.grid-space-sunk {
-  border: 3px solid red;
+.grid-sunkSpace-horizontalStart {
+  border-left: var(--sunk-borders);
+  border-top: var(--sunk-borders);
+  border-bottom: var(--sunk-borders);
+}
+.grid-sunkSpace-horizontalMiddle {
+  border-top: var(--sunk-borders);
+  border-bottom: var(--sunk-borders);
+}
+.grid-sunkSpace-horizontalEnd {
+  border-top: var(--sunk-borders);
+  border-bottom: var(--sunk-borders);
+  border-right: var(--sunk-borders);
+}
+.grid-sunkSpace-verticalStart {
+  border-top: var(--sunk-borders);
+  border-right: var(--sunk-borders);
+  border-left: var(--sunk-borders);
+}
+.grid-sunkSpace-verticalMiddle {
+  border-right: var(--sunk-borders);
+  border-left: var(--sunk-borders);
+}
+.grid-sunkSpace-verticalEnd {
+  border-right: var(--sunk-borders);
+  border-left: var(--sunk-borders);
+  border-bottom: var(--sunk-borders);
+}
+.grid-sunkSpace-horizontalStart::after,
+.grid-sunkSpace-verticalStart::after {
+  left: calc(calc(var(--grid-space-width) * 0.25) - var(--sunk-border-width));
+  top: calc(calc(var(--grid-space-width) * 0.25) - var(--sunk-border-width));
+}
+.grid-sunkSpace-horizontalMiddle::after,
+.grid-sunkSpace-horizontalEnd::after {
+  top: calc(calc(var(--grid-space-width) * 0.25) - var(--sunk-border-width));
+}
+.grid-sunkSpace-verticalMiddle::after,
+.grid-sunkSpace-verticalEnd::after {
+  left: calc(calc(var(--grid-space-width) * 0.25) - var(--sunk-border-width));
 }
