@@ -36,3 +36,25 @@ gameContainer.append(p2Grid);
 view.displayHits(p2, p2Grid);
 
 body.append(gameContainer);
+
+view.addAttackListeners(p2Grid, p1, p2);
+
+// p2.attack(p1, 0, 0);
+// p2.attack(p1, 1, 1);
+
+// p1.attack(p2, 0, 0);
+// p1.attack(p2, 1, 1);
+
+// p2Grid.addEventListener('click', (e) => {
+//   // view.deleteGridElements();
+//   // const p1Grid = view.createGrid();
+//   // gameContainer.append(p1Grid);
+//   // view.displayShipsOnGrid(p1, p1Grid);
+//   // view.displayHits(p1, p1Grid);
+//   // const p2Grid = view.createGrid();
+//   // gameContainer.append(p2Grid);
+//   // // view.displayShipsOnGrid(p2, p2Grid);
+//   // view.displayHits(p2, p2Grid);
+
+//   // body.append(gameContainer);
+// });

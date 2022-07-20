@@ -77,5 +77,40 @@ const displayHits = (player, gridElement) => {
     }
   }
 };
+const addAttackListeners = (gridElement, player, enemy) => {
+  for (let i = 0; i < enemy.gameboard.grid.length; i++) {
+    for (let n = 0; n < enemy.gameboard.grid[0].length; n++) {
+      const space = gridElement.querySelector(`.grid-space[data-row="${i}"][data-col="${n}"]`);
+      space.addEventListener('click', (e) => {
+        launchAttack(e, player, enemy);
+        space.classList.add('grid-space-hit');
+        if (enemy.gameboard.grid[i][n].ship) {
+          space.classList.add('grid-space-secretlyOccupied');
+          if (enemy.gameboard.grid[i][n].ship.isSunk()) {
+            // show the ship is sunk
+          }
+        }
+      });
+    }
+  }
+};
+const launchAttack = (e, player, enemy) => {
+  const target = [e.currentTarget.dataset.row, e.currentTarget.dataset.col];
+  if (enemy.gameboard.grid[target[0]][target[1]].hasBeenHit) {
+    return;
+  }
+  player.attack(enemy, ...target);
+};
+const deleteGridElements = () => {
+  const gridElements = document.querySelectorAll('.grid-outerContainer');
+  gridElements.forEach((grid) => grid.remove());
+};
 
-export { createGrid, displayShipsOnGrid, displayHits };
+export {
+  createGrid,
+  displayShipsOnGrid,
+  displayHits,
+  addAttackListeners,
+  launchAttack,
+  deleteGridElements,
+};

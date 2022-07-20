@@ -6,7 +6,7 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 #### TO-DO NEXT
 
-- add ability to click a space to attack it
+- add coordinates object for each ship so a sunk ship can more easily add sunk class to all of that ship's spaces
 
 #### TO-DO LATER
 
@@ -21,7 +21,17 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 ##### Style
 
+- maybe add sounds for hits and misses?
+- should I make a function to find edges and ends of ships so I can tailor their look accordingly instead of just having each occupied space look the same?
+
 #### DONE
+
+_0.5.0_
+
+- write function to translate click target to an attack
+- write function to add attack event listeners to each enemy space
+- make clicked attacks show colored hit peg
+- write function to delete both grids
 
 _0.4.3_
 
