@@ -39,6 +39,18 @@ test('Gameboard.placeShip() correctly places horizontal ship', () => {
   expect(testBoard.grid[3][2]).toEqual({ ship: testShip, position: 0, hasBeenHit: false });
   expect(testBoard.grid[3][5]).toEqual({ ship: testShip, position: 3, hasBeenHit: false });
 });
+test("Gameboard.placeShip() changes ship object's coordinates", () => {
+  const testShip = model.Ship(3);
+  const testBoard = model.Gameboard();
+  testBoard.placeShip(testShip, 3, 2);
+  const expectedArray = [
+    { row: 3, col: 2 },
+    { row: 3, col: 3 },
+    { row: 3, col: 4 },
+  ];
+  expect(testShip.coordinates.length).toBe(3);
+  expect(testShip.coordinates).toEqual(expectedArray);
+});
 test('Gameboard.receiveAttack() inflicts hit on ship in correct location', () => {
   const testShip = model.Ship(4);
   const testBoard = model.Gameboard();

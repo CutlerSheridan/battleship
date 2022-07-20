@@ -6,7 +6,7 @@ test('launchAttack() successfully launches an attack against the enemy', () => {
   const p1 = model.Player('p1');
   const p2 = model.Player('p2');
   const e = {
-    target: {
+    currentTarget: {
       dataset: {
         row: 2,
         col: 2,

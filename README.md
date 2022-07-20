@@ -6,7 +6,7 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 #### TO-DO NEXT
 
-- add coordinates object for each ship so a sunk ship can more easily add sunk class to all of that ship's spaces
+- make function to find edges and ends of ships so I can tailor their look accordingly instead of just having each occupied space look the same
 
 #### TO-DO LATER
 
@@ -22,9 +22,13 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 ##### Style
 
 - maybe add sounds for hits and misses?
-- should I make a function to find edges and ends of ships so I can tailor their look accordingly instead of just having each occupied space look the same?
 
 #### DONE
+
+_0.5.1_
+
+- add coordinates object for each ship so a sunk ship can more easily add sunk class to all of that ship's spaces
+- extract displayNewHit() from addAttackListeners()
 
 _0.5.0_
 

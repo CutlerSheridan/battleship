@@ -71,3 +71,6 @@ body {
 .grid-space-hit.grid-space-secretlyOccupied::after {
   background: red;
 }
+.grid-space-sunk {
+  border: 3px solid red;
+}

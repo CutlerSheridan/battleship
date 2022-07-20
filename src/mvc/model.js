@@ -8,6 +8,7 @@ const Ship = (length, name = 'unnamed') => {
   for (let i = 0; i < length; i++) {
     hitSpaces.push(false);
   }
+  const coordinates = [];
   const hit = (position) => {
     hitSpaces[position] = true;
   };
@@ -24,6 +25,7 @@ const Ship = (length, name = 'unnamed') => {
     turnShip,
     length,
     name,
+    coordinates,
     hitSpaces,
     hit,
     isSunk,
@@ -48,6 +50,7 @@ const Gameboard = () => {
         row = y + i;
       }
       grid[row][col] = { ship, position: i, hasBeenHit: false };
+      ship.coordinates.push({ row, col });
     }
   };
   const receiveAttack = (y, x) => {

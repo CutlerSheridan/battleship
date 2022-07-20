@@ -81,25 +81,34 @@ const addAttackListeners = (gridElement, player, enemy) => {
   for (let i = 0; i < enemy.gameboard.grid.length; i++) {
     for (let n = 0; n < enemy.gameboard.grid[0].length; n++) {
       const space = gridElement.querySelector(`.grid-space[data-row="${i}"][data-col="${n}"]`);
-      space.addEventListener('click', (e) => {
-        launchAttack(e, player, enemy);
-        space.classList.add('grid-space-hit');
-        if (enemy.gameboard.grid[i][n].ship) {
-          space.classList.add('grid-space-secretlyOccupied');
-          if (enemy.gameboard.grid[i][n].ship.isSunk()) {
-            // show the ship is sunk
-          }
-        }
+      space.addEventListener('click', () => {
+        launchAttack(space, player, enemy);
+        displayNewHit(space, enemy, gridElement);
       });
     }
   }
 };
-const launchAttack = (e, player, enemy) => {
-  const target = [e.currentTarget.dataset.row, e.currentTarget.dataset.col];
+const launchAttack = (space, player, enemy) => {
+  const target = [space.dataset.row, space.dataset.col];
   if (enemy.gameboard.grid[target[0]][target[1]].hasBeenHit) {
     return;
   }
   player.attack(enemy, ...target);
+};
+const displayNewHit = (space, enemy, gridElement) => {
+  space.classList.add('grid-space-hit');
+  const { ship } = enemy.gameboard.grid[space.dataset.row][space.dataset.col];
+  if (ship) {
+    space.classList.add('grid-space-secretlyOccupied');
+    if (ship.isSunk()) {
+      ship.coordinates.forEach((coord) => {
+        const sunkSpace = gridElement.querySelector(
+          `.grid-space[data-row="${coord.row}"][data-col="${coord.col}"]`
+        );
+        sunkSpace.classList.add('grid-space-sunk');
+      });
+    }
+  }
 };
 const deleteGridElements = () => {
   const gridElements = document.querySelectorAll('.grid-outerContainer');
