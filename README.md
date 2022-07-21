@@ -6,10 +6,6 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 #### TO-DO NEXT
 
-- refactor to remove some parameters, make more modular
-  - add indentifying class to each grid
-  - should players and/or grids be global variables (within the module)?
-
 #### TO-DO LATER
 
 ##### Features
@@ -17,6 +13,7 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 - grey out next turn button until attack has been launched
 - make current player's grid show ships and current enemy's ships invisible
 - make current player indicator work
+- add dark screen between human player turns
 - add win detection
 - add turns with computer
 - add basic opponent AI
@@ -28,6 +25,7 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 ##### Behavior
 
 - get ios touches to respond better when zoomed out
+- extricate game loop from view.js somehow?
 
 ##### Style
 
@@ -35,6 +33,11 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 - maybe add sounds for hits and misses?
 
 #### DONE
+
+_0.6.1_
+
+- refactor view.js to remove some parameters, make more modular
+  - make p1 and p2 variables accessible to all of view.js
 
 _0.6.0_
 

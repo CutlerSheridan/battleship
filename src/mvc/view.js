@@ -2,9 +2,10 @@
 import * as controller from './controller';
 import * as model from './model';
 
+const p1 = model.Player('P1');
+const p2 = model.Player('P2');
+
 const setupGame = () => {
-  const p1 = model.Player('P1');
-  const p2 = model.Player('P2');
   controller.placeAllShips(p1);
   controller.placeAllShips(p2);
   const p1Grid = createGrid();
@@ -16,16 +17,11 @@ const setupGame = () => {
   gameContainer.classList.add('game-container');
   gameContainer.append(p1Grid, p2Grid);
   displayShipsOnGrid(p1, p1Grid);
-  const nameElementsContainer = createNameElements(p1, p2);
-  const nextTurnButton = createNextTurnButton();
-  uiContainer.append(nameElementsContainer, nextTurnButton);
+  displayShipsOnGrid(p2, p2Grid);
+  uiContainer.append(createNameElements(), createNextTurnButton());
 
   const { body } = document;
   body.append(gameContainer, uiContainer);
-
-  nextTurnButton.addEventListener('click', () => {
-    startTurn(p1, p2, p1Grid, p2Grid);
-  });
 };
 
 const createGrid = () => {
@@ -107,7 +103,7 @@ const displayHits = (player, gridElement) => {
     }
   }
 };
-const createNameElements = (p1, p2) => {
+const createNameElements = () => {
   const names = [p1.name, p2.name];
   const playerNamesElement = document.createElement('div');
   playerNamesElement.classList.add('ui-playerNames');
@@ -126,8 +122,13 @@ const createNextTurnButton = () => {
   return btn;
 };
 
-const startTurn = (p1, p2, grid1, grid2) => {
+const enableNextTurnButton = () => {
   const nextButton = document.querySelector('.ui-nextButton');
+  nextButton.addEventListener('click', startTurn);
+};
+const startTurn = () => {
+  const nextButton = document.querySelector('.ui-nextButton');
+  const [grid1, grid2] = Array.from(document.querySelectorAll('.grid-outerContainer'));
 
   if (!p1.currentTurn && !p2.currentTurn) {
     p1.changeTurn();
@@ -194,9 +195,6 @@ const displayNewHit = (space, enemy, gridElement) => {
     }
   }
 };
-// const toggleGridClickability = (gridElement) => {
-//   gridElement.classList.add('grid-space-unclickable');
-// };
 const getAllSpaceElements = (gridElement) => {
   const spaceElements = [];
   for (let i = 0; i < 10; i++) {
@@ -219,6 +217,7 @@ export {
   displayShipsOnGrid,
   displayHits,
   addAttackListeners,
+  enableNextTurnButton,
   launchAttack,
   deleteGridElements,
   createNameElements,
