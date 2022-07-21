@@ -84,6 +84,10 @@ const Player = (name) => {
   const togglePlayerController = () => {
     isHuman = !isHuman;
   };
+  let currentTurn = false;
+  const changeTurn = () => {
+    currentTurn = !currentTurn;
+  };
   const ships = [
     Ship(5, 'aircraft carrier'),
     Ship(4, 'battleship'),
@@ -114,6 +118,10 @@ const Player = (name) => {
     togglePlayerController,
     get isHuman() {
       return isHuman;
+    },
+    changeTurn,
+    get currentTurn() {
+      return currentTurn;
     },
     ships,
     attack,

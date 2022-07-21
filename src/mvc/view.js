@@ -1,27 +1,31 @@
+/* eslint-disable no-use-before-define */
 import * as controller from './controller';
 import * as model from './model';
-
-let currentTurn;
 
 const setupGame = () => {
   const p1 = model.Player('P1');
   const p2 = model.Player('P2');
   controller.placeAllShips(p1);
   controller.placeAllShips(p2);
-  currentTurn = p1.name;
   const p1Grid = createGrid();
   const p2Grid = createGrid();
 
+  const uiContainer = document.createElement('div');
+  uiContainer.classList.add('ui-container');
   const gameContainer = document.createElement('div');
   gameContainer.classList.add('game-container');
   gameContainer.append(p1Grid, p2Grid);
   displayShipsOnGrid(p1, p1Grid);
   const nameElementsContainer = createNameElements(p1, p2);
+  const nextTurnButton = createNextTurnButton();
+  uiContainer.append(nameElementsContainer, nextTurnButton);
 
   const { body } = document;
-  body.append(gameContainer, nameElementsContainer);
+  body.append(gameContainer, uiContainer);
 
-  addAttackListeners(p2Grid, p1, p2);
+  nextTurnButton.addEventListener('click', () => {
+    startTurn(p1, p2, p1Grid, p2Grid);
+  });
 };
 
 const createGrid = () => {
@@ -111,22 +115,46 @@ const createNameElements = (p1, p2) => {
     const nameElement = document.createElement('div');
     nameElement.classList.add('ui-name');
     nameElement.textContent = name;
-    if (name === currentTurn) {
-      nameElement.classList.add('ui-name-current');
-    }
     playerNamesElement.append(nameElement);
   });
   return playerNamesElement;
 };
+const createNextTurnButton = () => {
+  const btn = document.createElement('button');
+  btn.classList.add('ui-nextButton');
+  btn.textContent = 'Start game';
+  return btn;
+};
 
+const startTurn = (p1, p2, grid1, grid2) => {
+  const nextButton = document.querySelector('.ui-nextButton');
+
+  if (!p1.currentTurn && !p2.currentTurn) {
+    p1.changeTurn();
+    grid1.classList.add('grid-unclickable');
+    nextButton.textContent = 'Next turn';
+  } else {
+    p1.changeTurn();
+    p2.changeTurn();
+  }
+  const currentPlayer = p1.currentTurn ? p1 : p2;
+  const currentEnemy = p1.currentTurn ? p2 : p1;
+  const enemyGrid = p1.currentTurn ? grid2 : grid1;
+  enemyGrid.classList.remove('grid-unclickable');
+
+  addAttackListeners(enemyGrid, currentPlayer, currentEnemy);
+};
 const addAttackListeners = (gridElement, player, enemy) => {
   for (let i = 0; i < enemy.gameboard.grid.length; i++) {
     for (let n = 0; n < enemy.gameboard.grid[0].length; n++) {
       const space = gridElement.querySelector(`.grid-space[data-row="${i}"][data-col="${n}"]`);
       space.addEventListener('click', (e) => {
         e.preventDefault();
-        launchAttack(space, player, enemy);
+        const successfulAttack = launchAttack(space, player, enemy);
         displayNewHit(space, enemy, gridElement);
+        if (successfulAttack) {
+          gridElement.classList.add('grid-unclickable');
+        }
       });
     }
   }
@@ -134,9 +162,10 @@ const addAttackListeners = (gridElement, player, enemy) => {
 const launchAttack = (space, player, enemy) => {
   const target = [space.dataset.row, space.dataset.col];
   if (enemy.gameboard.grid[target[0]][target[1]].hasBeenHit) {
-    return;
+    return false;
   }
   player.attack(enemy, ...target);
+  return true;
 };
 const displayNewHit = (space, enemy, gridElement) => {
   space.classList.add('grid-space-hit');
@@ -164,6 +193,20 @@ const displayNewHit = (space, enemy, gridElement) => {
       }
     }
   }
+};
+// const toggleGridClickability = (gridElement) => {
+//   gridElement.classList.add('grid-space-unclickable');
+// };
+const getAllSpaceElements = (gridElement) => {
+  const spaceElements = [];
+  for (let i = 0; i < 10; i++) {
+    for (let n = 0; n < 10; n++) {
+      spaceElements.push(
+        gridElement.querySelector(`.grid-space[data-row="${i}"][data-col="${n}"]`)
+      );
+    }
+  }
+  return spaceElements;
 };
 const deleteGridElements = () => {
   const gridElements = document.querySelectorAll('.grid-outerContainer');

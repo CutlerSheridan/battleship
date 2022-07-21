@@ -20,11 +20,12 @@ body {
   display: flex;
 }
 
+.grid-unclickable {
+  pointer-events: none;
+}
 .grid-outerContainer {
   margin: 1rem;
   padding: 2rem;
-  /* height: 60rem;
-  width: 60rem; */
   background: black;
 }
 .grid-innerContainer {
@@ -66,14 +67,10 @@ body {
 .grid-space-hit::after {
   content: '';
   position: absolute;
-  /* left: calc(var(--grid-space-width) * 0.25);
-  top: calc(var(--grid-space-width) * 0.25); */
-  width: calc(var(--grid-space-width) * 0.5);
-  height: calc(var(--grid-space-width) * 0.5);
   left: 25%;
   top: 25%;
-  /* width: 50%;
-  height: 50%; */
+  width: calc(var(--grid-space-width) * 0.5);
+  height: calc(var(--grid-space-width) * 0.5);
   background: goldenrod;
   border-radius: 5rem;
 }
@@ -123,9 +120,14 @@ body {
   left: calc(calc(var(--grid-space-width) * 0.25) - var(--sunk-border-width));
 }
 
+.ui-container {
+  margin-left: 5rem;
+  display: flex;
+  align-items: center;
+  gap: 5rem;
+}
 .ui-playerNames {
-  margin: 1.5rem;
-  max-width: 50rem;
+  width: 50rem;
   display: flex;
   justify-content: space-around;
   border: 3px solid pink;
@@ -139,5 +141,9 @@ body {
   background: orange;
 }
 .ui-name-current {
-  border: 3px solid purple;
+  border: 10px solid purple;
+}
+.ui-nextButton {
+  height: 7rem;
+  width: 12rem;
 }

@@ -6,16 +6,20 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 #### TO-DO NEXT
 
-- add button to go to next turn
-- add turns with computer
-- add basic opponent AI
+- refactor to remove some parameters, make more modular
+  - add indentifying class to each grid
+  - should players and/or grids be global variables (within the module)?
 
 #### TO-DO LATER
 
 ##### Features
 
+- grey out next turn button until attack has been launched
+- make current player's grid show ships and current enemy's ships invisible
+- make current player indicator work
 - add win detection
-- add turns with human
+- add turns with computer
+- add basic opponent AI
 - display opponent's ship statuses
 - add ability to place ships
 - add ability to remove ship and replace it
@@ -31,6 +35,12 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 - maybe add sounds for hits and misses?
 
 #### DONE
+
+_0.6.0_
+
+- add button to go to next turn
+- add turn swapping after each hit with human players
+- make enemy grid unclickable after a successful attack
 
 _0.5.3_
 
