@@ -54,6 +54,9 @@ body {
   background: rgb(88, 87, 87);
   color: white;
 }
+.grid-space-empty {
+  color: transparent;
+}
 .grid-space-empty > .grid-spaceContent::after {
   content: '';
   position: absolute;
@@ -146,4 +149,8 @@ body {
 .ui-nextButton {
   height: 7rem;
   width: 12rem;
+}
+.ui-nextButton-unclickable {
+  color: grey;
+  pointer-events: none;
 }

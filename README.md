@@ -6,21 +6,20 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 #### TO-DO NEXT
 
+- add win detection
+
 #### TO-DO LATER
 
 ##### Features
 
-- grey out next turn button until attack has been launched
-- make current player's grid show ships and current enemy's ships invisible
-- make current player indicator work
-- add dark screen between human player turns
-- add win detection
 - add turns with computer
 - add basic opponent AI
+- add dark screen between human player turns
 - display opponent's ship statuses
 - add ability to place ships
 - add ability to remove ship and replace it
 - add complex opponent AI
+- add ability for two people at separate computers to play by calling out coordinates
 
 ##### Behavior
 
@@ -33,6 +32,13 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 - maybe add sounds for hits and misses?
 
 #### DONE
+
+_0.6.2_
+
+- grey out next turn button until attack has been launched
+- make current player indicator work
+- make current player's grid show ships and current enemy's ships invisible
+- optimize swapping visibility by giving each ship space a class regardless of whether they're visibile
 
 _0.6.1_
 

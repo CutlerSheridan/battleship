@@ -22,6 +22,7 @@ const setupGame = () => {
 
   const { body } = document;
   body.append(gameContainer, uiContainer);
+  assignAllShipSpacesClass();
 };
 
 const createGrid = () => {
@@ -87,6 +88,21 @@ const displayOneShip = (y, x, ship, gridElement) => {
     }
   }
 };
+const assignAllShipSpacesClass = () => {
+  const gridElements = document.querySelectorAll('.grid-outerContainer');
+  const playerGrids = [p1.gameboard.grid, p2.gameboard.grid];
+
+  gridElements.forEach((grid, index) => {
+    for (let i = 0; i < playerGrids[index].length; i++) {
+      for (let n = 0; n < playerGrids[index][0].length; n++) {
+        if (playerGrids[index][i][n].ship) {
+          const space = grid.querySelector(`.grid-space[data-row="${i}"][data-col="${n}"]`);
+          space.classList.add('grid-space-shipHold');
+        }
+      }
+    }
+  });
+};
 const displayHits = (player, gridElement) => {
   const gridObj = player.gameboard.grid;
   for (let i = 0; i < gridObj.length; i++) {
@@ -107,12 +123,12 @@ const createNameElements = () => {
   const names = [p1.name, p2.name];
   const playerNamesElement = document.createElement('div');
   playerNamesElement.classList.add('ui-playerNames');
-  names.forEach((name) => {
+  for (let i = 0; i < 2; i++) {
     const nameElement = document.createElement('div');
     nameElement.classList.add('ui-name');
-    nameElement.textContent = name;
+    nameElement.textContent = names[i];
     playerNamesElement.append(nameElement);
-  });
+  }
   return playerNamesElement;
 };
 const createNextTurnButton = () => {
@@ -128,15 +144,22 @@ const enableNextTurnButton = () => {
 };
 const startTurn = () => {
   const nextButton = document.querySelector('.ui-nextButton');
+  nextButton.classList.add('ui-nextButton-unclickable');
   const [grid1, grid2] = Array.from(document.querySelectorAll('.grid-outerContainer'));
+  const nameElements = document.querySelectorAll('.ui-name');
 
   if (!p1.currentTurn && !p2.currentTurn) {
     p1.changeTurn();
     grid1.classList.add('grid-unclickable');
     nextButton.textContent = 'Next turn';
+    nameElements[0].classList.add('ui-name-current');
+    toggleShipVisibility(grid2);
   } else {
     p1.changeTurn();
     p2.changeTurn();
+    toggleShipVisibility(grid1);
+    toggleShipVisibility(grid2);
+    nameElements.forEach((name) => name.classList.toggle('ui-name-current'));
   }
   const currentPlayer = p1.currentTurn ? p1 : p2;
   const currentEnemy = p1.currentTurn ? p2 : p1;
@@ -144,6 +167,17 @@ const startTurn = () => {
   enemyGrid.classList.remove('grid-unclickable');
 
   addAttackListeners(enemyGrid, currentPlayer, currentEnemy);
+};
+const toggleShipVisibility = (gridElement) => {
+  const shipSpaces = gridElement.querySelectorAll('.grid-space-shipHold');
+  shipSpaces.forEach((space) => {
+    space.classList.toggle('grid-space-occupied');
+    if (space.classList.contains('grid-space-hit')) {
+      space.classList.toggle('grid-space-secretlyOccupied');
+    } else {
+      space.classList.toggle('grid-space-empty');
+    }
+  });
 };
 const addAttackListeners = (gridElement, player, enemy) => {
   for (let i = 0; i < enemy.gameboard.grid.length; i++) {
@@ -155,6 +189,8 @@ const addAttackListeners = (gridElement, player, enemy) => {
         displayNewHit(space, enemy, gridElement);
         if (successfulAttack) {
           gridElement.classList.add('grid-unclickable');
+          const nextButton = document.querySelector('.ui-nextButton');
+          nextButton.classList.remove('ui-nextButton-unclickable');
         }
       });
     }
