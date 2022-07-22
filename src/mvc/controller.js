@@ -42,4 +42,18 @@ const areSpacesAvailableForShip = (player, ship, y, x) => {
   }
   return true;
 };
-export { placeAllShips, randomlyPlaceShip, getRandomCoordinates, areSpacesAvailableForShip };
+const pickComputerMove = (enemy) => {
+  const row = Math.floor(Math.random() * enemy.gameboard.grid.length);
+  const col = Math.floor(Math.random() * enemy.gameboard.grid.length);
+  if (enemy.gameboard.grid[row][col].hasBeenHit) {
+    return pickComputerMove(enemy);
+  }
+  return [row, col];
+};
+export {
+  placeAllShips,
+  randomlyPlaceShip,
+  getRandomCoordinates,
+  areSpacesAvailableForShip,
+  pickComputerMove,
+};

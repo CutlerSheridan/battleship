@@ -89,27 +89,15 @@ const Player = (name) => {
     currentTurn = !currentTurn;
   };
   const ships = [
-    // Ship(5, 'aircraft carrier'),
-    // Ship(4, 'battleship'),
-    // Ship(3, 'cruiser'),
-    // Ship(3, 'submarine'),
+    Ship(5, 'aircraft carrier'),
+    Ship(4, 'battleship'),
+    Ship(3, 'cruiser'),
+    Ship(3, 'submarine'),
     Ship(2, 'destroyer'),
   ];
-  const pickComputerSpace = (enemyGrid) => {
-    const y = Math.floor(Math.random() * gameboard.grid.length);
-    const x = Math.floor(Math.random() * gameboard.grid.length);
-    if (enemyGrid[y][x].hasBeenHit) {
-      return pickComputerSpace(enemyGrid);
-    }
-    return [y, x];
-  };
   const attack = (enemy, y, x) => {
     const enemyBoard = enemy.gameboard;
-    if (isHuman) {
-      enemyBoard.receiveAttack(y, x);
-    } else {
-      enemyBoard.receiveAttack(...pickComputerSpace(enemyBoard.grid));
-    }
+    enemyBoard.receiveAttack(y, x);
   };
 
   return {

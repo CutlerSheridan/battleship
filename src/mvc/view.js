@@ -199,7 +199,9 @@ const displayNewHit = (space, enemy, gridElement) => {
   space.classList.add('grid-space-hit');
   const { ship } = enemy.gameboard.grid[space.dataset.row][space.dataset.col];
   if (ship) {
-    space.classList.add('grid-space-secretlyOccupied');
+    if (!space.classList.contains('grid-space-occupied')) {
+      space.classList.add('grid-space-secretlyOccupied');
+    }
     if (ship.isSunk()) {
       const coords = ship.coordinates;
       const orientation = ship.isHorizontal ? 'horizontal' : 'vertical';
@@ -262,8 +264,19 @@ const startTurn = () => {
     }
     nameElements.forEach((name) => name.classList.toggle('ui-name-current'));
   }
+  const currentPlayer = p1.currentTurn ? p1 : p2;
   const enemyGrid = p1.currentTurn ? grid2 : grid1;
-  enemyGrid.classList.remove('grid-unclickable');
+  if (currentPlayer.isHuman) {
+    enemyGrid.classList.remove('grid-unclickable');
+  } else {
+    const currentEnemy = p1.currentTurn ? p2 : p1;
+    const [row, col] = controller.pickComputerMove(currentEnemy);
+    // currentPlayer.attack(currentEnemy, ...attackCoords);
+    const targetSpace = enemyGrid.querySelector(
+      `.grid-space[data-row="${row}"][data-col="${col}"]`
+    );
+    attackHandler(enemyGrid, currentPlayer, currentEnemy, targetSpace);
+  }
 };
 const toggleShipVisibility = (gridElement) => {
   const shipSpaces = gridElement.querySelectorAll('.grid-space-shipHold');

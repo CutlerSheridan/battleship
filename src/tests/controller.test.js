@@ -41,3 +41,22 @@ test('randomlyPlaceShip() places a ship', () => {
     )
   ).toBe(true);
 });
+
+test('pickComputerMove() returns coordinate array', () => {
+  const enemy = model.Player('enemy');
+  const coords = controller.pickComputerMove(enemy);
+  expect(coords.length).toBe(2);
+  expect(Array.isArray(coords)).toBe(true);
+});
+test('pickComputerMove() only returns unused coordinates', () => {
+  const enemy = model.Player('enemy');
+  for (let i = 0; i < enemy.gameboard.grid.length; i++) {
+    for (let n = 0; n < enemy.gameboard.grid.length; n++) {
+      if (i !== 0 || n !== 0) {
+        enemy.gameboard.receiveAttack(i, n);
+      }
+    }
+  }
+  const coords = controller.pickComputerMove(enemy);
+  expect(coords).toEqual([0, 0]);
+});

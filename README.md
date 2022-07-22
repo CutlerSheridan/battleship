@@ -6,19 +6,18 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 #### TO-DO NEXT
 
-- add turns with computer
-- add basic opponent AI
+- add slight delay before computer goes
 
 #### TO-DO LATER
 
 ##### Features
 
-- add dark screen between human player turns
 - show which ship was hit
+- add complex opponent AI
+- add dark screen between human player turns
 - display opponent's ship statuses
 - add ability to place ships
 - add ability to remove ship and replace it
-- add complex opponent AI
 - add ability for two people at separate computers to play by calling out coordinates
 
 ##### Behavior
@@ -33,6 +32,12 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 - maybe add sounds for hits and misses?
 
 #### DONE
+
+_0.7.0_
+
+- add turns with computer
+- add random opponent AI
+- fix hits from computer displaying as secretlyOccupied
 
 _0.6.4_
 
