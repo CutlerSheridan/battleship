@@ -34,6 +34,10 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 #### DONE
 
+_0.6.4_
+
+- refactor addAttackListeners() so it only applies each listener once
+
 _0.6.3_
 
 - add win detection

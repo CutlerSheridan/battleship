@@ -8,6 +8,7 @@ let p2;
 const setupGame = () => {
   p1 = model.Player('p1');
   p2 = model.Player('p2');
+  p2.togglePlayerController();
   controller.placeAllShips(p1);
   controller.placeAllShips(p2);
   const p1Grid = createGrid();
@@ -26,6 +27,9 @@ const setupGame = () => {
   const { body } = document;
   body.append(gameContainer, uiContainer);
   assignAllShipSpacesClass();
+  addAttackListeners();
+  p1Grid.classList.add('grid-unclickable');
+  p2Grid.classList.add('grid-unclickable');
 
   nextButton.addEventListener('click', startTurn);
 };
@@ -142,58 +146,24 @@ const createNextTurnButton = () => {
   btn.textContent = 'Start game';
   return btn;
 };
-
-const enableNextTurnButton = () => {
-  const nextButton = document.querySelector('.ui-nextButton');
-  nextButton.addEventListener('click', startTurn);
-};
-const startTurn = () => {
-  const nextButton = document.querySelector('.ui-nextButton');
-  nextButton.classList.add('ui-nextButton-unclickable');
-  const [grid1, grid2] = Array.from(document.querySelectorAll('.grid-outerContainer'));
-  const nameElements = document.querySelectorAll('.ui-name');
-
-  if (!p1.currentTurn && !p2.currentTurn) {
-    p1.changeTurn();
-    grid1.classList.add('grid-unclickable');
-    nextButton.textContent = 'Next turn';
-    nameElements[0].classList.add('ui-name-current');
-    toggleShipVisibility(grid2);
-  } else {
-    p1.changeTurn();
-    p2.changeTurn();
-    toggleShipVisibility(grid1);
-    toggleShipVisibility(grid2);
-    nameElements.forEach((name) => name.classList.toggle('ui-name-current'));
-  }
-  const currentPlayer = p1.currentTurn ? p1 : p2;
-  const currentEnemy = p1.currentTurn ? p2 : p1;
-  const enemyGrid = p1.currentTurn ? grid2 : grid1;
-  enemyGrid.classList.remove('grid-unclickable');
-
-  addAttackListeners(enemyGrid, currentPlayer, currentEnemy);
-};
-const toggleShipVisibility = (gridElement) => {
-  const shipSpaces = gridElement.querySelectorAll('.grid-space-shipHold');
-  shipSpaces.forEach((space) => {
-    space.classList.toggle('grid-space-occupied');
-    if (space.classList.contains('grid-space-hit')) {
-      space.classList.toggle('grid-space-secretlyOccupied');
-    } else {
-      space.classList.toggle('grid-space-empty');
+const addAttackListeners = () => {
+  const gridElements = document.querySelectorAll('.grid-outerContainer');
+  const players = [p2, p1];
+  players.forEach((p, index) => {
+    if (p.isHuman) {
+      const enemySpaces = getAllSpaceElements(gridElements[index]);
+      enemySpaces.forEach((space) =>
+        space.addEventListener(
+          'click',
+          (e) => {
+            e.preventDefault();
+            attackHandler(gridElements[index], p, players[1 - index], space);
+          },
+          { once: true }
+        )
+      );
     }
   });
-};
-const addAttackListeners = (gridElement, player, enemy) => {
-  for (let i = 0; i < enemy.gameboard.grid.length; i++) {
-    for (let n = 0; n < enemy.gameboard.grid[0].length; n++) {
-      const space = gridElement.querySelector(`.grid-space[data-row="${i}"][data-col="${n}"]`);
-      space.addEventListener('click', (e) => {
-        e.preventDefault();
-        attackHandler(gridElement, player, enemy, space);
-      });
-    }
-  }
 };
 const attackHandler = (gridElement, player, enemy, space) => {
   const successfulAttack = launchAttack(space, player, enemy);
@@ -252,7 +222,6 @@ const displayNewHit = (space, enemy, gridElement) => {
     }
   }
 };
-
 const endGame = (winner) => {
   console.log(`${winner} wins!`);
   const nextButton = document.querySelector('.ui-nextButton');
@@ -268,6 +237,45 @@ const endGame = (winner) => {
   );
 };
 
+const enableNextTurnButton = () => {
+  const nextButton = document.querySelector('.ui-nextButton');
+  nextButton.addEventListener('click', startTurn);
+};
+const startTurn = () => {
+  const nextButton = document.querySelector('.ui-nextButton');
+  nextButton.classList.add('ui-nextButton-unclickable');
+  const [grid1, grid2] = Array.from(document.querySelectorAll('.grid-outerContainer'));
+  const nameElements = document.querySelectorAll('.ui-name');
+
+  if (!p1.currentTurn && !p2.currentTurn) {
+    p1.changeTurn();
+    grid1.classList.add('grid-unclickable');
+    nextButton.textContent = 'Next turn';
+    nameElements[0].classList.add('ui-name-current');
+    toggleShipVisibility(grid2);
+  } else {
+    p1.changeTurn();
+    p2.changeTurn();
+    if (p1.isHuman && p2.isHuman) {
+      toggleShipVisibility(grid2);
+      toggleShipVisibility(grid1);
+    }
+    nameElements.forEach((name) => name.classList.toggle('ui-name-current'));
+  }
+  const enemyGrid = p1.currentTurn ? grid2 : grid1;
+  enemyGrid.classList.remove('grid-unclickable');
+};
+const toggleShipVisibility = (gridElement) => {
+  const shipSpaces = gridElement.querySelectorAll('.grid-space-shipHold');
+  shipSpaces.forEach((space) => {
+    space.classList.toggle('grid-space-occupied');
+    if (space.classList.contains('grid-space-hit')) {
+      space.classList.toggle('grid-space-secretlyOccupied');
+    } else {
+      space.classList.toggle('grid-space-empty');
+    }
+  });
+};
 const getAllSpaceElements = (gridElement) => {
   const spaceElements = [];
   for (let i = 0; i < 10; i++) {
