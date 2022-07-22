@@ -89,10 +89,10 @@ const Player = (name) => {
     currentTurn = !currentTurn;
   };
   const ships = [
-    Ship(5, 'aircraft carrier'),
-    Ship(4, 'battleship'),
-    Ship(3, 'cruiser'),
-    Ship(3, 'submarine'),
+    // Ship(5, 'aircraft carrier'),
+    // Ship(4, 'battleship'),
+    // Ship(3, 'cruiser'),
+    // Ship(3, 'submarine'),
     Ship(2, 'destroyer'),
   ];
   const pickComputerSpace = (enemyGrid) => {

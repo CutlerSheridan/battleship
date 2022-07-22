@@ -6,15 +6,15 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 #### TO-DO NEXT
 
-- add win detection
+- add turns with computer
+- add basic opponent AI
 
 #### TO-DO LATER
 
 ##### Features
 
-- add turns with computer
-- add basic opponent AI
 - add dark screen between human player turns
+- show which ship was hit
 - display opponent's ship statuses
 - add ability to place ships
 - add ability to remove ship and replace it
@@ -28,10 +28,16 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 ##### Style
 
+- decide on style
 - figure out how to display on mobile
 - maybe add sounds for hits and misses?
 
 #### DONE
+
+_0.6.3_
+
+- add win detection
+- make next button restart game after someone wins
 
 _0.6.2_
 

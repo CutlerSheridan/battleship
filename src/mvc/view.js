@@ -2,10 +2,12 @@
 import * as controller from './controller';
 import * as model from './model';
 
-const p1 = model.Player('P1');
-const p2 = model.Player('P2');
+let p1;
+let p2;
 
 const setupGame = () => {
+  p1 = model.Player('p1');
+  p2 = model.Player('p2');
   controller.placeAllShips(p1);
   controller.placeAllShips(p2);
   const p1Grid = createGrid();
@@ -18,11 +20,14 @@ const setupGame = () => {
   gameContainer.append(p1Grid, p2Grid);
   displayShipsOnGrid(p1, p1Grid);
   displayShipsOnGrid(p2, p2Grid);
-  uiContainer.append(createNameElements(), createNextTurnButton());
+  const nextButton = createNextTurnButton();
+  uiContainer.append(createNameElements(), nextButton);
 
   const { body } = document;
   body.append(gameContainer, uiContainer);
   assignAllShipSpacesClass();
+
+  nextButton.addEventListener('click', startTurn);
 };
 
 const createGrid = () => {
@@ -185,14 +190,30 @@ const addAttackListeners = (gridElement, player, enemy) => {
       const space = gridElement.querySelector(`.grid-space[data-row="${i}"][data-col="${n}"]`);
       space.addEventListener('click', (e) => {
         e.preventDefault();
-        const successfulAttack = launchAttack(space, player, enemy);
-        displayNewHit(space, enemy, gridElement);
-        if (successfulAttack) {
-          gridElement.classList.add('grid-unclickable');
-          const nextButton = document.querySelector('.ui-nextButton');
-          nextButton.classList.remove('ui-nextButton-unclickable');
-        }
+        attackHandler(gridElement, player, enemy, space);
       });
+    }
+  }
+};
+const attackHandler = (gridElement, player, enemy, space) => {
+  const successfulAttack = launchAttack(space, player, enemy);
+  displayNewHit(space, enemy, gridElement);
+  if (successfulAttack) {
+    gridElement.classList.add('grid-unclickable');
+    const nextButton = document.querySelector('.ui-nextButton');
+    nextButton.classList.remove('ui-nextButton-unclickable');
+    if (enemy === p1) {
+      const [p1Success, p2Success] = [
+        p2.gameboard.allShipsAreSunk(),
+        p1.gameboard.allShipsAreSunk(),
+      ];
+      if (p1Success && p2Success) {
+        endGame('tie');
+      } else if (p1Success) {
+        endGame(p1.name);
+      } else if (p2Success) {
+        endGame(p2.name);
+      }
     }
   }
 };
@@ -231,6 +252,22 @@ const displayNewHit = (space, enemy, gridElement) => {
     }
   }
 };
+
+const endGame = (winner) => {
+  console.log(`${winner} wins!`);
+  const nextButton = document.querySelector('.ui-nextButton');
+  nextButton.removeEventListener('click', startTurn);
+  nextButton.textContent = 'New game?';
+  nextButton.addEventListener(
+    'click',
+    () => {
+      deleteDOMElements();
+      setupGame();
+    },
+    { once: true }
+  );
+};
+
 const getAllSpaceElements = (gridElement) => {
   const spaceElements = [];
   for (let i = 0; i < 10; i++) {
@@ -242,9 +279,12 @@ const getAllSpaceElements = (gridElement) => {
   }
   return spaceElements;
 };
-const deleteGridElements = () => {
-  const gridElements = document.querySelectorAll('.grid-outerContainer');
-  gridElements.forEach((grid) => grid.remove());
+const deleteDOMElements = () => {
+  const content = [
+    document.querySelector('.game-container'),
+    document.querySelector('.ui-container'),
+  ];
+  content.forEach((item) => item.remove());
 };
 
 export {
@@ -255,6 +295,5 @@ export {
   addAttackListeners,
   enableNextTurnButton,
   launchAttack,
-  deleteGridElements,
   createNameElements,
 };
