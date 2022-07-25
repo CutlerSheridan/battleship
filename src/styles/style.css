@@ -160,3 +160,14 @@ body {
 .ui-resultContainer-hidden {
   visibility: hidden;
 }
+.ui-result {
+  color: red;
+}
+.ui-matchResult {
+  font-size: 3rem;
+  font-weight: bold;
+  color: green;
+}
+.ui-matchResult-hidden {
+  visibility: hidden;
+}

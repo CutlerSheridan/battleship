@@ -8,8 +8,6 @@ let p2;
 const setupGame = () => {
   p1 = model.Player('p1');
   p2 = model.Player('p2');
-  // p1.togglePlayerController();
-  // p2.togglePlayerController();
   controller.placeAllShips(p1);
   controller.placeAllShips(p2);
   const p1Grid = createGrid();
@@ -23,7 +21,7 @@ const setupGame = () => {
   displayShipsOnGrid(p1, p1Grid);
   displayShipsOnGrid(p2, p2Grid);
   const nextButton = createNextTurnButton();
-  uiContainer.append(createNameElements(), nextButton, createAttackResult());
+  uiContainer.append(createNameElements(), nextButton, createAttackResult(), createMatchResult());
 
   const { body } = document;
   body.append(gameContainer, uiContainer);
@@ -157,15 +155,11 @@ const handlePlayerTypeToggles = () => {
   const originalSettings = [typeToggles[0].checked, typeToggles[1].checked];
   const originalButtonText = [];
   const isButtonUnclickable = [];
-  // const firstIndex = [];
 
   typeToggles.forEach((toggle, index) => {
     toggle.addEventListener('change', () => {
       originalButtonText.push(nextButton.textContent);
       isButtonUnclickable.push(nextButton.classList.contains('ui-nextButton-unclickable'));
-      // originalSettings.push(typeToggles[0].checked, typeToggles[1].checked);
-      // firstIndex.push(index);
-      // originalSettings[firstIndex[0]] = !originalSettings[firstIndex[0]];
       if (
         toggle.checked !== originalSettings[index] ||
         typeToggles[1 - index].checked !== originalSettings[1 - index]
@@ -203,6 +197,12 @@ const createAttackResult = () => {
   resultContainer.append(result);
   resultContainer.classList.add('ui-resultContainer-hidden');
   return resultContainer;
+};
+const createMatchResult = () => {
+  const resultEl = document.createElement('div');
+  resultEl.classList.add('ui-matchResult');
+  resultEl.classList.add('ui-matchResult-hidden');
+  return resultEl;
 };
 const enableNextTurnButton = () => {
   const nextButton = document.querySelector('.ui-nextButton');
@@ -354,7 +354,9 @@ const displayAttackResult = (enemy, space) => {
   }
 };
 const endGame = (winner) => {
-  console.log(`${winner} wins!`);
+  const resultEl = document.querySelector('.ui-matchResult');
+  resultEl.textContent = winner === 'tie' ? 'Tie!' : `${winner} wins!`;
+  resultEl.classList.remove('ui-matchResult-hidden');
   const nextButton = document.querySelector('.ui-nextButton');
   nextButton.removeEventListener('click', startTurn);
   nextButton.textContent = 'New game?';

@@ -6,18 +6,16 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 #### TODO NEXT
 
-- test control toggle in different scenarios
-- add win message
+- add complex opponent AI
 
 #### TODO LATER
 
 ##### Features
 
-- add complex opponent AI
-- add dark screen between human player turns
-- display opponent's ship statuses
 - add ability to place ships
 - add ability to remove ship and replace it
+- add dark screen between human player turns
+- display opponent's ship statuses
 - add ability for two people at separate computers to play by calling out coordinates
 
 ##### Behavior
@@ -33,6 +31,10 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 - add brief border on attacked squares
 
 #### DONE
+
+_0.8.1_
+
+- add win message
 
 _0.8.0_
 
