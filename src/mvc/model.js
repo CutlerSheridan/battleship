@@ -89,11 +89,11 @@ const Player = (name) => {
     currentTurn = !currentTurn;
   };
   const ships = [
-    Ship(5, 'aircraft carrier'),
-    Ship(4, 'battleship'),
-    Ship(3, 'cruiser'),
-    Ship(3, 'submarine'),
-    Ship(2, 'destroyer'),
+    Ship(5, 'Aircraft Carrier'),
+    Ship(4, 'Battleship'),
+    Ship(3, 'Cruiser'),
+    Ship(3, 'Submarine'),
+    Ship(2, 'Destroyer'),
   ];
   const attack = (enemy, y, x) => {
     const enemyBoard = enemy.gameboard;

@@ -22,7 +22,7 @@ const setupGame = () => {
   displayShipsOnGrid(p1, p1Grid);
   displayShipsOnGrid(p2, p2Grid);
   const nextButton = createNextTurnButton();
-  uiContainer.append(createNameElements(), nextButton);
+  uiContainer.append(createNameElements(), nextButton, createAttackResult());
 
   const { body } = document;
   body.append(gameContainer, uiContainer);
@@ -146,6 +146,17 @@ const createNextTurnButton = () => {
   btn.textContent = 'Start game';
   return btn;
 };
+const createAttackResult = () => {
+  const resultContainer = document.createElement('div');
+  resultContainer.classList.add('ui-resultContainer');
+  resultContainer.textContent = 'Target hit: ';
+  const result = document.createElement('span');
+  result.classList.add('ui-result');
+  result.textContent = 'test';
+  resultContainer.append(result);
+  resultContainer.classList.add('ui-resultContainer-hidden');
+  return resultContainer;
+};
 const addAttackListeners = () => {
   const gridElements = document.querySelectorAll('.grid-outerContainer');
   const players = [p2, p1];
@@ -172,6 +183,7 @@ const attackHandler = (gridElement, player, enemy, space) => {
     gridElement.classList.add('grid-unclickable');
     const nextButton = document.querySelector('.ui-nextButton');
     nextButton.classList.remove('ui-nextButton-unclickable');
+    displayAttackResult(enemy, space);
     if (enemy === p1) {
       const [p1Success, p2Success] = [
         p2.gameboard.allShipsAreSunk(),
@@ -224,6 +236,15 @@ const displayNewHit = (space, enemy, gridElement) => {
     }
   }
 };
+const displayAttackResult = (enemy, space) => {
+  const { ship } = enemy.gameboard.grid[space.dataset.row][space.dataset.col];
+  if (ship) {
+    const resultElement = document.querySelector('.ui-result');
+    resultElement.textContent = ship.name;
+    const resultContainer = document.querySelector('.ui-resultContainer');
+    resultContainer.classList.remove('ui-resultContainer-hidden');
+  }
+};
 const endGame = (winner) => {
   console.log(`${winner} wins!`);
   const nextButton = document.querySelector('.ui-nextButton');
@@ -246,6 +267,7 @@ const enableNextTurnButton = () => {
 const startTurn = () => {
   const nextButton = document.querySelector('.ui-nextButton');
   nextButton.classList.add('ui-nextButton-unclickable');
+  document.querySelector('.ui-resultContainer').classList.add('ui-resultContainer-hidden');
   const [grid1, grid2] = Array.from(document.querySelectorAll('.grid-outerContainer'));
   const nameElements = document.querySelectorAll('.ui-name');
 

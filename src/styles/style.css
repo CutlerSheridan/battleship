@@ -154,3 +154,6 @@ body {
   color: grey;
   pointer-events: none;
 }
+.ui-resultContainer-hidden {
+  visibility: hidden;
+}
