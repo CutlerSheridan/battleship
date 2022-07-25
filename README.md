@@ -6,16 +6,16 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 #### TO-DO NEXT
 
-- add slight delay before computer goes
+- show which ship was hit
 
 #### TO-DO LATER
 
 ##### Features
 
-- show which ship was hit
 - add complex opponent AI
 - add dark screen between human player turns
 - display opponent's ship statuses
+- add win message
 - add ability to place ships
 - add ability to remove ship and replace it
 - add ability for two people at separate computers to play by calling out coordinates
@@ -30,8 +30,13 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 - decide on style
 - figure out how to display on mobile
 - maybe add sounds for hits and misses?
+- add brief border on attacked squares
 
 #### DONE
+
+_0.7.1_
+
+- add slight delay before computer goes
 
 _0.7.0_
 

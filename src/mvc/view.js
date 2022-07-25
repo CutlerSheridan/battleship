@@ -271,11 +271,12 @@ const startTurn = () => {
   } else {
     const currentEnemy = p1.currentTurn ? p2 : p1;
     const [row, col] = controller.pickComputerMove(currentEnemy);
-    // currentPlayer.attack(currentEnemy, ...attackCoords);
     const targetSpace = enemyGrid.querySelector(
       `.grid-space[data-row="${row}"][data-col="${col}"]`
     );
-    attackHandler(enemyGrid, currentPlayer, currentEnemy, targetSpace);
+    setTimeout(() => {
+      attackHandler(enemyGrid, currentPlayer, currentEnemy, targetSpace);
+    }, 500);
   }
 };
 const toggleShipVisibility = (gridElement) => {

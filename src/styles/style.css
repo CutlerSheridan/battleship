@@ -1,7 +1,7 @@
 :root {
   --sunk-border-width: 5px;
   --sunk-borders: var(--sunk-border-width) solid red;
-  --grid-space-width: 5rem;
+  --grid-space-width: 4.5rem;
   font-size: 62.5%;
 }
 * {
