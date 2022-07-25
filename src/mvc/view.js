@@ -8,6 +8,7 @@ let p2;
 const setupGame = () => {
   p1 = model.Player('p1');
   p2 = model.Player('p2');
+  // p1.togglePlayerController();
   p2.togglePlayerController();
   controller.placeAllShips(p1);
   controller.placeAllShips(p2);
@@ -276,7 +277,16 @@ const startTurn = () => {
     grid1.classList.add('grid-unclickable');
     nextButton.textContent = 'Next turn';
     nameElements[0].classList.add('ui-name-current');
-    toggleShipVisibility(grid2);
+    if (!p1.isHuman || !p2.isHuman) {
+      if (!p1.isHuman) {
+        toggleShipVisibility(grid1);
+      }
+      if (!p2.isHuman) {
+        toggleShipVisibility(grid2);
+      }
+    } else {
+      toggleShipVisibility(grid2);
+    }
   } else {
     p1.changeTurn();
     p2.changeTurn();

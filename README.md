@@ -6,7 +6,6 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 #### TO-DO NEXT
 
-- make game work if both players are AI
 - add toggle to make a player computer-controlled
 
 #### TO-DO LATER
@@ -34,6 +33,10 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 - add brief border on attacked squares
 
 #### DONE
+
+_0.7.3_
+
+- make game work if both players are AI
 
 _0.7.2_
 
