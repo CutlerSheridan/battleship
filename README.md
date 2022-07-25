@@ -4,15 +4,15 @@
 
 Play by yourself or with a friend! Place your ships, attack your opponent, and try to sink the enemy's fleet before they can sink yours.
 
-#### TO-DO NEXT
+#### TODO NEXT
 
-- add toggle to make a player computer-controlled
+- test control toggle in different scenarios
+- add win message
 
-#### TO-DO LATER
+#### TODO LATER
 
 ##### Features
 
-- add win message
 - add complex opponent AI
 - add dark screen between human player turns
 - display opponent's ship statuses
@@ -33,6 +33,12 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 - add brief border on attacked squares
 
 #### DONE
+
+_0.8.0_
+
+- add toggle to make a player computer-controlled
+- make game restart upon confirming player control change
+- make new game remember which players are human vs. computer
 
 _0.7.3_
 

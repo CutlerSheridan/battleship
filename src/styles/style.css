@@ -146,6 +146,9 @@ body {
 .ui-name-current {
   border: 10px solid purple;
 }
+.ui-playerTypeLabel {
+  cursor: pointer;
+}
 .ui-nextButton {
   height: 7rem;
   width: 12rem;

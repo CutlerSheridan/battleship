@@ -9,7 +9,7 @@ const setupGame = () => {
   p1 = model.Player('p1');
   p2 = model.Player('p2');
   // p1.togglePlayerController();
-  p2.togglePlayerController();
+  // p2.togglePlayerController();
   controller.placeAllShips(p1);
   controller.placeAllShips(p2);
   const p1Grid = createGrid();
@@ -130,16 +130,62 @@ const displayHits = (player, gridElement) => {
   }
 };
 const createNameElements = () => {
-  const names = [p1.name, p2.name];
   const playerNamesElement = document.createElement('div');
   playerNamesElement.classList.add('ui-playerNames');
   for (let i = 0; i < 2; i++) {
     const nameElement = document.createElement('div');
     nameElement.classList.add('ui-name');
-    nameElement.textContent = names[i];
-    playerNamesElement.append(nameElement);
+    nameElement.textContent = [p1.name, p2.name][i];
+    const playerTypeContainer = document.createElement('div');
+    playerTypeContainer.classList.add('ui-playerTypeContainer');
+    const playerTypeLabel = document.createElement('label');
+    playerTypeLabel.textContent = 'Computer?';
+    playerTypeLabel.setAttribute('for', `p${i + 1}-type`);
+    playerTypeLabel.classList.add('ui-playerTypeLabel');
+    const typeToggle = document.createElement('input');
+    typeToggle.type = 'checkbox';
+    typeToggle.id = `p${i + 1}-type`;
+    typeToggle.classList.add('ui-playerTypeCheckbox');
+    playerTypeContainer.append(playerTypeLabel, typeToggle);
+    playerNamesElement.append(nameElement, playerTypeContainer);
   }
   return playerNamesElement;
+};
+const handlePlayerTypeToggles = () => {
+  const typeToggles = document.querySelectorAll('.ui-playerTypeCheckbox');
+  const nextButton = document.querySelector('.ui-nextButton');
+  const originalSettings = [typeToggles[0].checked, typeToggles[1].checked];
+  const originalButtonText = [];
+  const isButtonUnclickable = [];
+  // const firstIndex = [];
+
+  typeToggles.forEach((toggle, index) => {
+    toggle.addEventListener('change', () => {
+      originalButtonText.push(nextButton.textContent);
+      isButtonUnclickable.push(nextButton.classList.contains('ui-nextButton-unclickable'));
+      // originalSettings.push(typeToggles[0].checked, typeToggles[1].checked);
+      // firstIndex.push(index);
+      // originalSettings[firstIndex[0]] = !originalSettings[firstIndex[0]];
+      if (
+        toggle.checked !== originalSettings[index] ||
+        typeToggles[1 - index].checked !== originalSettings[1 - index]
+      ) {
+        nextButton.textContent = 'Restart game?';
+        nextButton.removeEventListener('click', startTurn);
+        nextButton.addEventListener('click', restartGame);
+        if (isButtonUnclickable[0]) {
+          nextButton.classList.remove('ui-nextButton-unclickable');
+        }
+      } else {
+        nextButton.textContent = originalButtonText[0];
+        nextButton.removeEventListener('click', restartGame);
+        nextButton.addEventListener('click', startTurn);
+        if (isButtonUnclickable[0]) {
+          nextButton.classList.add('ui-nextButton-unclickable');
+        }
+      }
+    });
+  });
 };
 const createNextTurnButton = () => {
   const btn = document.createElement('button');
@@ -157,6 +203,67 @@ const createAttackResult = () => {
   resultContainer.append(result);
   resultContainer.classList.add('ui-resultContainer-hidden');
   return resultContainer;
+};
+const enableNextTurnButton = () => {
+  const nextButton = document.querySelector('.ui-nextButton');
+  nextButton.addEventListener('click', startTurn);
+};
+const startTurn = () => {
+  const nextButton = document.querySelector('.ui-nextButton');
+  nextButton.classList.add('ui-nextButton-unclickable');
+  document.querySelector('.ui-resultContainer').classList.add('ui-resultContainer-hidden');
+  const [grid1, grid2] = Array.from(document.querySelectorAll('.grid-outerContainer'));
+  const nameElements = document.querySelectorAll('.ui-name');
+
+  if (!p1.currentTurn && !p2.currentTurn) {
+    p1.changeTurn();
+    grid1.classList.add('grid-unclickable');
+    nextButton.textContent = 'Next turn';
+    nameElements[0].classList.add('ui-name-current');
+    if (!p1.isHuman || !p2.isHuman) {
+      if (!p1.isHuman) {
+        toggleShipVisibility(grid1);
+      }
+      if (!p2.isHuman) {
+        toggleShipVisibility(grid2);
+      }
+    } else {
+      toggleShipVisibility(grid2);
+    }
+  } else {
+    p1.changeTurn();
+    p2.changeTurn();
+    if (p1.isHuman && p2.isHuman) {
+      toggleShipVisibility(grid2);
+      toggleShipVisibility(grid1);
+    }
+    nameElements.forEach((name) => name.classList.toggle('ui-name-current'));
+  }
+  const currentPlayer = p1.currentTurn ? p1 : p2;
+  const enemyGrid = p1.currentTurn ? grid2 : grid1;
+  if (currentPlayer.isHuman) {
+    enemyGrid.classList.remove('grid-unclickable');
+  } else {
+    const currentEnemy = p1.currentTurn ? p2 : p1;
+    const [row, col] = controller.pickComputerMove(currentEnemy);
+    const targetSpace = enemyGrid.querySelector(
+      `.grid-space[data-row="${row}"][data-col="${col}"]`
+    );
+    setTimeout(() => {
+      attackHandler(enemyGrid, currentPlayer, currentEnemy, targetSpace);
+    }, 400);
+  }
+};
+const toggleShipVisibility = (gridElement) => {
+  const shipSpaces = gridElement.querySelectorAll('.grid-space-shipHold');
+  shipSpaces.forEach((space) => {
+    space.classList.toggle('grid-space-occupied');
+    if (space.classList.contains('grid-space-hit')) {
+      space.classList.toggle('grid-space-secretlyOccupied');
+    } else {
+      space.classList.toggle('grid-space-empty');
+    }
+  });
 };
 const addAttackListeners = () => {
   const gridElements = document.querySelectorAll('.grid-outerContainer');
@@ -251,76 +358,28 @@ const endGame = (winner) => {
   const nextButton = document.querySelector('.ui-nextButton');
   nextButton.removeEventListener('click', startTurn);
   nextButton.textContent = 'New game?';
-  nextButton.addEventListener(
-    'click',
-    () => {
-      deleteDOMElements();
-      setupGame();
-    },
-    { once: true }
-  );
+  nextButton.addEventListener('click', restartGame, { once: true });
 };
-
-const enableNextTurnButton = () => {
-  const nextButton = document.querySelector('.ui-nextButton');
-  nextButton.addEventListener('click', startTurn);
-};
-const startTurn = () => {
-  const nextButton = document.querySelector('.ui-nextButton');
-  nextButton.classList.add('ui-nextButton-unclickable');
-  document.querySelector('.ui-resultContainer').classList.add('ui-resultContainer-hidden');
-  const [grid1, grid2] = Array.from(document.querySelectorAll('.grid-outerContainer'));
-  const nameElements = document.querySelectorAll('.ui-name');
-
-  if (!p1.currentTurn && !p2.currentTurn) {
-    p1.changeTurn();
-    grid1.classList.add('grid-unclickable');
-    nextButton.textContent = 'Next turn';
-    nameElements[0].classList.add('ui-name-current');
-    if (!p1.isHuman || !p2.isHuman) {
-      if (!p1.isHuman) {
-        toggleShipVisibility(grid1);
-      }
-      if (!p2.isHuman) {
-        toggleShipVisibility(grid2);
-      }
-    } else {
-      toggleShipVisibility(grid2);
-    }
-  } else {
-    p1.changeTurn();
-    p2.changeTurn();
-    if (p1.isHuman && p2.isHuman) {
-      toggleShipVisibility(grid2);
-      toggleShipVisibility(grid1);
-    }
-    nameElements.forEach((name) => name.classList.toggle('ui-name-current'));
-  }
-  const currentPlayer = p1.currentTurn ? p1 : p2;
-  const enemyGrid = p1.currentTurn ? grid2 : grid1;
-  if (currentPlayer.isHuman) {
-    enemyGrid.classList.remove('grid-unclickable');
-  } else {
-    const currentEnemy = p1.currentTurn ? p2 : p1;
-    const [row, col] = controller.pickComputerMove(currentEnemy);
-    const targetSpace = enemyGrid.querySelector(
-      `.grid-space[data-row="${row}"][data-col="${col}"]`
-    );
-    setTimeout(() => {
-      attackHandler(enemyGrid, currentPlayer, currentEnemy, targetSpace);
-    }, 500);
-  }
-};
-const toggleShipVisibility = (gridElement) => {
-  const shipSpaces = gridElement.querySelectorAll('.grid-space-shipHold');
-  shipSpaces.forEach((space) => {
-    space.classList.toggle('grid-space-occupied');
-    if (space.classList.contains('grid-space-hit')) {
-      space.classList.toggle('grid-space-secretlyOccupied');
-    } else {
-      space.classList.toggle('grid-space-empty');
+const restartGame = () => {
+  let playerTypeToggles = document.querySelectorAll('.ui-playerTypeCheckbox');
+  const playerTypes = [playerTypeToggles[0].checked, playerTypeToggles[1].checked];
+  deleteDOMElements();
+  setupGame();
+  playerTypeToggles = document.querySelectorAll('.ui-playerTypeCheckbox');
+  playerTypeToggles.forEach((toggle, index) => {
+    if (playerTypes[index]) {
+      toggle.checked = true;
+      [p1, p2][index].togglePlayerController();
     }
   });
+  handlePlayerTypeToggles();
+};
+const deleteDOMElements = () => {
+  const content = [
+    document.querySelector('.game-container'),
+    document.querySelector('.ui-container'),
+  ];
+  content.forEach((item) => item.remove());
 };
 const getAllSpaceElements = (gridElement) => {
   const spaceElements = [];
@@ -333,16 +392,10 @@ const getAllSpaceElements = (gridElement) => {
   }
   return spaceElements;
 };
-const deleteDOMElements = () => {
-  const content = [
-    document.querySelector('.game-container'),
-    document.querySelector('.ui-container'),
-  ];
-  content.forEach((item) => item.remove());
-};
 
 export {
   setupGame,
+  handlePlayerTypeToggles,
   createGrid,
   displayShipsOnGrid,
   displayHits,
