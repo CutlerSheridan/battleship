@@ -6,7 +6,7 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 #### TODO NEXT
 
-- add complex opponent AI
+- if AI is attacking a ship, accidentally hits another ship, then resumes sinking the initial ship, make AI then attack the second ship
 
 #### TODO LATER
 
@@ -31,6 +31,14 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 - add brief border on attacked squares
 
 #### DONE
+
+_0.9.0_
+
+- make AI pick adjacent space if last move was a hit and move before last was not
+- test thoroughly
+- write findDirectionalIncrement() and test
+- make AI determine orientation after multiple adjacent hits
+- make AI move in opposite direction if orientation is known and next space is not viable
 
 _0.8.1_
 

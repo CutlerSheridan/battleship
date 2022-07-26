@@ -245,7 +245,7 @@ const startTurn = () => {
     enemyGrid.classList.remove('grid-unclickable');
   } else {
     const currentEnemy = p1.currentTurn ? p2 : p1;
-    const [row, col] = controller.pickComputerMove(currentEnemy);
+    const [row, col] = controller.pickComputerMove(currentPlayer.moves, currentEnemy);
     const targetSpace = enemyGrid.querySelector(
       `.grid-space[data-row="${row}"][data-col="${col}"]`
     );

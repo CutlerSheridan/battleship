@@ -107,10 +107,14 @@ test('Player.attack() hits enemy board', () => {
   expect(p2.gameboard.grid[1][1].hasBeenHit).toBe(false);
   expect(p2.gameboard.grid[2][2].hasBeenHit).toBe(true);
 });
-test.skip('Player.attack() correctly checks for NPC', () => {
+test('Player.attack() updates Player.moves', () => {
   const p1 = model.Player('p1');
   const p2 = model.Player('p2');
-  p1.togglePlayerController();
-  p1.attack(p2);
-  expect(p2.gameboard.grid.some((row) => row.some((space) => space.hasBeenHit))).toBe(true);
+  p1.attack(p2, ...[2, 2]);
+  p1.attack(p2, ...[4, 5]);
+
+  expect(p1.moves).toEqual([
+    { row: 2, col: 2 },
+    { row: 4, col: 5 },
+  ]);
 });
