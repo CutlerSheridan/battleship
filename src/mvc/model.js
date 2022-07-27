@@ -101,6 +101,7 @@ const Player = (name) => {
     enemyBoard.receiveAttack(y, x);
     moves.push({ row: y, col: x });
   };
+  const savedMove = [];
 
   return {
     gameboard,
@@ -116,6 +117,7 @@ const Player = (name) => {
     ships,
     attack,
     moves,
+    savedMove,
   };
 };
 

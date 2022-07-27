@@ -6,7 +6,9 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 #### TODO NEXT
 
-- if AI is attacking a ship, accidentally hits another ship, then resumes sinking the initial ship, make AI then attack the second ship
+- if AI hits vertical ship, tries right and misses, then tries left and misses, make it then try down then up
+- get AI to work if attacking middle of vertical ship with another vertical ship adjacent to it
+- prevent AI from attacking too-small areas
 
 #### TODO LATER
 
@@ -31,6 +33,12 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 - add brief border on attacked squares
 
 #### DONE
+
+_0.9.1_
+
+- if AI is attacking a ship, accidentally hits another ship, then resumes sinking the initial ship, make AI then attack the second ship
+- if AI attempts to return to second ship and misses, try another direction
+- if AI hits a ship then misses, make it keep trying other directions
 
 _0.9.0_
 

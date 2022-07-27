@@ -42,7 +42,7 @@ const areSpacesAvailableForShip = (player, ship, y, x) => {
   }
   return true;
 };
-const pickComputerMove = (pastMoves, enemy) => {
+const pickComputerMove = (pastMoves, enemy, player) => {
   const { grid } = enemy.gameboard;
   let lastMoveLoc;
   let lastTarget;
@@ -50,19 +50,34 @@ const pickComputerMove = (pastMoves, enemy) => {
     lastMoveLoc = pastMoves.length - 1;
     lastTarget = grid[pastMoves[lastMoveLoc].row][pastMoves[lastMoveLoc].col];
   }
-  if (!lastTarget || !lastTarget.ship || lastTarget.ship.isSunk()) {
-    const row = Math.floor(Math.random() * grid.length);
-    const col = Math.floor(Math.random() * grid.length);
-    if (grid[row][col].hasBeenHit) {
-      return pickComputerMove(pastMoves, enemy);
-    }
-    return [row, col];
-  }
-
   let targetBeforeLast;
   if (pastMoves.length > 1) {
     targetBeforeLast = grid[pastMoves[lastMoveLoc - 1].row][pastMoves[lastMoveLoc - 1].col];
   }
+  if (!lastTarget || !lastTarget.ship || lastTarget.ship.isSunk()) {
+    if (!targetBeforeLast || !targetBeforeLast.ship || targetBeforeLast.ship.isSunk()) {
+      if (player) {
+        if (player.savedMove.length > 0) {
+          // const savedMoveLoc = pastMoves.findIndex(
+          //   (move) => move.row === player.savedMove[0].row && move.col === player.savedMove[0].col
+          // );
+          // player.savedMove.splice(0);
+          // const movesUpToSavedMove = Array.from(pastMoves);
+          // movesUpToSavedMove.splice(savedMoveLoc + 1);
+          player.moves.push(player.savedMove[0]);
+          player.savedMove.splice(0);
+          return pickComputerMove(player.moves, enemy);
+        }
+      }
+      const row = Math.floor(Math.random() * grid.length);
+      const col = Math.floor(Math.random() * grid.length);
+      if (grid[row][col].hasBeenHit) {
+        return pickComputerMove(pastMoves, enemy);
+      }
+      return [row, col];
+    }
+  }
+
   if (!targetBeforeLast || !targetBeforeLast.ship || targetBeforeLast.ship.isSunk()) {
     const { row, col } = pastMoves[lastMoveLoc];
     for (let i = 0; i < 2; i++) {
@@ -92,9 +107,15 @@ const pickComputerMove = (pastMoves, enemy) => {
       col += shift[1];
     } while (!grid[row][col] || grid[row][col].hasBeenHit);
     return [row, col];
-  } else {
+  } else if (lastTarget.ship && targetBeforeLast.ship !== lastTarget.ship) {
+    player.savedMove.push({ row: pastMoves[lastMoveLoc].row, col: pastMoves[lastMoveLoc].col });
     const movesArrayWithoutLastMove = pastMoves.filter((move, ind) => ind !== lastMoveLoc);
-    return pickComputerMove(movesArrayWithoutLastMove, enemy);
+    return pickComputerMove(movesArrayWithoutLastMove, enemy, player);
+  } else {
+    // const movesArrayWithoutLastMove = pastMoves.filter((move, ind) => ind !== lastMoveLoc);
+    // return pickComputerMove(movesArrayWithoutLastMove, enemy, player);
+    player.moves.push({ row: pastMoves[lastMoveLoc - 1].row, col: pastMoves[lastMoveLoc - 1].col });
+    return pickComputerMove(player.moves, enemy, player);
   }
 };
 const findDirectionalIncrement = (pastMoves) => {
