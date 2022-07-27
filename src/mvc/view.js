@@ -308,7 +308,7 @@ const attackHandler = (gridElement, player, enemy, space) => {
   }
 };
 const launchAttack = (space, player, enemy) => {
-  const target = [space.dataset.row, space.dataset.col];
+  const target = [+space.dataset.row, +space.dataset.col];
   if (enemy.gameboard.grid[target[0]][target[1]].hasBeenHit) {
     return false;
   }

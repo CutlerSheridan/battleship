@@ -62,9 +62,11 @@ const pickComputerMove = (player, enemy) => {
       }
       shift[0] = i;
       shift[1] = n;
-      const checkBackwards = false;
+      let checkBackwards = false;
       while (true) {
         const newMove = [moves[firstUnsunkHitLoc].row, moves[firstUnsunkHitLoc].col];
+        console.log(typeof moves[firstUnsunkHitLoc].row);
+        console.log(typeof newMove[0]);
         if (checkBackwards) {
           newMove[0] -= shift[0];
           newMove[1] -= shift[1];
@@ -72,7 +74,12 @@ const pickComputerMove = (player, enemy) => {
           newMove[0] += shift[0];
           newMove[1] += shift[1];
         }
-        const space = grid[newMove[0]][newMove[1]];
+        console.log(newMove);
+        console.table(grid);
+        const space =
+          newMove[0] <= grid.length && newMove[1] <= grid[0].length
+            ? grid[newMove[0]][newMove[1]]
+            : undefined;
         if (space && !space.hasBeenHit) {
           return newMove;
         }

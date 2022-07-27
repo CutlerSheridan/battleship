@@ -6,7 +6,6 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 #### TODO NEXT
 
-- get AI working in the actual game
 - prevent AI from attacking too-small areas
 
 #### TODO LATER
@@ -32,6 +31,10 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 - add brief border on attacked squares
 
 #### DONE
+
+_0.9.4_
+
+- get AI working in the actual game
 
 _0.9.3_
 
