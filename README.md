@@ -34,6 +34,10 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 #### DONE
 
+_0.9.2_
+
+- add another test for hitting a vertical ship then continuing to guess until it finds it
+
 _0.9.1_
 
 - if AI is attacking a ship, accidentally hits another ship, then resumes sinking the initial ship, make AI then attack the second ship

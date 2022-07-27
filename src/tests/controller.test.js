@@ -136,6 +136,18 @@ test('pickComputerMove() picks space if two spaces ago hit but last space missed
   p1.attack(p2, 2, 7);
   expect(controller.pickComputerMove(p1.moves, p2, p1)).toEqual([2, 5]);
 });
+test('pickComputerMove() picks space if three spaces ago hit but last space missed', () => {
+  const p1 = model.Player('p1');
+  const p2 = model.Player('p2');
+  const coords = [2, 2];
+  p2.ships[0].turnShip();
+  p2.gameboard.placeShip(p2.ships[0], ...coords);
+  p1.attack(p2, 2, 6);
+  p1.attack(p2, 2, 7);
+  p1.attack(p2, 2, 5);
+  // this one currently returns random coords because it doesn't look far back enough
+  expect(controller.pickComputerMove(p1.moves, p2, p1)).toEqual([3, 6]);
+});
 test('pickComputerMove() picks space if last two spaces have hit and right space exists untried', () => {
   const p1 = model.Player('p1');
   const p2 = model.Player('p2');
