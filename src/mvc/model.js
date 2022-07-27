@@ -95,13 +95,14 @@ const Player = (name) => {
     Ship(3, 'Submarine'),
     Ship(2, 'Destroyer'),
   ];
-  const moves = [];
+  const hitMoves = [];
   const attack = (enemy, y, x) => {
     const enemyBoard = enemy.gameboard;
     enemyBoard.receiveAttack(y, x);
-    moves.push({ row: y, col: x });
+    if (enemyBoard.grid[y][x].ship) {
+      hitMoves.push({ row: y, col: x });
+    }
   };
-  const savedMove = [];
 
   return {
     gameboard,
@@ -116,8 +117,7 @@ const Player = (name) => {
     },
     ships,
     attack,
-    moves,
-    savedMove,
+    hitMoves,
   };
 };
 

@@ -6,8 +6,7 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 #### TODO NEXT
 
-- if AI hits vertical ship, tries right and misses, then tries left and misses, make it then try down then up
-- get AI to work if attacking middle of vertical ship with another vertical ship adjacent to it
+- get AI working in the actual game
 - prevent AI from attacking too-small areas
 
 #### TODO LATER
@@ -33,6 +32,11 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 - add brief border on attacked squares
 
 #### DONE
+
+_0.9.3_
+
+- completely rewrite pickComputerMove() AI to be much more elegant and reliable
+- make it pass all preexisting tests
 
 _0.9.2_
 

@@ -43,12 +43,14 @@ test('randomlyPlaceShip() places a ship', () => {
 });
 
 test('pickComputerMove() returns coordinate array', () => {
+  const p1 = model.Player('p1');
   const enemy = model.Player('enemy');
-  const coords = controller.pickComputerMove([{ row: 2, col: 2 }], enemy);
+  const coords = controller.pickComputerMove(p1, enemy);
   expect(coords.length).toBe(2);
   expect(Array.isArray(coords)).toBe(true);
 });
 test('pickComputerMove() only returns unused coordinates', () => {
+  const p1 = model.Player('p1');
   const enemy = model.Player('enemy');
   for (let i = 0; i < enemy.gameboard.grid.length; i++) {
     for (let n = 0; n < enemy.gameboard.grid.length; n++) {
@@ -57,12 +59,14 @@ test('pickComputerMove() only returns unused coordinates', () => {
       }
     }
   }
-  const coords = controller.pickComputerMove([{ row: 2, col: 2 }], enemy);
+  const coords = controller.pickComputerMove(p1, enemy);
   expect(coords).toEqual([0, 0]);
 });
-test('pickComputerMove() returns space with no previous moves', () => {
+test('pickComputerMove() returns space with on previous move', () => {
+  const p1 = model.Player('p1');
   const enemy = model.Player('enemy');
-  const coords = controller.pickComputerMove([], enemy);
+  p1.attack(enemy, 3, 4);
+  const coords = controller.pickComputerMove(p1, enemy);
   expect(coords.length).toBe(2);
   expect(Array.isArray(coords)).toBe(true);
 });
@@ -72,7 +76,7 @@ test('pickComputerMove() picks space if only one move and hit left-most part of 
   const coords = [2, 2];
   p2.gameboard.placeShip(p2.ships[0], ...coords);
   p1.attack(p2, ...coords);
-  expect(controller.pickComputerMove(p1.moves, p2)).toEqual([2, 3]);
+  expect(controller.pickComputerMove(p1, p2)).toEqual([2, 3]);
 });
 test('pickComputerMove() picks space if only one move and hit right-most part of ship', () => {
   const p1 = model.Player('p1');
@@ -80,15 +84,7 @@ test('pickComputerMove() picks space if only one move and hit right-most part of
   const coords = [2, 2];
   p2.gameboard.placeShip(p2.ships[0], ...coords);
   p1.attack(p2, 2, 6);
-  expect(controller.pickComputerMove(p1.moves, p2)).toEqual([2, 7]);
-});
-test('pickComputerMove() picks space if only one move and hit right-most part of ship', () => {
-  const p1 = model.Player('p1');
-  const p2 = model.Player('p2');
-  const coords = [2, 2];
-  p2.gameboard.placeShip(p2.ships[0], ...coords);
-  p1.attack(p2, 2, 6);
-  expect(controller.pickComputerMove(p1.moves, p2)).toEqual([2, 7]);
+  expect(controller.pickComputerMove(p1, p2)).toEqual([2, 7]);
 });
 test('pickComputerMove() picks space if two moves but only last space hit', () => {
   const p1 = model.Player('p1');
@@ -97,7 +93,7 @@ test('pickComputerMove() picks space if two moves but only last space hit', () =
   p2.gameboard.placeShip(p2.ships[0], ...coords);
   p1.attack(p2, 1, 1);
   p1.attack(p2, ...coords);
-  expect(controller.pickComputerMove(p1.moves, p2)).toEqual([2, 3]);
+  expect(controller.pickComputerMove(p1, p2)).toEqual([2, 3]);
 });
 test('pickComputerMove() picks space if only last space hit and was right board edge', () => {
   const p1 = model.Player('p1');
@@ -105,7 +101,7 @@ test('pickComputerMove() picks space if only last space hit and was right board 
   const coords = [2, 5];
   p2.gameboard.placeShip(p2.ships[0], ...coords);
   p1.attack(p2, 2, 9);
-  expect(controller.pickComputerMove(p1.moves, p2)).toEqual([2, 8]);
+  expect(controller.pickComputerMove(p1, p2)).toEqual([2, 8]);
 });
 test('pickComputerMove() picks space if only last space hit and space to right has been tried', () => {
   const p1 = model.Player('p1');
@@ -114,7 +110,7 @@ test('pickComputerMove() picks space if only last space hit and space to right h
   p2.gameboard.placeShip(p2.ships[0], ...coords);
   p1.attack(p2, 2, 7);
   p1.attack(p2, 2, 6);
-  expect(controller.pickComputerMove(p1.moves, p2)).toEqual([2, 5]);
+  expect(controller.pickComputerMove(p1, p2)).toEqual([2, 5]);
 });
 test('pickComputerMove() picks space if only last space hit and spaces to right and left have been tried', () => {
   const p1 = model.Player('p1');
@@ -125,7 +121,7 @@ test('pickComputerMove() picks space if only last space hit and spaces to right 
   p1.attack(p2, 6, 3);
   p1.attack(p2, 6, 1);
   p1.attack(p2, 6, 2);
-  expect(controller.pickComputerMove(p1.moves, p2)).toEqual([7, 2]);
+  expect(controller.pickComputerMove(p1, p2)).toEqual([7, 2]);
 });
 test('pickComputerMove() picks space if two spaces ago hit but last space missed', () => {
   const p1 = model.Player('p1');
@@ -134,7 +130,7 @@ test('pickComputerMove() picks space if two spaces ago hit but last space missed
   p2.gameboard.placeShip(p2.ships[0], ...coords);
   p1.attack(p2, 2, 6);
   p1.attack(p2, 2, 7);
-  expect(controller.pickComputerMove(p1.moves, p2, p1)).toEqual([2, 5]);
+  expect(controller.pickComputerMove(p1, p2)).toEqual([2, 5]);
 });
 test('pickComputerMove() picks space if three spaces ago hit but last space missed', () => {
   const p1 = model.Player('p1');
@@ -142,11 +138,10 @@ test('pickComputerMove() picks space if three spaces ago hit but last space miss
   const coords = [2, 2];
   p2.ships[0].turnShip();
   p2.gameboard.placeShip(p2.ships[0], ...coords);
-  p1.attack(p2, 2, 6);
-  p1.attack(p2, 2, 7);
-  p1.attack(p2, 2, 5);
-  // this one currently returns random coords because it doesn't look far back enough
-  expect(controller.pickComputerMove(p1.moves, p2, p1)).toEqual([3, 6]);
+  p1.attack(p2, 2, 2);
+  p1.attack(p2, 2, 3);
+  p1.attack(p2, 2, 1);
+  expect(controller.pickComputerMove(p1, p2)).toEqual([3, 2]);
 });
 test('pickComputerMove() picks space if last two spaces have hit and right space exists untried', () => {
   const p1 = model.Player('p1');
@@ -155,7 +150,7 @@ test('pickComputerMove() picks space if last two spaces have hit and right space
   p2.gameboard.placeShip(p2.ships[0], ...coords);
   p1.attack(p2, 2, 4);
   p1.attack(p2, 2, 5);
-  expect(controller.pickComputerMove(p1.moves, p2)).toEqual([2, 6]);
+  expect(controller.pickComputerMove(p1, p2)).toEqual([2, 6]);
 });
 test('pickComputerMove() picks space if last two spaces have hit and right space has been tried', () => {
   const p1 = model.Player('p1');
@@ -164,7 +159,7 @@ test('pickComputerMove() picks space if last two spaces have hit and right space
   p2.gameboard.placeShip(p2.ships[0], ...coords);
   p1.attack(p2, 2, 7);
   p1.attack(p2, 2, 6);
-  expect(controller.pickComputerMove(p1.moves, p2)).toEqual([2, 5]);
+  expect(controller.pickComputerMove(p1, p2)).toEqual([2, 5]);
 });
 test('pickComputerMove() picks space if last two spaces have hit and right space does not exist', () => {
   const p1 = model.Player('p1');
@@ -173,17 +168,7 @@ test('pickComputerMove() picks space if last two spaces have hit and right space
   p2.gameboard.placeShip(p2.ships[0], ...coords);
   p1.attack(p2, 2, 8);
   p1.attack(p2, 2, 9);
-  expect(controller.pickComputerMove(p1.moves, p2)).toEqual([2, 7]);
-});
-test('pickComputerMove() picks space if last two spaces have hit vertically', () => {
-  const p1 = model.Player('p1');
-  const p2 = model.Player('p2');
-  const coords = [2, 2];
-  p2.ships[0].turnShip();
-  p2.gameboard.placeShip(p2.ships[0], ...coords);
-  p1.attack(p2, 2, 2);
-  p1.attack(p2, 3, 2);
-  expect(controller.pickComputerMove(p1.moves, p2)).toEqual([4, 2]);
+  expect(controller.pickComputerMove(p1, p2)).toEqual([2, 7]);
 });
 test('pickComputerMove() picks space if last two spaces have hit and right space hit something else', () => {
   const p1 = model.Player('p1');
@@ -194,7 +179,7 @@ test('pickComputerMove() picks space if last two spaces have hit and right space
   p1.attack(p2, 2, 5);
   p1.attack(p2, 2, 6);
   p1.attack(p2, 2, 7);
-  expect(controller.pickComputerMove(p1.moves, p2, p1)).toEqual([2, 4]);
+  expect(controller.pickComputerMove(p1, p2)).toEqual([2, 4]);
 });
 test('pickComputerMove() sinks first ship if last two spaces have hit and right space hit something else', () => {
   const p1 = model.Player('p1');
@@ -204,9 +189,9 @@ test('pickComputerMove() sinks first ship if last two spaces have hit and right 
   p1.attack(p2, 2, 5);
   p1.attack(p2, 2, 6);
   p1.attack(p2, 2, 7);
-  p1.attack(p2, ...controller.pickComputerMove(p1.moves, p2, p1));
-  p1.attack(p2, ...controller.pickComputerMove(p1.moves, p2, p1));
-  p1.attack(p2, ...controller.pickComputerMove(p1.moves, p2, p1));
+  p1.attack(p2, ...controller.pickComputerMove(p1, p2));
+  p1.attack(p2, ...controller.pickComputerMove(p1, p2));
+  p1.attack(p2, ...controller.pickComputerMove(p1, p2));
   expect(p2.gameboard.grid[2][2].ship.isSunk()).toBe(true);
 });
 test('pickComputerMove() returns to second ship if just sank first ship', () => {
@@ -217,10 +202,10 @@ test('pickComputerMove() returns to second ship if just sank first ship', () => 
   p1.attack(p2, 2, 5);
   p1.attack(p2, 2, 6);
   p1.attack(p2, 2, 7);
-  p1.attack(p2, ...controller.pickComputerMove(p1.moves, p2, p1));
-  p1.attack(p2, ...controller.pickComputerMove(p1.moves, p2, p1));
-  p1.attack(p2, ...controller.pickComputerMove(p1.moves, p2, p1));
-  expect(controller.pickComputerMove(p1.moves, p2, p1)).toEqual([2, 8]);
+  p1.attack(p2, ...controller.pickComputerMove(p1, p2));
+  p1.attack(p2, ...controller.pickComputerMove(p1, p2));
+  p1.attack(p2, ...controller.pickComputerMove(p1, p2));
+  expect(controller.pickComputerMove(p1, p2)).toEqual([2, 8]);
 });
 test('pickComputerMove() sinks second horizontal ship after sinking first ship', () => {
   const p1 = model.Player('p1');
@@ -232,7 +217,7 @@ test('pickComputerMove() sinks second horizontal ship after sinking first ship',
   p1.attack(p2, 2, 7);
   const looper = p2.ships[0].length + p2.ships[1].length;
   for (let i = 0; i < looper; i++) {
-    p1.attack(p2, ...controller.pickComputerMove(p1.moves, p2, p1));
+    p1.attack(p2, ...controller.pickComputerMove(p1, p2));
   }
   expect(p2.gameboard.grid[2][7].ship.isSunk()).toBe(true);
 });
@@ -247,7 +232,7 @@ test('pickComputerMove() sinks second vertical ship after sinking first horizont
   p1.attack(p2, 2, 7);
   const looper = p2.ships[0].length + p2.ships[1].length;
   for (let i = 0; i < looper; i++) {
-    p1.attack(p2, ...controller.pickComputerMove(p1.moves, p2, p1));
+    p1.attack(p2, ...controller.pickComputerMove(p1, p2));
   }
   expect(p2.gameboard.grid[2][7].ship.isSunk()).toBe(true);
 });
@@ -259,48 +244,27 @@ test('pickComputerMove() sinks first and second adjacent vertical ships starting
   p2.gameboard.placeShip(p2.ships[0], 2, 2);
   p2.gameboard.placeShip(p2.ships[1], 2, 3);
   p1.attack(p2, 4, 2);
-  const looper = p2.ships[0].length + p2.ships[1].length + 20;
-  console.log(looper);
-  let counter = 0;
+  const looper = p2.ships[0].length + p2.ships[1].length + 10;
   for (let i = 0; i < looper; i++) {
-    console.log(++counter);
-    console.log(controller.pickComputerMove(p1.moves, p2, p1));
-    console.log(p1.moves);
-
-    p1.attack(p2, ...controller.pickComputerMove(p1.moves, p2, p1));
+    p1.attack(p2, ...controller.pickComputerMove(p1, p2));
   }
-  console.table(p2.gameboard.grid);
-  console.log(p2.ships[0]);
-  console.log(p1.moves);
   expect(p2.gameboard.grid[2][2].ship.isSunk()).toBe(true);
   expect(p2.gameboard.grid[2][3].ship.isSunk()).toBe(true);
 });
-
-test('findDirectionalIncrement() returns right', () => {
+test('pickComputerMove() sinks three adjacent ships after hitting middle', () => {
   const p1 = model.Player('p1');
   const p2 = model.Player('p2');
-  p1.attack(p2, 3, 4);
-  p1.attack(p2, 3, 5);
-  expect(controller.findDirectionalIncrement(p1.moves)).toEqual([0, 1]);
-});
-test('findDirectionalIncrement() returns left', () => {
-  const p1 = model.Player('p1');
-  const p2 = model.Player('p2');
-  p1.attack(p2, 3, 4);
-  p1.attack(p2, 3, 3);
-  expect(controller.findDirectionalIncrement(p1.moves)).toEqual([0, -1]);
-});
-test('findDirectionalIncrement() returns down', () => {
-  const p1 = model.Player('p1');
-  const p2 = model.Player('p2');
-  p1.attack(p2, 3, 4);
-  p1.attack(p2, 4, 4);
-  expect(controller.findDirectionalIncrement(p1.moves)).toEqual([1, 0]);
-});
-test('findDirectionalIncrement() returns up', () => {
-  const p1 = model.Player('p1');
-  const p2 = model.Player('p2');
-  p1.attack(p2, 3, 4);
-  p1.attack(p2, 2, 4);
-  expect(controller.findDirectionalIncrement(p1.moves)).toEqual([-1, 0]);
+  p2.ships[0].turnShip();
+  p2.ships[1].turnShip();
+  p2.gameboard.placeShip(p2.ships[0], 2, 2);
+  p2.gameboard.placeShip(p2.ships[1], 2, 3);
+  p2.gameboard.placeShip(p2.ships[4], 4, 0);
+  p1.attack(p2, 4, 2);
+  const looper = p2.ships[0].length + p2.ships[1].length + p2.ships[4].length + 10;
+  for (let i = 0; i < looper; i++) {
+    p1.attack(p2, ...controller.pickComputerMove(p1, p2));
+  }
+  expect(p2.gameboard.grid[2][2].ship.isSunk()).toBe(true);
+  expect(p2.gameboard.grid[2][3].ship.isSunk()).toBe(true);
+  expect(p2.gameboard.grid[4][0].ship.isSunk()).toBe(true);
 });
