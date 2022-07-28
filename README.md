@@ -6,7 +6,8 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 #### TODO NEXT
 
-- prevent AI from attacking too-small areas
+- condense isGuessPossible()
+- make sure isGuessPossible() works in actual game
 
 #### TODO LATER
 
@@ -31,6 +32,10 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 - add brief border on attacked squares
 
 #### DONE
+
+_0.9,5_
+
+- prevent AI from attacking too-small areas
 
 _0.9.4_
 

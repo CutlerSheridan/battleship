@@ -268,3 +268,57 @@ test('pickComputerMove() sinks three adjacent ships after hitting middle', () =>
   expect(p2.gameboard.grid[2][3].ship.isSunk()).toBe(true);
   expect(p2.gameboard.grid[4][0].ship.isSunk()).toBe(true);
 });
+test('isGuessPossible() evals space without room', () => {
+  const p1 = model.Player('p1');
+  const p2 = model.Player('p2');
+  p2.ships = p2.ships.splice(2, 1);
+  for (let i = 0; i < p2.gameboard.grid.length; i++) {
+    for (let n = 0; n < p2.gameboard.grid[0].length; n++) {
+      if (i === 8 && n === 8) {
+        continue;
+      }
+      const moduloCheck = i % 2;
+      if (moduloCheck === n % 2) {
+        p1.attack(p2, i, n);
+      }
+    }
+  }
+  expect(controller.isGuessPossible(p2, 3, 4)).toBe(false);
+});
+test('isGuessPossible() evals space with horizontal room starting from middle', () => {
+  const p1 = model.Player('p1');
+  const p2 = model.Player('p2');
+  p2.ships = p2.ships.splice(2, 1);
+  for (let i = 0; i < p2.gameboard.grid.length; i++) {
+    for (let n = 0; n < p2.gameboard.grid[0].length; n++) {
+      if (i === 8 && n === 8) {
+        continue;
+      }
+      const moduloCheck = i % 2;
+      if (moduloCheck === n % 2) {
+        p1.attack(p2, i, n);
+      }
+    }
+  }
+  expect(controller.isGuessPossible(p2, 8, 8)).toBe(true);
+});
+test('isGuessPossible() evals space with veritcal room', () => {
+  const p1 = model.Player('p1');
+  const p2 = model.Player('p2');
+  p2.ships = p2.ships.splice(2, 1);
+  for (let i = 0; i < p2.gameboard.grid.length; i++) {
+    for (let n = 0; n < p2.gameboard.grid[0].length; n++) {
+      if (i === 8 && n === 8) {
+        continue;
+      }
+      const moduloCheck = i % 2;
+      if (moduloCheck === n % 2) {
+        p1.attack(p2, i, n);
+      }
+    }
+  }
+  expect(controller.isGuessPossible(p2, 7, 8)).toBe(true);
+});
+test("isGuessPossible() evals checkered grid when p2's last unsunk ship is destroyer", () => {
+  // write test
+});

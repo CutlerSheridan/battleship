@@ -52,7 +52,10 @@ const pickComputerMove = (player, enemy) => {
     if (grid[row][col].hasBeenHit) {
       return pickComputerMove(player, enemy);
     }
-    return [row, col];
+    if (isGuessPossible(enemy, row, col)) {
+      return [row, col];
+    }
+    return pickComputerMove(player, enemy);
   }
   let shift = [0, 0];
   for (let i = 0; i < 2; i++) {
@@ -65,8 +68,6 @@ const pickComputerMove = (player, enemy) => {
       let checkBackwards = false;
       while (true) {
         const newMove = [moves[firstUnsunkHitLoc].row, moves[firstUnsunkHitLoc].col];
-        console.log(typeof moves[firstUnsunkHitLoc].row);
-        console.log(typeof newMove[0]);
         if (checkBackwards) {
           newMove[0] -= shift[0];
           newMove[1] -= shift[1];
@@ -74,8 +75,6 @@ const pickComputerMove = (player, enemy) => {
           newMove[0] += shift[0];
           newMove[1] += shift[1];
         }
-        console.log(newMove);
-        console.table(grid);
         const space =
           newMove[0] <= grid.length && newMove[1] <= grid[0].length
             ? grid[newMove[0]][newMove[1]]
@@ -101,10 +100,50 @@ const pickComputerMove = (player, enemy) => {
     }
   }
 };
+const isGuessPossible = (enemy, y, x) => {
+  const { grid } = enemy.gameboard;
+  const unsunkShips = enemy.ships.filter((ship) => !ship.isSunk());
+  const shortestUnsunkShip = unsunkShips.reduce((prev, current) =>
+    prev.length < current.length ? prev : current
+  );
+  for (let i = 0; i < 2; i++) {
+    for (let n = 0; n < 2; n++) {
+      if (i === n) {
+        continue;
+      }
+      let adjacentSpaceCounter = 0;
+      const shift = [i, n];
+      const move = [y, x];
+      let nextSpace;
+      do {
+        nextSpace =
+          move[0] - shift[0] >= -1 && move[1] - shift[1] >= -1
+            ? grid[move[0] - shift[0]][move[1] - shift[1]]
+            : undefined;
+        move[0] -= shift[0];
+        move[1] -= shift[1];
+      } while (nextSpace && !nextSpace.hasBeenHit);
+      do {
+        nextSpace =
+          move[0] + shift[0] < grid.length && move[1] + shift[1] < grid[0].length
+            ? grid[move[0] + shift[0]][move[1] + shift[1]]
+            : undefined;
+        move[0] += shift[0];
+        move[1] += shift[1];
+        adjacentSpaceCounter++;
+      } while (nextSpace && !nextSpace.hasBeenHit);
+      if (adjacentSpaceCounter >= shortestUnsunkShip.length) {
+        return true;
+      }
+    }
+  }
+  return false;
+};
 export {
   placeAllShips,
   randomlyPlaceShip,
   getRandomCoordinates,
   areSpacesAvailableForShip,
   pickComputerMove,
+  isGuessPossible,
 };
