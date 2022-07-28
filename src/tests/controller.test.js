@@ -1,4 +1,5 @@
 /* eslint-disable no-undef */
+
 import * as controller from '../mvc/controller';
 import * as model from '../mvc/model';
 
@@ -54,13 +55,14 @@ test('pickComputerMove() only returns unused coordinates', () => {
   const enemy = model.Player('enemy');
   for (let i = 0; i < enemy.gameboard.grid.length; i++) {
     for (let n = 0; n < enemy.gameboard.grid.length; n++) {
-      if (i !== 0 || n !== 0) {
+      if (i > 1 || n !== 0) {
         enemy.gameboard.receiveAttack(i, n);
       }
     }
   }
   const coords = controller.pickComputerMove(p1, enemy);
-  expect(coords).toEqual([0, 0]);
+  expect(coords[0]).toBeLessThan(2);
+  expect(coords[1]).toBeLessThan(1);
 });
 test('pickComputerMove() returns space with on previous move', () => {
   const p1 = model.Player('p1');
@@ -173,53 +175,53 @@ test('pickComputerMove() picks space if last two spaces have hit and right space
 test('pickComputerMove() picks space if last two spaces have hit and right space hit something else', () => {
   const p1 = model.Player('p1');
   const p2 = model.Player('p2');
-  const coords = [2, 2];
+  const coords = [2, 1];
   p2.gameboard.placeShip(p2.ships[0], ...coords);
-  p2.gameboard.placeShip(p2.ships[1], 2, 7);
+  p2.gameboard.placeShip(p2.ships[1], 2, 6);
+  p1.attack(p2, 2, 4);
   p1.attack(p2, 2, 5);
   p1.attack(p2, 2, 6);
-  p1.attack(p2, 2, 7);
-  expect(controller.pickComputerMove(p1, p2)).toEqual([2, 4]);
+  expect(controller.pickComputerMove(p1, p2)).toEqual([2, 3]);
 });
 test('pickComputerMove() sinks first ship if last two spaces have hit and right space hit something else', () => {
   const p1 = model.Player('p1');
   const p2 = model.Player('p2');
-  p2.gameboard.placeShip(p2.ships[0], 2, 2);
-  p2.gameboard.placeShip(p2.ships[1], 2, 7);
+  p2.gameboard.placeShip(p2.ships[0], 2, 1);
+  p2.gameboard.placeShip(p2.ships[1], 2, 6);
+  p1.attack(p2, 2, 4);
   p1.attack(p2, 2, 5);
   p1.attack(p2, 2, 6);
-  p1.attack(p2, 2, 7);
   p1.attack(p2, ...controller.pickComputerMove(p1, p2));
   p1.attack(p2, ...controller.pickComputerMove(p1, p2));
   p1.attack(p2, ...controller.pickComputerMove(p1, p2));
-  expect(p2.gameboard.grid[2][2].ship.isSunk()).toBe(true);
+  expect(p2.gameboard.grid[2][1].ship.isSunk()).toBe(true);
 });
 test('pickComputerMove() returns to second ship if just sank first ship', () => {
   const p1 = model.Player('p1');
   const p2 = model.Player('p2');
-  p2.gameboard.placeShip(p2.ships[0], 2, 2);
-  p2.gameboard.placeShip(p2.ships[1], 2, 7);
+  p2.gameboard.placeShip(p2.ships[0], 2, 1);
+  p2.gameboard.placeShip(p2.ships[1], 2, 6);
+  p1.attack(p2, 2, 4);
   p1.attack(p2, 2, 5);
   p1.attack(p2, 2, 6);
-  p1.attack(p2, 2, 7);
   p1.attack(p2, ...controller.pickComputerMove(p1, p2));
   p1.attack(p2, ...controller.pickComputerMove(p1, p2));
   p1.attack(p2, ...controller.pickComputerMove(p1, p2));
-  expect(controller.pickComputerMove(p1, p2)).toEqual([2, 8]);
+  expect(controller.pickComputerMove(p1, p2)).toEqual([2, 7]);
 });
 test('pickComputerMove() sinks second horizontal ship after sinking first ship', () => {
   const p1 = model.Player('p1');
   const p2 = model.Player('p2');
-  p2.gameboard.placeShip(p2.ships[0], 2, 2);
-  p2.gameboard.placeShip(p2.ships[1], 2, 7);
+  p2.gameboard.placeShip(p2.ships[0], 2, 1);
+  p2.gameboard.placeShip(p2.ships[1], 2, 6);
+  p1.attack(p2, 2, 4);
   p1.attack(p2, 2, 5);
   p1.attack(p2, 2, 6);
-  p1.attack(p2, 2, 7);
   const looper = p2.ships[0].length + p2.ships[1].length;
   for (let i = 0; i < looper; i++) {
     p1.attack(p2, ...controller.pickComputerMove(p1, p2));
   }
-  expect(p2.gameboard.grid[2][7].ship.isSunk()).toBe(true);
+  expect(p2.gameboard.grid[2][6].ship.isSunk()).toBe(true);
 });
 test('pickComputerMove() sinks second vertical ship after sinking first horizontal ship', () => {
   const p1 = model.Player('p1');
@@ -244,7 +246,7 @@ test('pickComputerMove() sinks first and second adjacent vertical ships starting
   p2.gameboard.placeShip(p2.ships[0], 2, 2);
   p2.gameboard.placeShip(p2.ships[1], 2, 3);
   p1.attack(p2, 4, 2);
-  const looper = p2.ships[0].length + p2.ships[1].length + 10;
+  const looper = p2.ships[0].length + p2.ships[1].length + 3;
   for (let i = 0; i < looper; i++) {
     p1.attack(p2, ...controller.pickComputerMove(p1, p2));
   }
@@ -260,7 +262,7 @@ test('pickComputerMove() sinks three adjacent ships after hitting middle', () =>
   p2.gameboard.placeShip(p2.ships[1], 2, 3);
   p2.gameboard.placeShip(p2.ships[4], 4, 0);
   p1.attack(p2, 4, 2);
-  const looper = p2.ships[0].length + p2.ships[1].length + p2.ships[4].length + 10;
+  const looper = p2.ships[0].length + p2.ships[1].length + p2.ships[4].length + 2;
   for (let i = 0; i < looper; i++) {
     p1.attack(p2, ...controller.pickComputerMove(p1, p2));
   }
@@ -268,6 +270,7 @@ test('pickComputerMove() sinks three adjacent ships after hitting middle', () =>
   expect(p2.gameboard.grid[2][3].ship.isSunk()).toBe(true);
   expect(p2.gameboard.grid[4][0].ship.isSunk()).toBe(true);
 });
+
 test('isGuessPossible() evals space without room', () => {
   const p1 = model.Player('p1');
   const p2 = model.Player('p2');
@@ -319,6 +322,54 @@ test('isGuessPossible() evals space with veritcal room', () => {
   }
   expect(controller.isGuessPossible(p2, 7, 8)).toBe(true);
 });
-test("isGuessPossible() evals checkered grid when p2's last unsunk ship is destroyer", () => {
-  // write test
+test('isGuessPossible() evals space when guessing on left edge', () => {
+  const p1 = model.Player('p1');
+  const p2 = model.Player('p2');
+  p2.ships = p2.ships.splice(2, 1);
+  for (let i = 0; i < p2.gameboard.grid.length; i++) {
+    for (let n = 0; n < p2.gameboard.grid[0].length; n++) {
+      if (i === 8 && n === 8) {
+        continue;
+      }
+      const moduloCheck = i % 2;
+      if (moduloCheck === n % 2) {
+        p1.attack(p2, i, n);
+      }
+    }
+  }
+  expect(controller.isGuessPossible(p2, 2, 1)).toBe(false);
+});
+test('isGuessPossible() evals space one space too little on right edge', () => {
+  const p1 = model.Player('p1');
+  const p2 = model.Player('p2');
+  p2.ships = p2.ships.splice(1, 1);
+  for (let i = 0; i < p2.gameboard.grid.length; i++) {
+    for (let n = 0; n < p2.gameboard.grid[0].length; n++) {
+      if (i === 8 && n === 8) {
+        continue;
+      }
+      const moduloCheck = i % 2;
+      if (moduloCheck === n % 2) {
+        p1.attack(p2, i, n);
+      }
+    }
+  }
+  expect(controller.isGuessPossible(p2, 8, 8)).toBe(false);
+});
+test('isGuessPossible() evals space one space too little on left edge', () => {
+  const p1 = model.Player('p1');
+  const p2 = model.Player('p2');
+  p2.ships = p2.ships.splice(1, 1);
+  for (let i = 0; i < p2.gameboard.grid.length; i++) {
+    for (let n = 0; n < p2.gameboard.grid[0].length; n++) {
+      if (i === 6 && n === 2) {
+        continue;
+      }
+      const moduloCheck = i % 2;
+      if (moduloCheck === n % 2) {
+        p1.attack(p2, i, n);
+      }
+    }
+  }
+  expect(controller.isGuessPossible(p2, 6, 2)).toBe(false);
 });

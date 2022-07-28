@@ -6,7 +6,6 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 #### TODO NEXT
 
-- condense isGuessPossible()
 - make sure isGuessPossible() works in actual game
 
 #### TODO LATER
@@ -33,7 +32,13 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 #### DONE
 
-_0.9,5_
+_0.9.6_
+
+- simplify isGuessPossible()
+- get it working on right edge
+- get it working on left edge
+
+_0.9.5_
 
 - prevent AI from attacking too-small areas
 

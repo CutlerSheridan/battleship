@@ -76,7 +76,7 @@ const pickComputerMove = (player, enemy) => {
           newMove[1] += shift[1];
         }
         const space =
-          newMove[0] <= grid.length && newMove[1] <= grid[0].length
+          newMove[0] < grid.length && newMove[1] < grid[0].length
             ? grid[newMove[0]][newMove[1]]
             : undefined;
         if (space && !space.hasBeenHit) {
@@ -106,34 +106,51 @@ const isGuessPossible = (enemy, y, x) => {
   const shortestUnsunkShip = unsunkShips.reduce((prev, current) =>
     prev.length < current.length ? prev : current
   );
+  console.log(`ATTACKING ${enemy.name.toUpperCase()}
+Attempted coord: [${y}, ${x}]
+shortestUnsunkShip: ${shortestUnsunkShip.name}
+grid.length: ${grid.length}
+grid[0].length: ${grid[0].length}
+`);
   for (let i = 0; i < 2; i++) {
     for (let n = 0; n < 2; n++) {
       if (i === n) {
         continue;
       }
       let adjacentSpaceCounter = 0;
-      const shift = [i, n];
+      let shift = [0 - i, 0 - n];
       const move = [y, x];
       let nextSpace;
-      do {
-        nextSpace =
-          move[0] - shift[0] >= -1 && move[1] - shift[1] >= -1
-            ? grid[move[0] - shift[0]][move[1] - shift[1]]
-            : undefined;
-        move[0] -= shift[0];
-        move[1] -= shift[1];
-      } while (nextSpace && !nextSpace.hasBeenHit);
-      do {
-        nextSpace =
-          move[0] + shift[0] < grid.length && move[1] + shift[1] < grid[0].length
-            ? grid[move[0] + shift[0]][move[1] + shift[1]]
-            : undefined;
-        move[0] += shift[0];
-        move[1] += shift[1];
-        adjacentSpaceCounter++;
-      } while (nextSpace && !nextSpace.hasBeenHit);
-      if (adjacentSpaceCounter >= shortestUnsunkShip.length) {
-        return true;
+      for (let t = 0; t < 2; t++) {
+        if (t === 1) {
+          shift = shift.map((num) => num * -1);
+        }
+        do {
+          const nextRow = move[0] + shift[0];
+          const nextCol = move[1] + shift[1];
+          //           console.log(`shift: [${shift[0]}, ${shift[1]}]
+          // current space: [${move[0]}, ${move[1]}]
+          // nextRow: ${nextRow}
+          // nextCol: ${nextCol}
+          // `);
+          if (nextRow >= 0 && nextRow < grid.length && nextCol >= 0 && nextCol < grid[0].length) {
+            nextSpace = grid[nextRow][nextCol];
+          } else {
+            nextSpace = undefined;
+          }
+          if (nextRow < grid.length && nextCol < grid[0].length) {
+            move[0] += shift[0];
+            move[1] += shift[1];
+            if (shift[0] + shift[1] > 0 && !nextSpace.hasBeenHit) {
+              adjacentSpaceCounter++;
+              // console.log(`moving to space: [${move[0]}, ${move[1]}]
+              // adjacentSpaceCounter: ${adjacentSpaceCounter}`);
+            }
+          }
+        } while (nextSpace && !nextSpace.hasBeenHit);
+        if (adjacentSpaceCounter >= shortestUnsunkShip.length) {
+          return true;
+        }
       }
     }
   }
