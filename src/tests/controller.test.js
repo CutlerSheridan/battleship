@@ -282,7 +282,7 @@ test('pickComputerMove() skips trying horizontally if just hit and no room that 
   expect(controller.pickComputerMove(p1, p2)).toEqual([3, 2]);
 });
 
-test('canShipBeHorizontal() checks if 5-space ship has room in 4 horizontal spaces', () => {
+test('canShipBeDirection() checks if 5-space ship has room in 2 horizontal spaces', () => {
   const p1 = model.Player('p1');
   const p2 = model.Player('p2');
   p2.ships.splice(1);
@@ -291,9 +291,39 @@ test('canShipBeHorizontal() checks if 5-space ship has room in 4 horizontal spac
   p1.attack(p2, 2, 1);
   p1.attack(p2, 2, 4);
   p1.attack(p2, 2, 2);
-  expect(controller.canShipBeHorizontal(p2, p2.ships[0], 2, 2)).toBe(false);
+  expect(controller.canShipBeDirection(p2, 'horizontal', 2, 2)).toBe(false);
 });
-// test this if there are two vertical hits already
+test('canShipBeDirection() checks if 5-space ship has room in 5 horizontal spaces', () => {
+  const p1 = model.Player('p1');
+  const p2 = model.Player('p2');
+  p2.ships.splice(1);
+  p2.ships[0].turnShip();
+  p2.gameboard.placeShip(p2.ships[0], 2, 2);
+  p1.attack(p2, 2, 1);
+  p1.attack(p2, 2, 7);
+  p1.attack(p2, 2, 2);
+  expect(controller.canShipBeDirection(p2, 'horizontal', 2, 2)).toBe(true);
+});
+test('canShipBeDirection() checks if 5-space ship has room in 4 vertical spaces', () => {
+  const p1 = model.Player('p1');
+  const p2 = model.Player('p2');
+  p2.ships.splice(1);
+  p2.gameboard.placeShip(p2.ships[0], 2, 2);
+  p1.attack(p2, 1, 2);
+  p1.attack(p2, 5, 2);
+  p1.attack(p2, 2, 2);
+  expect(controller.canShipBeDirection(p2, 'vertical', 2, 2)).toBe(false);
+});
+test('canShipBeDirection() checks if 5-space ship has room in 5 vertical spaces', () => {
+  const p1 = model.Player('p1');
+  const p2 = model.Player('p2');
+  p2.ships.splice(1);
+  p2.gameboard.placeShip(p2.ships[0], 2, 2);
+  p1.attack(p2, 1, 2);
+  p1.attack(p2, 7, 2);
+  p1.attack(p2, 2, 2);
+  expect(controller.canShipBeDirection(p2, 'vertical', 2, 2)).toBe(true);
+});
 
 test('isGuessPossible() evals space without room', () => {
   const p1 = model.Player('p1');

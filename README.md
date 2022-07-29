@@ -6,14 +6,13 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 #### TODO NEXT
 
-- change canShipBeHorizontal() to canShipBeDirection()
-- combine isGuessPossible() with canShipBeHorizontal()
+- make sure game works with changes
+- add ability to place ships
 
 #### TODO LATER
 
 ##### Features
 
-- add ability to place ships
 - add ability to remove ship and replace it
 - add dark screen between human player turns
 - display opponent's ship statuses
@@ -32,6 +31,11 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 - add brief border on attacked squares
 
 #### DONE
+
+_0.9.8_
+
+- change canShipBeHorizontal() to canShipBeDirection()
+- mostly delete isGuessPossible() and just use canShipBeDirection() twice inside it instead
 
 _0.9.7_
 

@@ -59,13 +59,6 @@ const pickComputerMove = (player, enemy) => {
   }
   const originalHitCoords = [moves[firstUnsunkHitLoc].row, moves[firstUnsunkHitLoc].col];
   const hitShip = grid[moves[firstUnsunkHitLoc].row][moves[firstUnsunkHitLoc].col].ship;
-  const numOfHits = hitShip.hitSpaces.reduce((prev, current) => {
-    if (current) {
-      prev++;
-    }
-    return prev;
-  }, 0);
-  console.log(`numOfHits: ${numOfHits}`);
 
   let shift = [0, 0];
   for (let i = 0; i < 2; i++) {
@@ -74,7 +67,7 @@ const pickComputerMove = (player, enemy) => {
         continue;
       }
       if (n === 1) {
-        if (numOfHits === 1 && !canShipBeHorizontal(enemy, hitShip, ...originalHitCoords)) {
+        if (!canShipBeDirection(enemy, 'horizontal', ...originalHitCoords)) {
           continue;
         }
       }
@@ -112,75 +105,43 @@ const pickComputerMove = (player, enemy) => {
   }
 };
 const isGuessPossible = (enemy, y, x) => {
-  const { grid } = enemy.gameboard;
-  const unsunkShips = enemy.ships.filter((ship) => !ship.isSunk());
-  const shortestUnsunkShip = unsunkShips.reduce((prev, current) =>
-    prev.length < current.length ? prev : current
-  );
-  for (let i = 0; i < 2; i++) {
-    for (let n = 0; n < 2; n++) {
-      if (i === n) {
-        continue;
-      }
-      let adjacentSpaceCounter = 0;
-      let shift = [0 - i, 0 - n];
-      const move = [y, x];
-      let nextSpace;
-      for (let t = 0; t < 2; t++) {
-        if (t === 1) {
-          shift = shift.map((num) => num * -1);
-        }
-        do {
-          const nextRow = move[0] + shift[0];
-          const nextCol = move[1] + shift[1];
-          if (nextRow >= 0 && nextRow < grid.length && nextCol >= 0 && nextCol < grid[0].length) {
-            nextSpace = grid[nextRow][nextCol];
-          } else {
-            nextSpace = undefined;
-          }
-          if (nextRow < grid.length && nextCol < grid[0].length) {
-            move[0] += shift[0];
-            move[1] += shift[1];
-            if (shift[0] + shift[1] > 0 && !nextSpace.hasBeenHit) {
-              adjacentSpaceCounter++;
-            }
-          }
-        } while (nextSpace && !nextSpace.hasBeenHit);
-        if (adjacentSpaceCounter >= shortestUnsunkShip.length) {
-          return true;
-        }
-      }
-    }
+  if (canShipBeDirection(enemy, 'horizontal', y, x)) {
+    return true;
   }
-  return false;
+  return canShipBeDirection(enemy, 'vertical', y, x);
 };
-const canShipBeHorizontal = (enemy, hitShip, y, x) => {
+const canShipBeDirection = (enemy, direction, y, x) => {
   const { grid } = enemy.gameboard;
   const unsunkShips = enemy.ships.filter((ship) => !ship.isSunk());
   const shortestUnsunkShip = unsunkShips.reduce((prev, current) =>
     prev.length < current.length ? prev : current
   );
   const minWidth = shortestUnsunkShip.length;
+  const checkingHorizontal = direction === 'horizontal';
   let spaceCounter = 1;
   let increment = 1;
-  const row = y;
-  let col = x;
+  let changingCoord = checkingHorizontal ? x : y;
   while (true) {
-    col += increment;
+    changingCoord += increment;
     const space =
-      row >= 0 && col >= 0 && row < grid.length && col < grid[0].length
-        ? grid[row][col]
+      changingCoord >= 0 && changingCoord < grid.length
+        ? grid[checkingHorizontal ? y : changingCoord][checkingHorizontal ? changingCoord : x]
         : undefined;
-    if (!space || col < 0 || col > grid[0].length || (space.hasBeenHit && space.ship !== hitShip)) {
+    if (
+      !space ||
+      changingCoord < 0 ||
+      changingCoord > grid.length ||
+      (space.hasBeenHit && space.ship !== unsunkShips[0])
+    ) {
       if (increment > 0) {
-        col = x;
+        changingCoord = checkingHorizontal ? x : y;
         increment *= -1;
         continue;
       }
       break;
-    } else if (space.hasBeenHit && space.ship === hitShip) {
+    } else if (space.hasBeenHit && space.ship === unsunkShips[0]) {
       return true;
-    } else if (!grid[row][col].hasBeenHit) {
+    } else if (!space.hasBeenHit) {
       spaceCounter++;
     }
   }
@@ -193,5 +154,5 @@ export {
   areSpacesAvailableForShip,
   pickComputerMove,
   isGuessPossible,
-  canShipBeHorizontal,
+  canShipBeDirection,
 };
