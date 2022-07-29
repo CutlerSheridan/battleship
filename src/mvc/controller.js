@@ -57,17 +57,32 @@ const pickComputerMove = (player, enemy) => {
     }
     return pickComputerMove(player, enemy);
   }
+  const originalHitCoords = [moves[firstUnsunkHitLoc].row, moves[firstUnsunkHitLoc].col];
+  const hitShip = grid[moves[firstUnsunkHitLoc].row][moves[firstUnsunkHitLoc].col].ship;
+  const numOfHits = hitShip.hitSpaces.reduce((prev, current) => {
+    if (current) {
+      prev++;
+    }
+    return prev;
+  }, 0);
+  console.log(`numOfHits: ${numOfHits}`);
+
   let shift = [0, 0];
   for (let i = 0; i < 2; i++) {
     for (let n = 0; n < 2; n++) {
       if (i === n) {
         continue;
       }
+      if (n === 1) {
+        if (numOfHits === 1 && !canShipBeHorizontal(enemy, hitShip, ...originalHitCoords)) {
+          continue;
+        }
+      }
       shift[0] = i;
       shift[1] = n;
       let checkBackwards = false;
       while (true) {
-        const newMove = [moves[firstUnsunkHitLoc].row, moves[firstUnsunkHitLoc].col];
+        const newMove = [...originalHitCoords];
         if (checkBackwards) {
           newMove[0] -= shift[0];
           newMove[1] -= shift[1];
@@ -82,11 +97,7 @@ const pickComputerMove = (player, enemy) => {
         if (space && !space.hasBeenHit) {
           return newMove;
         }
-        if (
-          !space ||
-          (space.hasBeenHit &&
-            space.ship !== grid[moves[firstUnsunkHitLoc].row][moves[firstUnsunkHitLoc].col].ship)
-        ) {
+        if (!space || (space.hasBeenHit && space.ship !== hitShip)) {
           if (checkBackwards) {
             break;
           }
@@ -106,12 +117,6 @@ const isGuessPossible = (enemy, y, x) => {
   const shortestUnsunkShip = unsunkShips.reduce((prev, current) =>
     prev.length < current.length ? prev : current
   );
-  console.log(`ATTACKING ${enemy.name.toUpperCase()}
-Attempted coord: [${y}, ${x}]
-shortestUnsunkShip: ${shortestUnsunkShip.name}
-grid.length: ${grid.length}
-grid[0].length: ${grid[0].length}
-`);
   for (let i = 0; i < 2; i++) {
     for (let n = 0; n < 2; n++) {
       if (i === n) {
@@ -128,11 +133,6 @@ grid[0].length: ${grid[0].length}
         do {
           const nextRow = move[0] + shift[0];
           const nextCol = move[1] + shift[1];
-          //           console.log(`shift: [${shift[0]}, ${shift[1]}]
-          // current space: [${move[0]}, ${move[1]}]
-          // nextRow: ${nextRow}
-          // nextCol: ${nextCol}
-          // `);
           if (nextRow >= 0 && nextRow < grid.length && nextCol >= 0 && nextCol < grid[0].length) {
             nextSpace = grid[nextRow][nextCol];
           } else {
@@ -143,8 +143,6 @@ grid[0].length: ${grid[0].length}
             move[1] += shift[1];
             if (shift[0] + shift[1] > 0 && !nextSpace.hasBeenHit) {
               adjacentSpaceCounter++;
-              // console.log(`moving to space: [${move[0]}, ${move[1]}]
-              // adjacentSpaceCounter: ${adjacentSpaceCounter}`);
             }
           }
         } while (nextSpace && !nextSpace.hasBeenHit);
@@ -156,6 +154,38 @@ grid[0].length: ${grid[0].length}
   }
   return false;
 };
+const canShipBeHorizontal = (enemy, hitShip, y, x) => {
+  const { grid } = enemy.gameboard;
+  const unsunkShips = enemy.ships.filter((ship) => !ship.isSunk());
+  const shortestUnsunkShip = unsunkShips.reduce((prev, current) =>
+    prev.length < current.length ? prev : current
+  );
+  const minWidth = shortestUnsunkShip.length;
+  let spaceCounter = 1;
+  let increment = 1;
+  const row = y;
+  let col = x;
+  while (true) {
+    col += increment;
+    const space =
+      row >= 0 && col >= 0 && row < grid.length && col < grid[0].length
+        ? grid[row][col]
+        : undefined;
+    if (!space || col < 0 || col > grid[0].length || (space.hasBeenHit && space.ship !== hitShip)) {
+      if (increment > 0) {
+        col = x;
+        increment *= -1;
+        continue;
+      }
+      break;
+    } else if (space.hasBeenHit && space.ship === hitShip) {
+      return true;
+    } else if (!grid[row][col].hasBeenHit) {
+      spaceCounter++;
+    }
+  }
+  return spaceCounter >= minWidth;
+};
 export {
   placeAllShips,
   randomlyPlaceShip,
@@ -163,4 +193,5 @@ export {
   areSpacesAvailableForShip,
   pickComputerMove,
   isGuessPossible,
+  canShipBeHorizontal,
 };

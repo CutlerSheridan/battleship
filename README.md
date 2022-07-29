@@ -6,7 +6,8 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 #### TODO NEXT
 
-- make sure isGuessPossible() works in actual game
+- change canShipBeHorizontal() to canShipBeDirection()
+- combine isGuessPossible() with canShipBeHorizontal()
 
 #### TODO LATER
 
@@ -31,6 +32,11 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 - add brief border on attacked squares
 
 #### DONE
+
+_0.9.7_
+
+- make sure isGuessPossible() works in actual game
+- make it so, if AI hits a ship that only has room vertically, it won't try attacking horizontally first
 
 _0.9.6_
 
