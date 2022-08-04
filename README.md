@@ -6,6 +6,7 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 #### TODO NEXT
 
+- clean up console.logs
 - make sure game works with changes
 - add ability to place ships
 
@@ -31,6 +32,10 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 - add brief border on attacked squares
 
 #### DONE
+
+_0.9.9_
+
+- fix canShipBeDirection()
 
 _0.9.8_
 

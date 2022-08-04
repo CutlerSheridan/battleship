@@ -96,12 +96,14 @@ const Player = (name) => {
     Ship(2, 'Destroyer'),
   ];
   const hitMoves = [];
+  const moves = [];
   const attack = (enemy, y, x) => {
     const enemyBoard = enemy.gameboard;
     enemyBoard.receiveAttack(y, x);
     if (enemyBoard.grid[y][x].ship) {
       hitMoves.push({ row: y, col: x });
     }
+    moves.push({ row: y, col: x });
   };
 
   return {
@@ -118,6 +120,7 @@ const Player = (name) => {
     ships,
     attack,
     hitMoves,
+    moves,
   };
 };
 

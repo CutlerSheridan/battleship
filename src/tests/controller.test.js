@@ -134,6 +134,26 @@ test('pickComputerMove() picks space if two spaces ago hit but last space missed
   p1.attack(p2, 2, 7);
   expect(controller.pickComputerMove(p1, p2)).toEqual([2, 5]);
 });
+test('pickComputerMove() picks space if three and two spaces ago hit but last space missed', () => {
+  const p1 = model.Player('p1');
+  const p2 = model.Player('p2');
+  const coords = [2, 2];
+  p2.gameboard.placeShip(p2.ships[0], ...coords);
+  p1.attack(p2, 2, 5);
+  p1.attack(p2, 2, 6);
+  p1.attack(p2, 2, 7);
+  expect(controller.pickComputerMove(p1, p2)).toEqual([2, 4]);
+});
+test('pickComputerMove() picks space if hit far right of hor. ship, then missed, then hit one left', () => {
+  const p1 = model.Player('p1');
+  const p2 = model.Player('p2');
+  const coords = [2, 2];
+  p2.gameboard.placeShip(p2.ships[0], ...coords);
+  p1.attack(p2, 2, 6);
+  p1.attack(p2, 2, 7);
+  p1.attack(p2, 2, 5);
+  expect(controller.pickComputerMove(p1, p2)).toEqual([2, 4]);
+});
 test('pickComputerMove() picks space if three spaces ago hit but last space missed', () => {
   const p1 = model.Player('p1');
   const p2 = model.Player('p2');
@@ -323,6 +343,17 @@ test('canShipBeDirection() checks if 5-space ship has room in 5 vertical spaces'
   p1.attack(p2, 7, 2);
   p1.attack(p2, 2, 2);
   expect(controller.canShipBeDirection(p2, 'vertical', 2, 2)).toBe(true);
+});
+test('canShipBeDirection() checks if 3-space ship with a space already hit fits', () => {
+  const p1 = model.Player('p1');
+  const p2 = model.Player('p2');
+  p2.ships.splice(2);
+  p2.gameboard.placeShip(p2.ships[0], 2, 2);
+  p2.gameboard.placeShip(p2.ships[1], 5, 4);
+  p1.attack(p2, 5, 7);
+  p1.attack(p2, 5, 8);
+  p1.attack(p2, 5, 6);
+  expect(controller.canShipBeDirection(p2, 'horizontal', 5, 7, p1)).toBe(true);
 });
 
 test('isGuessPossible() evals space without room', () => {

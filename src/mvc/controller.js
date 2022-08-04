@@ -67,7 +67,8 @@ const pickComputerMove = (player, enemy) => {
         continue;
       }
       if (n === 1) {
-        if (!canShipBeDirection(enemy, 'horizontal', ...originalHitCoords)) {
+        if (!canShipBeDirection(enemy, 'horizontal', ...originalHitCoords, player)) {
+          console.log("reading as can't be horizontal");
           continue;
         }
       }
@@ -75,6 +76,7 @@ const pickComputerMove = (player, enemy) => {
       shift[1] = n;
       let checkBackwards = false;
       while (true) {
+        console.log('in the while loop in pickComputerMove()');
         const newMove = [...originalHitCoords];
         if (checkBackwards) {
           newMove[0] -= shift[0];
@@ -88,6 +90,7 @@ const pickComputerMove = (player, enemy) => {
             ? grid[newMove[0]][newMove[1]]
             : undefined;
         if (space && !space.hasBeenHit) {
+          console.log('checked space is unhit');
           return newMove;
         }
         if (!space || (space.hasBeenHit && space.ship !== hitShip)) {
@@ -100,6 +103,7 @@ const pickComputerMove = (player, enemy) => {
           continue;
         }
         shift = shift.map((num) => (num === 0 ? num + 0 : num + 1));
+        console.log('checked space holds same ship');
       }
     }
   }
@@ -110,12 +114,24 @@ const isGuessPossible = (enemy, y, x) => {
   }
   return canShipBeDirection(enemy, 'vertical', y, x);
 };
-const canShipBeDirection = (enemy, direction, y, x) => {
+const canShipBeDirection = (enemy, direction, y, x, player) => {
   const { grid } = enemy.gameboard;
   const unsunkShips = enemy.ships.filter((ship) => !ship.isSunk());
   const shortestUnsunkShip = unsunkShips.reduce((prev, current) =>
     prev.length < current.length ? prev : current
   );
+  let firstUnsunkHitLoc;
+  let firstHitShip;
+  if (player) {
+    const playerMoves = player.hitMoves;
+    firstUnsunkHitLoc = playerMoves.findIndex((move) => !grid[move.row][move.col].ship.isSunk());
+    if (firstUnsunkHitLoc !== -1) {
+      firstHitShip =
+        grid[playerMoves[firstUnsunkHitLoc].row][playerMoves[firstUnsunkHitLoc].col].ship;
+    }
+  } else {
+    firstUnsunkHitLoc = -1;
+  }
   const minWidth = shortestUnsunkShip.length;
   const checkingHorizontal = direction === 'horizontal';
   let spaceCounter = 1;
@@ -127,11 +143,19 @@ const canShipBeDirection = (enemy, direction, y, x) => {
       changingCoord >= 0 && changingCoord < grid.length
         ? grid[checkingHorizontal ? y : changingCoord][checkingHorizontal ? changingCoord : x]
         : undefined;
+    if (space && firstUnsunkHitLoc !== -1) {
+      console.log('in canShipBeDirection');
+      console.log('space.ship:');
+      console.log(space.ship);
+      console.log('previously hit ship:');
+      console.log(firstHitShip);
+    }
     if (
       !space ||
       changingCoord < 0 ||
       changingCoord > grid.length ||
-      (space.hasBeenHit && space.ship !== unsunkShips[0])
+      (space.hasBeenHit &&
+        (firstUnsunkHitLoc === -1 || (firstUnsunkHitLoc !== -1 && space.ship !== firstHitShip)))
     ) {
       if (increment > 0) {
         changingCoord = checkingHorizontal ? x : y;
@@ -139,12 +163,22 @@ const canShipBeDirection = (enemy, direction, y, x) => {
         continue;
       }
       break;
-    } else if (space.hasBeenHit && space.ship === unsunkShips[0]) {
+    } else if (space.hasBeenHit && firstUnsunkHitLoc !== -1 && space.ship === firstHitShip) {
       return true;
     } else if (!space.hasBeenHit) {
+      console.log(
+        `space: ${checkingHorizontal ? y : changingCoord}, ${
+          checkingHorizontal ? changingCoord : x
+        }`
+      );
+      console.log(space);
       spaceCounter++;
     }
   }
+  console.log(
+    `checking direction: ${direction}\nspaceCounter: ${spaceCounter}\nminWidth: ${minWidth}\nFrom point: ${y}, ${x}`
+  );
+  console.table(grid.map((row) => row.map((item) => `${item.hasBeenHit ? 'X' : '_'}`)));
   return spaceCounter >= minWidth;
 };
 export {
