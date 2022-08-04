@@ -273,7 +273,7 @@ test('pickComputerMove() sinks first and second adjacent vertical ships starting
   expect(p2.gameboard.grid[2][2].ship.isSunk()).toBe(true);
   expect(p2.gameboard.grid[2][3].ship.isSunk()).toBe(true);
 });
-test('pickComputerMove() sinks three adjacent ships after hitting middle', () => {
+test('pickComputerMove() sinks three adjacent ships after hitting middle close to left edge', () => {
   const p1 = model.Player('p1');
   const p2 = model.Player('p2');
   p2.ships[0].turnShip();
@@ -282,13 +282,30 @@ test('pickComputerMove() sinks three adjacent ships after hitting middle', () =>
   p2.gameboard.placeShip(p2.ships[1], 2, 3);
   p2.gameboard.placeShip(p2.ships[4], 4, 0);
   p1.attack(p2, 4, 2);
-  const looper = p2.ships[0].length + p2.ships[1].length + p2.ships[4].length + 2;
+  const looper = p2.ships[0].length + p2.ships[1].length + 2;
   for (let i = 0; i < looper; i++) {
     p1.attack(p2, ...controller.pickComputerMove(p1, p2));
   }
   expect(p2.gameboard.grid[2][2].ship.isSunk()).toBe(true);
   expect(p2.gameboard.grid[2][3].ship.isSunk()).toBe(true);
-  expect(p2.gameboard.grid[4][0].ship.isSunk()).toBe(true);
+  expect(p2.gameboard.grid[4][0].ship.isSunk()).toBe(false);
+});
+test('pickComputerMove() sinks three adjacent ships after hitting middle far from left edge', () => {
+  const p1 = model.Player('p1');
+  const p2 = model.Player('p2');
+  p2.ships[0].turnShip();
+  p2.ships[1].turnShip();
+  p2.gameboard.placeShip(p2.ships[0], 2, 5);
+  p2.gameboard.placeShip(p2.ships[1], 2, 6);
+  p2.gameboard.placeShip(p2.ships[4], 4, 3);
+  p1.attack(p2, 4, 5);
+  const looper = p2.ships[0].length + p2.ships[1].length + p2.ships[4].length + 20;
+  for (let i = 0; i < looper; i++) {
+    p1.attack(p2, ...controller.pickComputerMove(p1, p2));
+  }
+  expect(p2.gameboard.grid[2][5].ship.isSunk()).toBe(true);
+  expect(p2.gameboard.grid[2][6].ship.isSunk()).toBe(true);
+  expect(p2.gameboard.grid[4][3].ship.isSunk()).toBe(true);
 });
 test('pickComputerMove() skips trying horizontally if just hit and no room that way', () => {
   const p1 = model.Player('p1');
@@ -300,6 +317,22 @@ test('pickComputerMove() skips trying horizontally if just hit and no room that 
   p1.attack(p2, 2, 4);
   p1.attack(p2, 2, 2);
   expect(controller.pickComputerMove(p1, p2)).toEqual([3, 2]);
+});
+test('pickComputerMove() picks move if once-hit 3-space vert. ship in left bottom corner with sunk ship two away', () => {
+  const p1 = model.Player('p1');
+  const p2 = model.Player('p2');
+  // p2.ships.splice(3);
+  p2.ships[0].turnShip();
+  p2.ships[2].turnShip();
+  p2.gameboard.placeShip(p2.ships[0], 5, 2);
+  p2.gameboard.placeShip(p2.ships[2], 7, 0);
+  p1.attack(p2, 5, 2);
+  p1.attack(p2, 6, 2);
+  p1.attack(p2, 7, 2);
+  p1.attack(p2, 8, 2);
+  p1.attack(p2, 9, 2);
+  p1.attack(p2, 9, 0);
+  expect(controller.pickComputerMove(p1, p2)).toEqual([8, 0]);
 });
 
 test('canShipBeDirection() checks if 5-space ship has room in 2 horizontal spaces', () => {
@@ -354,6 +387,22 @@ test('canShipBeDirection() checks if 3-space ship with a space already hit fits'
   p1.attack(p2, 5, 8);
   p1.attack(p2, 5, 6);
   expect(controller.canShipBeDirection(p2, 'horizontal', 5, 7, p1)).toBe(true);
+});
+test('canShipBeDirection() checks if once-hit 3-space vert. ship in left bottom corner fits with sunk ship two away', () => {
+  const p1 = model.Player('p1');
+  const p2 = model.Player('p2');
+  p2.ships.splice(3);
+  p2.ships[0].turnShip();
+  p2.ships[2].turnShip();
+  p2.gameboard.placeShip(p2.ships[0], 5, 2);
+  p2.gameboard.placeShip(p2.ships[2], 7, 0);
+  p1.attack(p2, 5, 2);
+  p1.attack(p2, 6, 2);
+  p1.attack(p2, 7, 2);
+  p1.attack(p2, 8, 2);
+  p1.attack(p2, 9, 2);
+  p1.attack(p2, 9, 0);
+  expect(controller.canShipBeDirection(p2, 'horizontal', 9, 0, p1)).toBe(false);
 });
 
 test('isGuessPossible() evals space without room', () => {

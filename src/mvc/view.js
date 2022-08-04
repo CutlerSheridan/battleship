@@ -240,29 +240,16 @@ const startTurn = () => {
     nameElements.forEach((name) => name.classList.toggle('ui-name-current'));
   }
   const currentPlayer = p1.currentTurn ? p1 : p2;
-  console.log(currentPlayer.name);
   const enemyGrid = p1.currentTurn ? grid2 : grid1;
   if (currentPlayer.isHuman) {
     enemyGrid.classList.remove('grid-unclickable');
   } else {
     const currentEnemy = p1.currentTurn ? p2 : p1;
-    let row;
-    let col;
-    try {
-      [row, col] = controller.pickComputerMove(currentPlayer, currentEnemy);
-    } catch (err) {
-      console.log(err);
-      console.log('p1');
-      console.log(p1.moves);
-      console.log('p2');
-      console.log(p2.moves);
-    }
+    const [row, col] = controller.pickComputerMove(currentPlayer, currentEnemy);
     const targetSpace = enemyGrid.querySelector(
       `.grid-space[data-row="${row}"][data-col="${col}"]`
     );
     setTimeout(() => {
-      console.log('target space:');
-      console.log(targetSpace);
       attackHandler(enemyGrid, currentPlayer, currentEnemy, targetSpace);
     }, 400);
   }

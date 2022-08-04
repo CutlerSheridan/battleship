@@ -6,16 +6,14 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 #### TODO NEXT
 
-- clean up console.logs
-- make sure game works with changes
-- add ability to place ships
+- add dark screen between human player turns
 
 #### TODO LATER
 
 ##### Features
 
 - add ability to remove ship and replace it
-- add dark screen between human player turns
+- add ability to place ships
 - display opponent's ship statuses
 - add ability for two people at separate computers to play by calling out coordinates
 
@@ -32,6 +30,12 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 - add brief border on attacked squares
 
 #### DONE
+
+_0.9.10_
+
+- make canShipBeDirection() use length of hit ship if that's the basis
+- clean up console.logs
+- make sure game works with changes
 
 _0.9.9_
 
