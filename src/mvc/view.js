@@ -25,12 +25,18 @@ const setupGame = () => {
 
   const { body } = document;
   body.append(gameContainer, uiContainer);
-  assignAllShipSpacesClass();
-  addAttackListeners();
   p1Grid.classList.add('grid-unclickable');
   p2Grid.classList.add('grid-unclickable');
 
-  nextButton.addEventListener('click', startTurn);
+  // nextButton.addEventListener('click', startTurn);
+  nextButton.addEventListener(
+    'click',
+    () => {
+      startRoundZero(p1);
+    },
+    { once: true }
+  );
+  handlePlayerTypeToggles();
 };
 
 const createGrid = () => {
@@ -103,8 +109,9 @@ const assignAllShipSpacesClass = () => {
   gridElements.forEach((grid, index) => {
     for (let i = 0; i < playerGrids[index].length; i++) {
       for (let n = 0; n < playerGrids[index][0].length; n++) {
+        const space = grid.querySelector(`.grid-space[data-row="${i}"][data-col="${n}"]`);
+        space.classList.remove('grid-space-shipHold');
         if (playerGrids[index][i][n].ship) {
-          const space = grid.querySelector(`.grid-space[data-row="${i}"][data-col="${n}"]`);
           space.classList.add('grid-space-shipHold');
         }
       }
@@ -204,41 +211,106 @@ const createMatchResult = () => {
   resultEl.classList.add('ui-matchResult-hidden');
   return resultEl;
 };
+
+const startRoundZero = (player) => {
+  const nextButton = document.querySelector('.ui-nextButton');
+  assignAllShipSpacesClass();
+  switchTurns(true);
+  if (!player.isHuman) {
+    if (player === p2) {
+      nextButton.addEventListener('click', startTurn);
+      startTurn();
+      return;
+    }
+    startRoundZero(p2);
+    return;
+  }
+  // click ship to move it
+
+  if (player === p1) {
+    nextButton.addEventListener(
+      'click',
+      () => {
+        startRoundZero(p2);
+      },
+      { once: true }
+    );
+  }
+  if (player === p2) {
+    nextButton.addEventListener(
+      'click',
+      () => {
+        assignAllShipSpacesClass();
+        addAttackListeners();
+      },
+      { once: true }
+    );
+    nextButton.addEventListener('click', startTurn);
+  }
+};
+const switchTurns = (isRoundZero = false) => {
+  const nextButton = document.querySelector('.ui-nextButton');
+  const grids = Array.from(document.querySelectorAll('.grid-outerContainer'));
+  const players = [p1, p2];
+  const nameElements = document.querySelectorAll('.ui-name');
+
+  if (!p1.currentTurn && !p2.currentTurn) {
+    p1.changeTurn();
+    nameElements[0].classList.add('ui-name-current');
+    players.forEach((p, index) => {
+      if (!p.isHuman) {
+        toggleShipVisibility(grids[1 - index]);
+      }
+    });
+    if (p1.isHuman && p2.isHuman) {
+      toggleShipVisibility(grids[1]);
+    }
+    nextButton.textContent = 'Next turn';
+
+    // p1.changeTurn();
+    // grids[0].classList.add('grid-unclickable');
+    // nextButton.textContent = 'Next turn';
+    // nameElements[0].classList.add('ui-name-current');
+    // if (!p1.isHuman || !p2.isHuman) {
+    //   if (!p1.isHuman) {
+    //     toggleShipVisibility(grids[0]);
+    //   }
+    //   if (!p2.isHuman) {
+    //     toggleShipVisibility(grids[1]);
+    //   }
+    // } else {
+    //   toggleShipVisibility(grids[0]);
+    // }
+  } else {
+    if (!isRoundZero) {
+      nextButton.classList.add('ui-nextButton-unclickable');
+    }
+    p1.changeTurn();
+    p2.changeTurn();
+    if (p1.isHuman && p2.isHuman) {
+      toggleShipVisibility(grids[1]);
+      toggleShipVisibility(grids[0]);
+    }
+    nameElements.forEach((name) => name.classList.toggle('ui-name-current'));
+  }
+  if (isRoundZero) {
+    players.forEach((p, index) => {
+      if (p.currentTurn && p.isHuman) {
+        grids[index].classList.remove('grid-unclickable');
+        grids[1 - index].classList.add('grid-unclickable');
+      }
+    });
+  }
+};
 const enableNextTurnButton = () => {
   const nextButton = document.querySelector('.ui-nextButton');
   nextButton.addEventListener('click', startTurn);
 };
 const startTurn = () => {
-  const nextButton = document.querySelector('.ui-nextButton');
-  nextButton.classList.add('ui-nextButton-unclickable');
-  document.querySelector('.ui-resultContainer').classList.add('ui-resultContainer-hidden');
   const [grid1, grid2] = Array.from(document.querySelectorAll('.grid-outerContainer'));
-  const nameElements = document.querySelectorAll('.ui-name');
 
-  if (!p1.currentTurn && !p2.currentTurn) {
-    p1.changeTurn();
-    grid1.classList.add('grid-unclickable');
-    nextButton.textContent = 'Next turn';
-    nameElements[0].classList.add('ui-name-current');
-    if (!p1.isHuman || !p2.isHuman) {
-      if (!p1.isHuman) {
-        toggleShipVisibility(grid1);
-      }
-      if (!p2.isHuman) {
-        toggleShipVisibility(grid2);
-      }
-    } else {
-      toggleShipVisibility(grid2);
-    }
-  } else {
-    p1.changeTurn();
-    p2.changeTurn();
-    if (p1.isHuman && p2.isHuman) {
-      toggleShipVisibility(grid2);
-      toggleShipVisibility(grid1);
-    }
-    nameElements.forEach((name) => name.classList.toggle('ui-name-current'));
-  }
+  document.querySelector('.ui-resultContainer').classList.add('ui-resultContainer-hidden');
+  switchTurns();
   const currentPlayer = p1.currentTurn ? p1 : p2;
   const enemyGrid = p1.currentTurn ? grid2 : grid1;
   if (currentPlayer.isHuman) {

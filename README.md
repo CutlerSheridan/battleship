@@ -6,6 +6,7 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 #### TODO NEXT
 
+- get round zero working for one human, one computer
 - add dark screen between human player turns
 
 #### TODO LATER
@@ -30,6 +31,12 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 - add brief border on attacked squares
 
 #### DONE
+
+_0.10.0_
+
+- extract switchTurns() into its own function
+- add useless round zero for two humans
+- get round zero working with two computers
 
 _0.9.10_
 
