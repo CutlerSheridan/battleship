@@ -203,7 +203,10 @@ const startTurn = () => {
     return;
   }
   const currentPlayer = p1.currentTurn ? p1 : p2;
+  const currentGrid = p1.currentTurn ? grid1 : grid2;
   const enemyGrid = p1.currentTurn ? grid2 : grid1;
+  currentGrid.classList.add('grid-unclickable');
+  enemyGrid.classList.add('grid-unclickable');
   if (currentPlayer.isHuman) {
     enemyGrid.classList.remove('grid-unclickable');
   } else {
@@ -229,7 +232,7 @@ const switchTurns = () => {
     nameElements[0].classList.add('ui-name-current');
     players.forEach((p, index) => {
       if (!p.isHuman) {
-        toggleShipVisibility(players[1 - index]);
+        toggleShipVisibility(players[index]);
       }
     });
     if (p1.isHuman && p2.isHuman) {
@@ -257,8 +260,10 @@ const switchTurns = () => {
 
   if (isRoundZero()) {
     players.forEach((p, index) => {
-      if (p.currentTurn && p.isHuman) {
-        grids[index].classList.remove('grid-unclickable');
+      if (p.currentTurn) {
+        if (p.isHuman) {
+          grids[index].classList.remove('grid-unclickable');
+        }
         grids[1 - index].classList.add('grid-unclickable');
       }
     });
@@ -271,16 +276,15 @@ const startRoundZero = () => {
   const player = p1.currentTurn ? p1 : p2;
   console.log(p1);
   console.log(player);
-  if (!player.isHuman) {
-    startTurn();
-    return;
-  }
-  // click ship to move it
-
   if (player === p2) {
     console.log('adding attack listener');
     nextButton.addEventListener('click', addAttackListeners, { once: true });
   }
+  if (!player.isHuman) {
+    startTurn();
+    // return;
+  }
+  // click ship to move it
 };
 const toggleShipVisibility = (player) => {
   const allShipSpaces = getAllShipSpaceElements();
@@ -320,16 +324,16 @@ const getAllShipSpaceElements = () => {
 };
 const addAttackListeners = () => {
   const gridElements = document.querySelectorAll('.grid-outerContainer');
-  const players = [p2, p1];
+  const players = [p1, p2];
   players.forEach((p, index) => {
     if (p.isHuman) {
-      const enemySpaces = getAllSpaceElements(gridElements[index]);
+      const enemySpaces = getAllSpaceElements(gridElements[1 - index]);
       enemySpaces.forEach((space) =>
         space.addEventListener(
           'click',
           (e) => {
             e.preventDefault();
-            attackHandler(gridElements[index], p, players[1 - index], space);
+            attackHandler(gridElements[1 - index], p, players[1 - index], space);
           },
           { once: true }
         )
@@ -341,6 +345,7 @@ const attackHandler = (gridElement, player, enemy, space) => {
   const successfulAttack = launchAttack(space, player, enemy);
   displayNewHit(space, enemy, gridElement);
   if (successfulAttack) {
+    console.log('successful attack');
     gridElement.classList.add('grid-unclickable');
     const nextButton = document.querySelector('.ui-nextButton');
     nextButton.classList.remove('ui-nextButton-unclickable');

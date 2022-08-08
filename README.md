@@ -6,9 +6,9 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 #### TODO NEXT
 
-- make sure game works when you interrupt round zero to switch to a game with a different player makeup
-- get round zero working for one human, one computer
+- get game working when p1 = human, p2 = computer--currently, when p1 has first real turn, attacks don't register
 - add dark screen between human player turns
+- fix bug where, when one human and one computer, if the next button is still greyed out, if it's human's turn and you click to toggle a player type, the next button correctly changes to say restart but if you unclick the toggle so the player types remain unchanged, the next button remains as restart; clicking restart correctly begins the computer's turn, but potentially without the player having gone--it should change the text back to next and it should go back to being greyed out; text then forever remains restart
 
 #### TODO LATER
 
@@ -30,8 +30,15 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 - figure out how to display on mobile
 - maybe add sounds for hits and misses?
 - add brief border on attacked squares
+- make sure ship pegs don't shift upon sinking
 
 #### DONE
+
+_0.10.2_
+
+- get game working when p1 = computer, p2 = human
+- make sure game works when you interrupt round zero to switch to a game with a different player makeup
+- fix whatever is happening with the grids remaining clickable after attacking
 
 _0.10.1_
 
