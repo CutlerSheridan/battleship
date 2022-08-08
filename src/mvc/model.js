@@ -88,6 +88,10 @@ const Player = (name) => {
   const changeTurn = () => {
     currentTurn = !currentTurn;
   };
+  let turnNum = 0;
+  const incrementTurn = () => {
+    turnNum++;
+  };
   const ships = [
     // Ship(5, 'Aircraft Carrier'),
     // Ship(4, 'Battleship'),
@@ -117,6 +121,10 @@ const Player = (name) => {
     get currentTurn() {
       return currentTurn;
     },
+    get turnNum() {
+      return turnNum;
+    },
+    incrementTurn,
     ships,
     attack,
     hitMoves,

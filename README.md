@@ -6,6 +6,7 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 #### TODO NEXT
 
+- make sure game works when you interrupt round zero to switch to a game with a different player makeup
 - get round zero working for one human, one computer
 - add dark screen between human player turns
 
@@ -31,6 +32,16 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 - add brief border on attacked squares
 
 #### DONE
+
+_0.10.1_
+
+- add a turnNum property to Player objects for determining if Round Zero behavior should execute
+- add startRoundZero() as a possible path in startTurn()
+- make game restart remove round zero listeners if that's interrupted
+- refactor toggleShipVisibility() to accept player parameter instead of gridElement
+- refactor toggleShipVisibility() to use new getAllShipElements() function
+- remove assignAllShipSpacesClass() function
+- stop p2's round zero turn allowing p1 to attack p2
 
 _0.10.0_
 

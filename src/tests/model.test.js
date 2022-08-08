@@ -116,3 +116,9 @@ test('Player.attack() updates Player.hitMoves', () => {
 
   expect(p1.hitMoves).toEqual([{ row: 2, col: 2 }]);
 });
+test('Player.incrementTurn() adds to Player.turnNum', () => {
+  const p1 = model.Player('p1');
+  p1.incrementTurn();
+  p1.incrementTurn();
+  expect(p1.turnNum).toBe(2);
+});
