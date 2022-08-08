@@ -6,16 +6,14 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 #### TODO NEXT
 
-- get game working when p1 = human, p2 = computer--currently, when p1 has first real turn, attacks don't register
-- add dark screen between human player turns
-- fix bug where, when one human and one computer, if the next button is still greyed out, if it's human's turn and you click to toggle a player type, the next button correctly changes to say restart but if you unclick the toggle so the player types remain unchanged, the next button remains as restart; clicking restart correctly begins the computer's turn, but potentially without the player having gone--it should change the text back to next and it should go back to being greyed out; text then forever remains restart
+- add ability to remove ship and replace it
 
 #### TODO LATER
 
 ##### Features
 
-- add ability to remove ship and replace it
 - add ability to place ships
+- add dark screen between human player turns
 - display opponent's ship statuses
 - add ability for two people at separate computers to play by calling out coordinates
 
@@ -31,8 +29,16 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 - maybe add sounds for hits and misses?
 - add brief border on attacked squares
 - make sure ship pegs don't shift upon sinking
+- when one human one AI, indicate after round zero that it's the human's turn again
 
 #### DONE
+
+_0.10.3_
+
+- get game working when p1 = human, p2 = computer--currently, when p1 has first real turn, attacks don't register
+  - ohhhh, when p2 is a computer, it attaches addAttackListeners to the next button, which the computer doesn't press because it goes straight back to p1's turn
+- get both p1 AI and p2 AI to make their round zero move without human having to click next
+- fix bug where, when one human and one computer, if the next button is still greyed out, if it's human's turn and you click to toggle a player type, the next button correctly changes to say restart but if you unclick the toggle so the player types remain unchanged, the next button remains as restart; clicking restart correctly begins the computer's turn, but potentially without the player having gone--it should change the text back to next and it should go back to being greyed out; text then forever remains restart [this one went away on its own]
 
 _0.10.2_
 

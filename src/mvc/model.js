@@ -93,10 +93,10 @@ const Player = (name) => {
     turnNum++;
   };
   const ships = [
-    // Ship(5, 'Aircraft Carrier'),
-    // Ship(4, 'Battleship'),
-    // Ship(3, 'Cruiser'),
-    // Ship(3, 'Submarine'),
+    Ship(5, 'Aircraft Carrier'),
+    Ship(4, 'Battleship'),
+    Ship(3, 'Cruiser'),
+    Ship(3, 'Submarine'),
     Ship(2, 'Destroyer'),
   ];
   const hitMoves = [];

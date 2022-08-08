@@ -236,7 +236,6 @@ const switchTurns = () => {
       }
     });
     if (p1.isHuman && p2.isHuman) {
-      console.log('reaches round zero turn one ship visibility toggle logic');
       toggleShipVisibility(p2);
     }
     nextButton.textContent = 'Next turn';
@@ -271,18 +270,17 @@ const switchTurns = () => {
 };
 const isRoundZero = () => p1.turnNum <= 1 && p2.turnNum <= 1;
 const startRoundZero = () => {
-  console.log('gets in');
   const nextButton = document.querySelector('.ui-nextButton');
   const player = p1.currentTurn ? p1 : p2;
-  console.log(p1);
-  console.log(player);
   if (player === p2) {
-    console.log('adding attack listener');
-    nextButton.addEventListener('click', addAttackListeners, { once: true });
+    if (player.isHuman) {
+      nextButton.addEventListener('click', addAttackListeners, { once: true });
+    } else {
+      addAttackListeners();
+    }
   }
   if (!player.isHuman) {
     startTurn();
-    // return;
   }
   // click ship to move it
 };
@@ -345,7 +343,6 @@ const attackHandler = (gridElement, player, enemy, space) => {
   const successfulAttack = launchAttack(space, player, enemy);
   displayNewHit(space, enemy, gridElement);
   if (successfulAttack) {
-    console.log('successful attack');
     gridElement.classList.add('grid-unclickable');
     const nextButton = document.querySelector('.ui-nextButton');
     nextButton.classList.remove('ui-nextButton-unclickable');
