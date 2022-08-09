@@ -51,6 +51,35 @@ test("Gameboard.placeShip() changes ship object's coordinates", () => {
   expect(testShip.coordinates.length).toBe(3);
   expect(testShip.coordinates).toEqual(expectedArray);
 });
+test('Gameboard.placeShip() places horizontal ship held from middle', () => {
+  const testShip = model.Ship(3);
+  testShip.heldPos = 2;
+  const testBoard = model.Gameboard();
+  testBoard.placeShip(testShip, 3, 3);
+  const expectedArray = [
+    { row: 3, col: 2 },
+    { row: 3, col: 3 },
+    { row: 3, col: 4 },
+  ];
+  expect(testShip.coordinates.length).toBe(3);
+  expect(testShip.coordinates).toEqual(expectedArray);
+});
+test('Gameboard.placeShip() places vertical ship held from spot 4 / 5', () => {
+  const testShip = model.Ship(5);
+  testShip.turnShip();
+  testShip.heldPos = 4;
+  const testBoard = model.Gameboard();
+  testBoard.placeShip(testShip, 7, 3);
+  const expectedArray = [
+    { row: 4, col: 3 },
+    { row: 5, col: 3 },
+    { row: 6, col: 3 },
+    { row: 7, col: 3 },
+    { row: 8, col: 3 },
+  ];
+  expect(testShip.coordinates.length).toBe(5);
+  expect(testShip.coordinates).toEqual(expectedArray);
+});
 test('Gameboard.receiveAttack() inflicts hit on ship in correct location', () => {
   const testShip = model.Ship(4);
   const testBoard = model.Gameboard();

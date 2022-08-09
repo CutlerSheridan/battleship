@@ -9,6 +9,8 @@ const Ship = (length, name = 'unnamed') => {
     hitSpaces.push(false);
   }
   const coordinates = [];
+  const isHeld = false;
+  const heldPos = null;
   const hit = (position) => {
     hitSpaces[position] = true;
   };
@@ -26,6 +28,8 @@ const Ship = (length, name = 'unnamed') => {
     length,
     name,
     coordinates,
+    isHeld,
+    heldPos,
     hitSpaces,
     hit,
     isSunk,
@@ -41,15 +45,15 @@ const Gameboard = () => {
     }
   }
   const placeShip = (ship, y, x) => {
-    let row = y;
-    let col = x;
-    for (let i = 0; i < ship.length; i++) {
-      if (ship.isHorizontal) {
-        col = x + i;
-      } else {
-        row = y + i;
-      }
-      grid[row][col] = { ship, position: i, hasBeenHit: false };
+    const heldPos = ship.heldPos ? ship.heldPos : 1;
+    const spacesBefore = heldPos - 1;
+    const spacesAfter = ship.length - heldPos;
+    let counter = 0;
+    for (let i = spacesBefore; i >= -1 * spacesAfter; i--) {
+      const newCoord = (ship.isHorizontal ? x : y) - i;
+      const row = ship.isHorizontal ? y : newCoord;
+      const col = ship.isHorizontal ? newCoord : x;
+      grid[row][col] = { ship, position: counter++, hasBeenHit: false };
       ship.coordinates.push({ row, col });
     }
   };

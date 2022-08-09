@@ -33,6 +33,10 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 #### DONE
 
+_0.11.0_
+
+- rewrite model.Gameboard.placeShip() to accomodate ships being placed while held from any spot
+
 _0.10.3_
 
 - get game working when p1 = human, p2 = computer--currently, when p1 has first real turn, attacks don't register
