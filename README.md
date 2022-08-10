@@ -6,13 +6,14 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 #### TODO NEXT
 
-- add ability to remove ship and replace it
-- make sure relocLift listeners are removed after each round zero turn
+- make function that finds spaces sufficiently far from walls and ships to place a ship and adds an event listener to those spaces with a passed function
+- make addRelocShipListeners and handleRelocPlace use that function for placing handleRelocLift
 
 #### TODO LATER
 
 ##### Features
 
+- add hover effect or something showing where your ship will be when you put it back down
 - add ability to place ships
 - add dark screen between human player turns
 - display opponent's ship statuses
@@ -34,6 +35,11 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 - when one human one AI, indicate after round zero that it's the human's turn again
 
 #### DONE
+
+_0.11.2_
+
+- add ability to remove ship and replace it
+- make sure relocLift listeners are removed after each round zero turn
 
 _0.11.1_
 

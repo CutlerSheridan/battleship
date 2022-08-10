@@ -208,6 +208,14 @@ const startTurn = () => {
     startRoundZero();
     return;
   }
+  if (p1.currentTurn && p1.turnNum === 2) {
+    const allSpaceEls = [];
+    allSpaceEls.push(...getGridSpaceElements(grid1));
+    allSpaceEls.push(...getGridSpaceElements(grid2));
+    allSpaceEls.forEach((space) => {
+      space.removeEventListener('click', handleRelocLift);
+    });
+  }
   const currentPlayer = p1.currentTurn ? p1 : p2;
   const currentGrid = p1.currentTurn ? grid1 : grid2;
   const enemyGrid = p1.currentTurn ? grid2 : grid1;
@@ -319,13 +327,32 @@ const handleRelocLift = (e) => {
   } else {
     // handle if removing from off-grid
   }
+
+  const allSpaceEls = getGridSpaceElements(pGridElement);
+  allSpaceEls.forEach((space) => {
+    space.removeEventListener('click', handleRelocLift);
+    space.addEventListener('click', handleRelocPlace);
+  });
 };
-// const handleRelocPlace = (e) => {
-//   const player = p1.currentTurn ? p1 : p2;
-//   const gridElements = document.querySelectorAll('.grid-outerContainer');
-//   const pGridElement = p1.currentTurn ? gridElements[0] : gridElements[1];
-//   const clickedSpace = e.currentTarget;
-// };
+const handleRelocPlace = (e) => {
+  const player = p1.currentTurn ? p1 : p2;
+  const gridElements = document.querySelectorAll('.grid-outerContainer');
+  const pGridElement = p1.currentTurn ? gridElements[0] : gridElements[1];
+  const clickedSpace = e.currentTarget;
+  const { row } = clickedSpace.dataset;
+  const { col } = clickedSpace.dataset;
+  player.gameboard.placeShip(
+    player.ships.find((ship) => ship.heldPos),
+    row,
+    col
+  );
+  displayShipsOnGrid(player, pGridElement);
+  const allSpaceEls = getGridSpaceElements(pGridElement);
+  allSpaceEls.forEach((space) => {
+    space.removeEventListener('click', handleRelocPlace);
+  });
+  addRelocShipListeners();
+};
 const toggleShipVisibility = (player) => {
   const allShipSpaces = getAllShipSpaceElements();
   let shipSpaces;
@@ -367,7 +394,7 @@ const addAttackListeners = () => {
   const players = [p1, p2];
   players.forEach((p, index) => {
     if (p.isHuman) {
-      const enemySpaces = getAllSpaceElements(gridElements[1 - index]);
+      const enemySpaces = getGridSpaceElements(gridElements[1 - index]);
       enemySpaces.forEach((space) =>
         space.addEventListener(
           'click',
@@ -480,7 +507,7 @@ const deleteDOMElements = () => {
   ];
   content.forEach((item) => item.remove());
 };
-const getAllSpaceElements = (gridElement) => {
+const getGridSpaceElements = (gridElement) => {
   const spaceElements = [];
   for (let i = 0; i < 10; i++) {
     for (let n = 0; n < 10; n++) {

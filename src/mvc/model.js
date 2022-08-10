@@ -9,7 +9,6 @@ const Ship = (length, name = 'unnamed') => {
     hitSpaces.push(false);
   }
   const coordinates = [];
-  const isHeld = false;
   const heldPos = null;
   const hit = (position) => {
     hitSpaces[position] = true;
@@ -28,7 +27,6 @@ const Ship = (length, name = 'unnamed') => {
     length,
     name,
     coordinates,
-    isHeld,
     heldPos,
     hitSpaces,
     hit,
@@ -56,6 +54,7 @@ const Gameboard = () => {
       grid[row][col] = { ship, position: counter++, hasBeenHit: false };
       ship.coordinates.push({ row, col });
     }
+    ship.heldPos = null;
   };
   const removeShip = (ship) => {
     for (let i = 0; i < ship.coordinates.length; i++) {
