@@ -171,3 +171,6 @@ body {
 .ui-matchResult-hidden {
   visibility: hidden;
 }
+.ui-instructions-hidden {
+  visibility: hidden;
+}

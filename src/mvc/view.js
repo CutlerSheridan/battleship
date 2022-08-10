@@ -21,7 +21,13 @@ const setupGame = () => {
   displayShipsOnGrid(p1, p1Grid);
   displayShipsOnGrid(p2, p2Grid);
   const nextButton = createNextTurnButton();
-  uiContainer.append(createNameElements(), nextButton, createAttackResult(), createMatchResult());
+  uiContainer.append(
+    createNameElements(),
+    nextButton,
+    createAttackResult(),
+    createMatchResult(),
+    createInstructions()
+  );
 
   const { body } = document;
   body.append(gameContainer, uiContainer);
@@ -194,6 +200,13 @@ const createMatchResult = () => {
   resultEl.classList.add('ui-matchResult-hidden');
   return resultEl;
 };
+const createInstructions = () => {
+  const instructionsEl = document.createElement('div');
+  instructionsEl.classList.add('ui-instructions');
+  instructionsEl.classList.add('ui-instructions-hidden');
+  instructionsEl.textContent = 'Click to move a ship.  Press any key to turn it.';
+  return instructionsEl;
+};
 
 const enableNextTurnButton = () => {
   const nextButton = document.querySelector('.ui-nextButton');
@@ -201,14 +214,17 @@ const enableNextTurnButton = () => {
 };
 const startTurn = () => {
   const [grid1, grid2] = Array.from(document.querySelectorAll('.grid-outerContainer'));
+  const instructions = document.querySelector('.ui-instructions');
 
   document.querySelector('.ui-resultContainer').classList.add('ui-resultContainer-hidden');
   switchTurns();
   if (isRoundZero()) {
+    instructions.classList.remove('ui-instructions-hidden');
     startRoundZero();
     return;
   }
   if (p1.currentTurn && p1.turnNum === 2) {
+    instructions.classList.add('ui-instructions-hidden');
     const allSpaceEls = [];
     allSpaceEls.push(...getGridSpaceElements(grid1));
     allSpaceEls.push(...getGridSpaceElements(grid2));
@@ -336,13 +352,9 @@ const handleRelocLift = (e) => {
       space.addEventListener('click', handleRelocPlace);
     }
   });
+  document.addEventListener('keydown', ship.turnShip);
+  document.querySelector('.ui-nextButton').classList.add('ui-nextButton-unclickable');
 };
-// const getPossibleRelocSpaceElements = () => {
-//   const player = p1.currentTurn ? p1 : p2;
-//   const gridElements = document.querySelectorAll('.grid-outerContainer');
-//   const pGridElement = p1.currentTurn ? gridElements[0] : gridElements[1];
-//   // call controller method
-// };
 const handleRelocPlace = (e) => {
   const player = p1.currentTurn ? p1 : p2;
   const gridElements = document.querySelectorAll('.grid-outerContainer');
@@ -350,16 +362,16 @@ const handleRelocPlace = (e) => {
   const clickedSpace = e.currentTarget;
   const { row } = clickedSpace.dataset;
   const { col } = clickedSpace.dataset;
-  player.gameboard.placeShip(
-    player.ships.find((ship) => ship.heldPos),
-    row,
-    col
-  );
+  const ship = player.ships.find((s) => s.heldPos);
+  player.gameboard.placeShip(ship, row, col);
   displayShipsOnGrid(player, pGridElement);
   const allSpaceEls = getGridSpaceElements(pGridElement);
   allSpaceEls.forEach((space) => {
     space.removeEventListener('click', handleRelocPlace);
   });
+  document.removeEventListener('keydown', ship.turnShip);
+  document.querySelector('.ui-nextButton').classList.remove('ui-nextButton-unclickable');
+
   addRelocShipListeners();
 };
 const toggleShipVisibility = (player) => {

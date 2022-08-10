@@ -6,21 +6,19 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 #### TODO NEXT
 
-- add ability to turn ships when rearranging
-
 #### TODO LATER
+
+- add hover effect or something showing where your ship will be when you put it back down
 
 ##### Features
 
-- add hover effect or something showing where your ship will be when you put it back down
-- add ability to place ships
+- add ability to place ships from scratch
 - add dark screen between human player turns
 - display opponent's ship statuses
 - add ability for two people at separate computers to play by calling out coordinates
 
 ##### Behavior
 
-- during round zero, grey out 'next' button if all ships are not on board
 - get ios touches to respond better when zoomed out
 - extricate game loop from view.js somehow?
 
@@ -34,6 +32,12 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 - when one human one AI, indicate after round zero that it's the human's turn again
 
 #### DONE
+
+_0.11.4_
+
+- add ability to turn ships when rearranging by pressing any key
+- add placeholder round zero instructions
+- during round zero, grey out 'next' button if a ship is being relocated
 
 _0.11.3_
 

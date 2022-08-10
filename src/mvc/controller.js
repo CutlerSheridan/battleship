@@ -40,23 +40,6 @@ const areSpacesAvailableForShip = (player, ship, y, x) => {
     }
   }
   return true;
-  // let row = y;
-  // let col = x;
-  // const { grid } = player.gameboard;
-  // for (let i = 0; i < ship.length; i++) {
-  //   if (ship.isHorizontal) {
-  //     col = x + i;
-  //   } else {
-  //     row = y + i;
-  //   }
-  //   if (col >= grid.length || row >= grid[0].length) {
-  //     return false;
-  //   }
-  //   if (grid[row][col].ship) {
-  //     return false;
-  //   }
-  // }
-  // return true;
 };
 const pickComputerMove = (player, enemy) => {
   const { grid } = enemy.gameboard;
