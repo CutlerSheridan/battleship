@@ -57,6 +57,12 @@ const Gameboard = () => {
       ship.coordinates.push({ row, col });
     }
   };
+  const removeShip = (ship) => {
+    for (let i = 0; i < ship.coordinates.length; i++) {
+      grid[ship.coordinates[i].row][ship.coordinates[i].col] = { hasBeenHit: false };
+    }
+    ship.coordinates.splice(0);
+  };
   const receiveAttack = (y, x) => {
     const target = grid[y][x];
     if (target.ship) {
@@ -78,6 +84,7 @@ const Gameboard = () => {
   return {
     grid,
     placeShip,
+    removeShip,
     receiveAttack,
     allShipsAreSunk,
   };

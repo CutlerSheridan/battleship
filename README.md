@@ -7,6 +7,7 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 #### TODO NEXT
 
 - add ability to remove ship and replace it
+- make sure relocLift listeners are removed after each round zero turn
 
 #### TODO LATER
 
@@ -19,6 +20,7 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 ##### Behavior
 
+- during round zero, grey out 'next' button if all ships are not on board
 - get ios touches to respond better when zoomed out
 - extricate game loop from view.js somehow?
 
@@ -32,6 +34,12 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 - when one human one AI, indicate after round zero that it's the human's turn again
 
 #### DONE
+
+_0.11.1_
+
+- write Gameboard.removeShip()
+- refactor displayShipsOnGrid() to remove occupied classes if no ship is present
+- get round zero to add reloc listeners to ships so player can remove them from the board
 
 _0.11.0_
 

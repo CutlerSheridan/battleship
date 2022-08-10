@@ -80,6 +80,13 @@ test('Gameboard.placeShip() places vertical ship held from spot 4 / 5', () => {
   expect(testShip.coordinates.length).toBe(5);
   expect(testShip.coordinates).toEqual(expectedArray);
 });
+test('Gameboard.removeShip() removes a ship', () => {
+  const testShip = model.Ship(5);
+  const testBoard = model.Gameboard();
+  testBoard.placeShip(testShip, 5, 5);
+  testBoard.removeShip(testShip);
+  expect(testBoard.grid[5][5]).toEqual({ hasBeenHit: false });
+});
 test('Gameboard.receiveAttack() inflicts hit on ship in correct location', () => {
   const testShip = model.Ship(4);
   const testBoard = model.Gameboard();

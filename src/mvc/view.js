@@ -69,7 +69,13 @@ const displayShipsOnGrid = (player, gridElement) => {
   const pGrid = player.gameboard.grid;
   for (let i = 0; i < pGrid.length; i++) {
     for (let n = 0; n < pGrid[0].length; n++) {
-      if (pGrid[i][n].position === 0) {
+      if (!pGrid[i][n].ship) {
+        const spaceEl = gridElement.querySelector(`.grid-space[data-row="${i}"][data-col="${n}"]`);
+        spaceEl.classList.remove('grid-space-occupied');
+        spaceEl.classList.add('grid-space-empty');
+        const spaceElContent = spaceEl.querySelector('.grid-spaceContent');
+        spaceElContent.textContent = '';
+      } else if (pGrid[i][n].position === 0) {
         displayOneShip(i, n, pGrid[i][n].ship, gridElement);
       }
     }
@@ -272,6 +278,9 @@ const isRoundZero = () => p1.turnNum <= 1 && p2.turnNum <= 1;
 const startRoundZero = () => {
   const nextButton = document.querySelector('.ui-nextButton');
   const player = p1.currentTurn ? p1 : p2;
+  if (player.isHuman) {
+    addRelocShipListeners();
+  }
   if (player === p2) {
     if (player.isHuman) {
       nextButton.addEventListener('click', addAttackListeners, { once: true });
@@ -282,8 +291,41 @@ const startRoundZero = () => {
   if (!player.isHuman) {
     startTurn();
   }
-  // click ship to move it
 };
+const addRelocShipListeners = () => {
+  const allShipSpaces = getAllShipSpaceElements();
+  let shipSpaces;
+  if (p1.currentTurn) {
+    allShipSpaces.splice(allShipSpaces.length / 2);
+    shipSpaces = allShipSpaces;
+  } else {
+    shipSpaces = allShipSpaces.splice(allShipSpaces.length / 2);
+  }
+  shipSpaces.forEach((space) => space.addEventListener('click', handleRelocLift));
+};
+const handleRelocLift = (e) => {
+  const player = p1.currentTurn ? p1 : p2;
+  const gridElements = document.querySelectorAll('.grid-outerContainer');
+  const pGridElement = p1.currentTurn ? gridElements[0] : gridElements[1];
+  const clickedSpace = e.currentTarget;
+  if (clickedSpace.classList.contains('grid-space')) {
+    const clickedRow = clickedSpace.dataset.row;
+    const clickedCol = clickedSpace.dataset.col;
+    const gridSpaceObj = player.gameboard.grid[clickedRow][clickedCol];
+    const { ship } = gridSpaceObj;
+    ship.heldPos = gridSpaceObj.position + 1;
+    player.gameboard.removeShip(ship);
+    displayShipsOnGrid(player, pGridElement);
+  } else {
+    // handle if removing from off-grid
+  }
+};
+// const handleRelocPlace = (e) => {
+//   const player = p1.currentTurn ? p1 : p2;
+//   const gridElements = document.querySelectorAll('.grid-outerContainer');
+//   const pGridElement = p1.currentTurn ? gridElements[0] : gridElements[1];
+//   const clickedSpace = e.currentTarget;
+// };
 const toggleShipVisibility = (player) => {
   const allShipSpaces = getAllShipSpaceElements();
   let shipSpaces;
