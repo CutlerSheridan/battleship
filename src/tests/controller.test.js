@@ -31,6 +31,52 @@ test('areSpacesAvail() returns false if ship would go beyond grid vertically', (
   p1.ships[0].turnShip();
   expect(controller.areSpacesAvailableForShip(p1, p1.ships[0], 8, 8)).toBe(false);
 });
+test('areSpacesAvail() returns true if horizontal ship held at middle has room', () => {
+  const p1 = model.Player('p1');
+  p1.ships[0].heldPos = 3;
+  expect(controller.areSpacesAvailableForShip(p1, p1.ships[0], 5, 5)).toBe(true);
+});
+test('areSpacesAvail() returns false if horizontal ship held at middle would go beyond grid', () => {
+  const p1 = model.Player('p1');
+  p1.ships[0].heldPos = 3;
+  expect(controller.areSpacesAvailableForShip(p1, p1.ships[0], 8, 8)).toBe(false);
+});
+test('areSpacesAvail() returns false if horizontal ship held at middle would go before grid', () => {
+  const p1 = model.Player('p1');
+  p1.ships[0].heldPos = 3;
+  expect(controller.areSpacesAvailableForShip(p1, p1.ships[0], 1, 1)).toBe(false);
+});
+test('areSpacesAvail() returns false if horizontal ship held at middle would hit ship before', () => {
+  const p1 = model.Player('p1');
+  p1.ships[1].turnShip();
+  p1.gameboard.placeShip(p1.ships[1], 1, 1);
+  p1.ships[0].heldPos = 4;
+  expect(controller.areSpacesAvailableForShip(p1, p1.ships[0], 2, 3)).toBe(false);
+});
+test('areSpacesAvail() returns false if vertical ship held at middle would hit ship after', () => {
+  const p1 = model.Player('p1');
+  p1.gameboard.placeShip(p1.ships[1], 5, 5);
+  p1.ships[0].heldPos = 2;
+  expect(controller.areSpacesAvailableForShip(p1, p1.ships[0], 4, 8)).toBe(false);
+});
+test('areSpacesAvail() returns true if vertical ship held at middle has room', () => {
+  const p1 = model.Player('p1');
+  p1.ships[0].turnShip();
+  p1.ships[0].heldPos = 3;
+  expect(controller.areSpacesAvailableForShip(p1, p1.ships[0], 5, 5)).toBe(true);
+});
+test('areSpacesAvail() returns false if vertical ship held at middle would go beyond grid', () => {
+  const p1 = model.Player('p1');
+  p1.ships[0].turnShip();
+  p1.ships[0].heldPos = 3;
+  expect(controller.areSpacesAvailableForShip(p1, p1.ships[0], 8, 8)).toBe(false);
+});
+test('areSpacesAvail() returns false if vertical ship held at middle would go before grid', () => {
+  const p1 = model.Player('p1');
+  p1.ships[0].turnShip();
+  p1.ships[0].heldPos = 3;
+  expect(controller.areSpacesAvailableForShip(p1, p1.ships[0], 1, 8)).toBe(false);
+});
 
 test('randomlyPlaceShip() places a ship', () => {
   const p1 = model.Player('p1');

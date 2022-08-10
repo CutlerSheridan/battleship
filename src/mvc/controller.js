@@ -24,23 +24,39 @@ const getRandomCoordinates = () => {
   return [y, x];
 };
 const areSpacesAvailableForShip = (player, ship, y, x) => {
-  let row = y;
-  let col = x;
   const { grid } = player.gameboard;
-  for (let i = 0; i < ship.length; i++) {
-    if (ship.isHorizontal) {
-      col = x + i;
-    } else {
-      row = y + i;
-    }
-    if (col >= grid.length || row >= grid[0].length) {
+  const heldPos = ship.heldPos ? ship.heldPos : 1;
+  const spacesBefore = heldPos - 1;
+  const spacesAfter = ship.length - heldPos;
+  for (let i = spacesBefore; i >= -1 * spacesAfter; i--) {
+    const newCoord = (ship.isHorizontal ? x : y) - i;
+    if (newCoord < 0 || newCoord >= grid.length) {
       return false;
     }
+    const row = ship.isHorizontal ? y : newCoord;
+    const col = ship.isHorizontal ? newCoord : x;
     if (grid[row][col].ship) {
       return false;
     }
   }
   return true;
+  // let row = y;
+  // let col = x;
+  // const { grid } = player.gameboard;
+  // for (let i = 0; i < ship.length; i++) {
+  //   if (ship.isHorizontal) {
+  //     col = x + i;
+  //   } else {
+  //     row = y + i;
+  //   }
+  //   if (col >= grid.length || row >= grid[0].length) {
+  //     return false;
+  //   }
+  //   if (grid[row][col].ship) {
+  //     return false;
+  //   }
+  // }
+  // return true;
 };
 const pickComputerMove = (player, enemy) => {
   const { grid } = enemy.gameboard;

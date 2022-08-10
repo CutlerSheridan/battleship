@@ -6,8 +6,7 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 #### TODO NEXT
 
-- make function that finds spaces sufficiently far from walls and ships to place a ship and adds an event listener to those spaces with a passed function
-- make addRelocShipListeners and handleRelocPlace use that function for placing handleRelocLift
+- add ability to turn ships when rearranging
 
 #### TODO LATER
 
@@ -35,6 +34,10 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 - when one human one AI, indicate after round zero that it's the human's turn again
 
 #### DONE
+
+_0.11.3_
+
+- refactor areSpacesAvail() to accomodate use for held ships
 
 _0.11.2_
 

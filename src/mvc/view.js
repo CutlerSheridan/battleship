@@ -316,11 +316,12 @@ const handleRelocLift = (e) => {
   const gridElements = document.querySelectorAll('.grid-outerContainer');
   const pGridElement = p1.currentTurn ? gridElements[0] : gridElements[1];
   const clickedSpace = e.currentTarget;
+  let ship;
   if (clickedSpace.classList.contains('grid-space')) {
     const clickedRow = clickedSpace.dataset.row;
     const clickedCol = clickedSpace.dataset.col;
     const gridSpaceObj = player.gameboard.grid[clickedRow][clickedCol];
-    const { ship } = gridSpaceObj;
+    ship = gridSpaceObj.ship;
     ship.heldPos = gridSpaceObj.position + 1;
     player.gameboard.removeShip(ship);
     displayShipsOnGrid(player, pGridElement);
@@ -331,9 +332,17 @@ const handleRelocLift = (e) => {
   const allSpaceEls = getGridSpaceElements(pGridElement);
   allSpaceEls.forEach((space) => {
     space.removeEventListener('click', handleRelocLift);
-    space.addEventListener('click', handleRelocPlace);
+    if (controller.areSpacesAvailableForShip(player, ship, space.dataset.row, space.dataset.col)) {
+      space.addEventListener('click', handleRelocPlace);
+    }
   });
 };
+// const getPossibleRelocSpaceElements = () => {
+//   const player = p1.currentTurn ? p1 : p2;
+//   const gridElements = document.querySelectorAll('.grid-outerContainer');
+//   const pGridElement = p1.currentTurn ? gridElements[0] : gridElements[1];
+//   // call controller method
+// };
 const handleRelocPlace = (e) => {
   const player = p1.currentTurn ? p1 : p2;
   const gridElements = document.querySelectorAll('.grid-outerContainer');
