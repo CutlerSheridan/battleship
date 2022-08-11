@@ -25,22 +25,33 @@ const getRandomCoordinates = () => {
 };
 const areSpacesAvailableForShip = (player, ship, y, x) => {
   const { grid } = player.gameboard;
-  const heldPos = ship.heldPos ? ship.heldPos : 1;
-  const spacesBefore = heldPos - 1;
-  const spacesAfter = ship.length - heldPos;
-  for (let i = spacesBefore; i >= -1 * spacesAfter; i--) {
-    const newCoord = (ship.isHorizontal ? x : y) - i;
-    if (newCoord < 0 || newCoord >= grid.length) {
+  const potentialShipCoords = getPotentialShipCoords(ship, y, x);
+  const changingAxis = ship.isHorizontal ? 'col' : 'row';
+  for (let i = 0; i < potentialShipCoords.length; i++) {
+    const coord = potentialShipCoords[i];
+    if (coord[changingAxis] < 0 || coord[changingAxis] >= grid.length) {
       return false;
     }
-    const row = ship.isHorizontal ? y : newCoord;
-    const col = ship.isHorizontal ? newCoord : x;
-    if (grid[row][col].ship) {
+    if (grid[coord.row][coord.col].ship) {
       return false;
     }
   }
   return true;
 };
+const getPotentialShipCoords = (ship, y, x) => {
+  const heldPos = ship.heldPos ? ship.heldPos : 1;
+  const spacesBefore = heldPos - 1;
+  const spacesAfter = ship.length - heldPos;
+  const potentialShipSpaces = [];
+  for (let i = spacesBefore; i >= -1 * spacesAfter; i--) {
+    const newCoord = (ship.isHorizontal ? x : y) - i;
+    const row = ship.isHorizontal ? y : newCoord;
+    const col = ship.isHorizontal ? newCoord : x;
+    potentialShipSpaces.push({ row, col });
+  }
+  return potentialShipSpaces;
+};
+
 const pickComputerMove = (player, enemy) => {
   const { grid } = enemy.gameboard;
   const moves = player.hitMoves;
@@ -165,6 +176,7 @@ export {
   randomlyPlaceShip,
   getRandomCoordinates,
   areSpacesAvailableForShip,
+  getPotentialShipCoords,
   pickComputerMove,
   isGuessPossible,
   canShipBeDirection,

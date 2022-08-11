@@ -33,6 +33,10 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 #### DONE
 
+_0.11.5_
+
+- refactor areSpacesAvail...() by extracting getPotentialShipSpaces() which returns an array of the potential ship spaces (this is to prepare for the hover behavior while rearranging ships)
+
 _0.11.4_
 
 - add ability to turn ships when rearranging by pressing any key

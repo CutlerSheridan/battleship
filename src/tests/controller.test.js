@@ -78,6 +78,31 @@ test('areSpacesAvail() returns false if vertical ship held at middle would go be
   expect(controller.areSpacesAvailableForShip(p1, p1.ships[0], 1, 8)).toBe(false);
 });
 
+test('getPotentialShipCoords() gets coords for a ship with room', () => {
+  const p1 = model.Player('p1');
+  p1.ships[0].heldPos = 3;
+  const expectedArray = [
+    { row: 5, col: 3 },
+    { row: 5, col: 4 },
+    { row: 5, col: 5 },
+    { row: 5, col: 6 },
+    { row: 5, col: 7 },
+  ];
+  expect(controller.getPotentialShipCoords(p1.ships[0], 5, 5)).toEqual(expectedArray);
+});
+test('getPotentialShipCoords() gets coords for a ship without room', () => {
+  const p1 = model.Player('p1');
+  p1.ships[0].heldPos = 3;
+  const expectedArray = [
+    { row: 5, col: -2 },
+    { row: 5, col: -1 },
+    { row: 5, col: 0 },
+    { row: 5, col: 1 },
+    { row: 5, col: 2 },
+  ];
+  expect(controller.getPotentialShipCoords(p1.ships[0], 5, 0)).toEqual(expectedArray);
+});
+
 test('randomlyPlaceShip() places a ship', () => {
   const p1 = model.Player('p1');
   controller.randomlyPlaceShip(p1, p1.ships[0]);
