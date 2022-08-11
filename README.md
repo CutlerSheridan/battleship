@@ -8,7 +8,11 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 #### TODO LATER
 
-- add hover effect or something showing where your ship will be when you put it back down
+- get hovered potential squares to show on occupied spaces
+- get hovered square under cursor to match adjacent potential squares instead of registering as hit
+- get hovered squares to turn when you turn a ship
+- get squares to become hovered initially upon picking up a ship instead of when you start moving it
+- remove hover handler upon placing a ship
 
 ##### Features
 
@@ -32,6 +36,10 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 - when one human one AI, indicate after round zero that it's the human's turn again
 
 #### DONE
+
+_0.11.6_
+
+- get hovered potential squares to show on empty spaces
 
 _0.11.5_
 

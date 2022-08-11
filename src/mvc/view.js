@@ -351,9 +351,38 @@ const handleRelocLift = (e) => {
     if (controller.areSpacesAvailableForShip(player, ship, space.dataset.row, space.dataset.col)) {
       space.addEventListener('click', handleRelocPlace);
     }
+    space.addEventListener('mouseenter', handleLiftedHover, { useCapture: true });
   });
   document.addEventListener('keydown', ship.turnShip);
   document.querySelector('.ui-nextButton').classList.add('ui-nextButton-unclickable');
+};
+const handleLiftedHover = (e) => {
+  const player = p1.currentTurn ? p1 : p2;
+  const gridElements = document.querySelectorAll('.grid-outerContainer');
+  const pGridElement = p1.currentTurn ? gridElements[0] : gridElements[1];
+  const hoveredSpace = e.currentTarget;
+  const { row } = hoveredSpace.dataset;
+  const { col } = hoveredSpace.dataset;
+  const ship = player.ships.find((s) => s.heldPos);
+  const potentialCoords = controller.getPotentialShipCoords(ship, row, col);
+  const changingAxis = ship.isHorizontal ? 'col' : 'row';
+  for (let i = 0; i < potentialCoords.length; i++) {
+    const coord = potentialCoords[i];
+    console.log(coord);
+    if (coord[changingAxis] >= 0 && coord[changingAxis] < player.gameboard.grid.length) {
+      const spaceEl = pGridElement.querySelector(
+        `.grid-space[data-row="${coord.row}"][data-col="${coord.col}"]`
+      );
+      console.log(spaceEl);
+      if (!player.gameboard.grid[coord.row][coord.col].ship) {
+        console.log('should add class');
+        spaceEl.classList.toggle('grid-potentialSpace-empty');
+      } else {
+        spaceEl.classList.toggle('grid-potentialSpace-occupied');
+      }
+      spaceEl.addEventListener('mouseleave', handleLiftedHover, { once: true });
+    }
+  }
 };
 const handleRelocPlace = (e) => {
   const player = p1.currentTurn ? p1 : p2;
