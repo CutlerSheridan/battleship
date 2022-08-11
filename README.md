@@ -8,9 +8,8 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 #### TODO LATER
 
-- get hovered squares to turn when you turn a ship
-- get squares to become hovered initially upon picking up a ship instead of when you start moving it
-- remove hover handler upon placing a ship
+- don't let rearranging hovered squares retain class on placement of ship
+- fix it so if you place a ship then pick it up from the same place it shows the ship hover
 
 ##### Features
 
@@ -34,6 +33,13 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 - when one human one AI, indicate after round zero that it's the human's turn again
 
 #### DONE
+
+_0.11.8_
+
+- get hovered squares to turn when you turn a ship
+- get squares to become hovered initially upon picking up a ship instead of when you start moving it
+- remove hover handler upon placing a ship
+- make it so when you turn a ship, you can place it in a space that would have previously been invalid
 
 _0.11.7_
 

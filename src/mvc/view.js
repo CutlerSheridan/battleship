@@ -341,6 +341,7 @@ const handleRelocLift = (e) => {
     ship.heldPos = gridSpaceObj.position + 1;
     player.gameboard.removeShip(ship);
     displayShipsOnGrid(player, pGridElement);
+    handleLiftedHover(e);
   } else {
     // handle if removing from off-grid
   }
@@ -348,22 +349,40 @@ const handleRelocLift = (e) => {
   const allSpaceEls = getGridSpaceElements(pGridElement);
   allSpaceEls.forEach((space) => {
     space.removeEventListener('click', handleRelocLift);
-    if (controller.areSpacesAvailableForShip(player, ship, space.dataset.row, space.dataset.col)) {
-      space.addEventListener('click', handleRelocPlace);
-    }
+    space.addEventListener('click', handleRelocPlace);
     space.addEventListener('mouseenter', handleLiftedHover, { useCapture: true });
   });
-  document.addEventListener('keydown', ship.turnShip);
+  document.addEventListener('keydown', handleKeyPress);
   document.querySelector('.ui-nextButton').classList.add('ui-nextButton-unclickable');
 };
+const handleKeyPress = (e) => {
+  handleLiftedHover(e);
+  let ship;
+  for (let i = 0; i < 2; i++) {
+    [p1, p2][i].ships.forEach((s) => {
+      if (s.heldPos) {
+        ship = s;
+      }
+    });
+  }
+  ship.turnShip();
+  handleLiftedHover(e);
+};
 const handleLiftedHover = (e) => {
+  console.log(e);
   const player = p1.currentTurn ? p1 : p2;
+  const ship = player.ships.find((s) => s.heldPos);
   const gridElements = document.querySelectorAll('.grid-outerContainer');
   const pGridElement = p1.currentTurn ? gridElements[0] : gridElements[1];
-  const hoveredSpace = e.currentTarget;
+  let hoveredSpace;
+  if (e.type === 'mouseenter' || e.type === 'mouseleave') {
+    hoveredSpace = e.currentTarget;
+  } else {
+    const elements = Array.from(document.querySelectorAll(':hover'));
+    hoveredSpace = elements.find((el) => el.classList.contains('grid-space'));
+  }
   const { row } = hoveredSpace.dataset;
   const { col } = hoveredSpace.dataset;
-  const ship = player.ships.find((s) => s.heldPos);
   const potentialCoords = controller.getPotentialShipCoords(ship, row, col);
   const changingAxis = ship.isHorizontal ? 'col' : 'row';
   for (let i = 0; i < potentialCoords.length; i++) {
@@ -374,11 +393,8 @@ const handleLiftedHover = (e) => {
       );
       console.log(spaceEl);
       if (!player.gameboard.grid[coord.row][coord.col].ship) {
-        console.log('adding empty');
         spaceEl.classList.toggle('grid-potentialSpace-empty');
       } else {
-        console.log('adding taken');
-
         spaceEl.classList.toggle('grid-potentialSpace-occupied');
       }
       spaceEl.addEventListener('mouseleave', handleLiftedHover, { once: true });
@@ -393,16 +409,27 @@ const handleRelocPlace = (e) => {
   const { row } = clickedSpace.dataset;
   const { col } = clickedSpace.dataset;
   const ship = player.ships.find((s) => s.heldPos);
-  player.gameboard.placeShip(ship, row, col);
-  displayShipsOnGrid(player, pGridElement);
-  const allSpaceEls = getGridSpaceElements(pGridElement);
-  allSpaceEls.forEach((space) => {
-    space.removeEventListener('click', handleRelocPlace);
-  });
-  document.removeEventListener('keydown', ship.turnShip);
-  document.querySelector('.ui-nextButton').classList.remove('ui-nextButton-unclickable');
+  if (
+    controller.areSpacesAvailableForShip(
+      player,
+      ship,
+      clickedSpace.dataset.row,
+      clickedSpace.dataset.col
+    )
+  ) {
+    player.gameboard.placeShip(ship, row, col);
+    displayShipsOnGrid(player, pGridElement);
+    const allSpaceEls = getGridSpaceElements(pGridElement);
+    allSpaceEls.forEach((space) => {
+      space.removeEventListener('click', handleRelocPlace);
+      space.removeEventListener('mouseenter', handleLiftedHover);
+      space.removeEventListener('mouseleave', handleLiftedHover, { once: true });
+    });
+    document.removeEventListener('keydown', handleKeyPress);
+    document.querySelector('.ui-nextButton').classList.remove('ui-nextButton-unclickable');
 
-  addRelocShipListeners();
+    addRelocShipListeners();
+  }
 };
 const toggleShipVisibility = (player) => {
   const allShipSpaces = getAllShipSpaceElements();
