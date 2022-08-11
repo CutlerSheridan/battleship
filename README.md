@@ -6,17 +6,15 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 #### TODO NEXT
 
-#### TODO LATER
+- add ability to place ships from scratch
 
-- don't let rearranging hovered squares retain class on placement of ship
-- fix it so if you place a ship then pick it up from the same place it shows the ship hover
+#### TODO LATER
 
 ##### Features
 
-- add ability to place ships from scratch
+- make ships invisible at start
 - add dark screen between human player turns
 - display opponent's ship statuses
-- add ability for two people at separate computers to play by calling out coordinates
 
 ##### Behavior
 
@@ -32,7 +30,16 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 - make sure ship pegs don't shift upon sinking
 - when one human one AI, indicate after round zero that it's the human's turn again
 
+##### Maybe
+
+- add ability for two people at separate computers to play by calling out coordinates
+
 #### DONE
+
+_0.11.9_
+
+- don't let rearranging hovered squares retain class on placement of ship
+- fix it so if you place a ship then pick it up from the same place it shows the ship hover
 
 _0.11.8_
 

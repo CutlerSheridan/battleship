@@ -359,11 +359,7 @@ const handleKeyPress = (e) => {
   handleLiftedHover(e);
   let ship;
   for (let i = 0; i < 2; i++) {
-    [p1, p2][i].ships.forEach((s) => {
-      if (s.heldPos) {
-        ship = s;
-      }
-    });
+    [p1, p2][i].ships.forEach((s) => (s.heldPos ? (ship = s) : ''));
   }
   ship.turnShip();
   handleLiftedHover(e);
@@ -417,6 +413,7 @@ const handleRelocPlace = (e) => {
       clickedSpace.dataset.col
     )
   ) {
+    handleLiftedHover(e);
     player.gameboard.placeShip(ship, row, col);
     displayShipsOnGrid(player, pGridElement);
     const allSpaceEls = getGridSpaceElements(pGridElement);
