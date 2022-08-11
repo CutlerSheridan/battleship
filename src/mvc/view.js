@@ -368,16 +368,17 @@ const handleLiftedHover = (e) => {
   const changingAxis = ship.isHorizontal ? 'col' : 'row';
   for (let i = 0; i < potentialCoords.length; i++) {
     const coord = potentialCoords[i];
-    console.log(coord);
     if (coord[changingAxis] >= 0 && coord[changingAxis] < player.gameboard.grid.length) {
       const spaceEl = pGridElement.querySelector(
         `.grid-space[data-row="${coord.row}"][data-col="${coord.col}"]`
       );
       console.log(spaceEl);
       if (!player.gameboard.grid[coord.row][coord.col].ship) {
-        console.log('should add class');
+        console.log('adding empty');
         spaceEl.classList.toggle('grid-potentialSpace-empty');
       } else {
+        console.log('adding taken');
+
         spaceEl.classList.toggle('grid-potentialSpace-occupied');
       }
       spaceEl.addEventListener('mouseleave', handleLiftedHover, { once: true });

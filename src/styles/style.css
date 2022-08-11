@@ -45,7 +45,7 @@ body {
   -webkit-tap-highlight-color: rgb(0, 0, 0, 0);
 }
 @media (hover: hover) {
-  .grid-space:not([data-row='-1'], [data-col='-1'], .grid-potentialSpace-empty):hover {
+  .grid-space:not([data-row='-1'], [data-col='-1'], .grid-potentialSpace-empty, .grid-potentialSpace-occupied):hover {
     background: pink;
   }
 }
@@ -67,13 +67,12 @@ body {
   background: black;
   border-radius: 1rem;
 }
-@media (hover: hover) {
-  .grid-potentialSpace-empty {
-    background: lightgrey;
-  }
-  .grid-potentialSpace-occupied {
-    background: pink;
-  }
+.grid-potentialSpace-empty {
+  background: lightgrey;
+}
+.grid-potentialSpace-occupied.grid-space-occupied {
+  border: 3px solid red;
+  background: rgb(153, 115, 121);
 }
 .grid-space-hit::after {
   content: '';
