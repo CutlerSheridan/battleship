@@ -1,9 +1,21 @@
 /* eslint-disable no-use-before-define */
 const placeAllShips = (player) => {
   player.ships.forEach((ship) => {
-    assignShipOrientation(ship);
-    randomlyPlaceShip(player, ship);
+    if (player.isHuman) {
+      neatlyPlaceShip(player, ship);
+    } else {
+      assignShipOrientation(ship);
+      randomlyPlaceShip(player, ship);
+    }
   });
+};
+const neatlyPlaceShip = (player, ship) => {
+  for (let i = 0; i < player.ships.length; i++) {
+    if (!player.gameboard.grid[i][0].ship) {
+      player.gameboard.placeShip(ship, i, 0);
+      break;
+    }
+  }
 };
 const randomlyPlaceShip = (player, ship) => {
   let coords = getRandomCoordinates();

@@ -6,13 +6,12 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 #### TODO NEXT
 
-- add ability to place ships from scratch
+- make ships invisible at start
 
 #### TODO LATER
 
 ##### Features
 
-- make ships invisible at start
 - add dark screen between human player turns
 - display opponent's ship statuses
 
@@ -32,9 +31,14 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 ##### Maybe
 
+- start game with all ships off the board instead of in corner
 - add ability for two people at separate computers to play by calling out coordinates
 
 #### DONE
+
+_0.11.10_
+
+- make humans start game with ships in corner
 
 _0.11.9_
 

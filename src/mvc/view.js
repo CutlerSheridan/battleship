@@ -8,6 +8,13 @@ let p2;
 const setupGame = () => {
   p1 = model.Player('p1');
   p2 = model.Player('p2');
+  // [p1, p2].forEach((p) => {
+  //   if (p.isHuman) {
+  //     controller.placeShipsNeatly(p);
+  //   } else {
+  //     controller.placeShipsRandomly(p);
+  //   }
+  // });
   controller.placeAllShips(p1);
   controller.placeAllShips(p2);
   const p1Grid = createGrid();
