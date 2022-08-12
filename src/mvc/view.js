@@ -211,7 +211,7 @@ const createInstructions = () => {
   const instructionsEl = document.createElement('div');
   instructionsEl.classList.add('ui-instructions');
   instructionsEl.classList.add('ui-instructions-hidden');
-  instructionsEl.textContent = 'Click to move a ship.  Press any key to turn it.';
+  instructionsEl.textContent = 'Click to move a ship.\nPress any key to turn it.';
   return instructionsEl;
 };
 
@@ -221,17 +221,29 @@ const enableNextTurnButton = () => {
 };
 const startTurn = () => {
   const [grid1, grid2] = Array.from(document.querySelectorAll('.grid-outerContainer'));
+  const [innerGrid1, innerGrid2] = Array.from(document.querySelectorAll('.grid-innerContainer'));
   const instructions = document.querySelector('.ui-instructions');
 
   document.querySelector('.ui-resultContainer').classList.add('ui-resultContainer-hidden');
+  if (p1.turnNum !== 0 && p1.isHuman && p2.isHuman) {
+    [innerGrid1, innerGrid2].forEach((g) => {
+      g.classList.toggle('grid-innerContainer-transition');
+    });
+    if (innerGrid1.classList.contains('grid-innerContainer-transition')) {
+      instructions.classList.remove('ui-instructions-hidden');
+      instructions.textContent = `Pass the game to ${p1.currentTurn ? p2.name : p1.name}!`;
+      return;
+    }
+    instructions.textContent = 'Click to move a ship.\nPress any key to turn it.';
+  }
   switchTurns();
   if (isRoundZero()) {
     instructions.classList.remove('ui-instructions-hidden');
     startRoundZero();
     return;
   }
+  instructions.classList.add('ui-instructions-hidden');
   if (p1.currentTurn && p1.turnNum === 2) {
-    instructions.classList.add('ui-instructions-hidden');
     const allSpaceEls = [];
     allSpaceEls.push(...getGridSpaceElements(grid1));
     allSpaceEls.push(...getGridSpaceElements(grid2));
@@ -374,7 +386,6 @@ const handleKeyPress = (e) => {
   handleLiftedHover(e);
 };
 const handleLiftedHover = (e) => {
-  console.log(e);
   const player = p1.currentTurn ? p1 : p2;
   const ship = player.ships.find((s) => s.heldPos);
   const gridElements = document.querySelectorAll('.grid-outerContainer');
@@ -396,7 +407,6 @@ const handleLiftedHover = (e) => {
       const spaceEl = pGridElement.querySelector(
         `.grid-space[data-row="${coord.row}"][data-col="${coord.col}"]`
       );
-      console.log(spaceEl);
       if (!player.gameboard.grid[coord.row][coord.col].ship) {
         spaceEl.classList.toggle('grid-potentialSpace-empty');
       } else {

@@ -6,7 +6,7 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 #### TODO NEXT
 
-- add dark screen between human player turns
+- when one human one AI, indicate after round zero that it's the human's turn again
 
 #### TODO LATER
 
@@ -22,11 +22,10 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 ##### Style
 
 - decide on style
-- figure out how to display on mobile
-- maybe add sounds for hits and misses?
 - add brief border on attacked squares
 - make sure ship pegs don't shift upon sinking
-- when one human one AI, indicate after round zero that it's the human's turn again
+- maybe add sounds for hits and misses?
+- figure out how to display on mobile
 
 ##### Maybe
 
@@ -34,6 +33,12 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 - add ability for two people at separate computers to play by calling out coordinates
 
 #### DONE
+
+_0.12.0_
+
+- add dark screen between two human players' turns
+- add text indicating who is next during transition screen
+- make next player indicator continue to show after round zero
 
 _0.11.11_
 
