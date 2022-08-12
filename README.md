@@ -6,7 +6,7 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 #### TODO NEXT
 
-- when one human one AI, indicate after round zero that it's the human's turn again
+- decide on style
 
 #### TODO LATER
 
@@ -21,7 +21,6 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 ##### Style
 
-- decide on style
 - add brief border on attacked squares
 - make sure ship pegs don't shift upon sinking
 - maybe add sounds for hits and misses?
@@ -33,6 +32,10 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 - add ability for two people at separate computers to play by calling out coordinates
 
 #### DONE
+
+_0.12.1_
+
+- when one human one AI, indicate after round zero that it's the human's turn again
 
 _0.12.0_
 

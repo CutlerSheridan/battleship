@@ -250,6 +250,10 @@ const startTurn = () => {
     allSpaceEls.forEach((space) => {
       space.removeEventListener('click', handleRelocLift);
     });
+    if (p1.isHuman && !p2.isHuman) {
+      instructions.textContent = `${p1.name}, launch your first attack!`;
+      instructions.classList.remove('ui-instructions-hidden');
+    }
   }
   const currentPlayer = p1.currentTurn ? p1 : p2;
   const currentGrid = p1.currentTurn ? grid1 : grid2;
