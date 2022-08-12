@@ -109,6 +109,9 @@ const Player = (name) => {
     Ship(3, 'Submarine'),
     Ship(2, 'Destroyer'),
   ];
+  const removeAllShipsFromBoard = () => {
+    ships.forEach((ship) => gameboard.removeShip(ship));
+  };
   const hitMoves = [];
   const moves = [];
   const attack = (enemy, y, x) => {
@@ -136,6 +139,7 @@ const Player = (name) => {
     },
     incrementTurn,
     ships,
+    removeAllShipsFromBoard,
     attack,
     hitMoves,
     moves,

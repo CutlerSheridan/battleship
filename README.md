@@ -6,13 +6,12 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 #### TODO NEXT
 
-- make ships invisible at start
+- add dark screen between human player turns
 
 #### TODO LATER
 
 ##### Features
 
-- add dark screen between human player turns
 - display opponent's ship statuses
 
 ##### Behavior
@@ -35,6 +34,10 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 - add ability for two people at separate computers to play by calling out coordinates
 
 #### DONE
+
+_0.11.11_
+
+- make computer rearrange its ships during Round Zero
 
 _0.11.10_
 

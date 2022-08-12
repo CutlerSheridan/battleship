@@ -320,6 +320,8 @@ const startRoundZero = () => {
     }
   }
   if (!player.isHuman) {
+    player.removeAllShipsFromBoard();
+    controller.placeAllShips(player);
     startTurn();
   }
 };
