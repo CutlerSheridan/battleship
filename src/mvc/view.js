@@ -8,13 +8,6 @@ let p2;
 const setupGame = () => {
   p1 = model.Player('p1');
   p2 = model.Player('p2');
-  // [p1, p2].forEach((p) => {
-  //   if (p.isHuman) {
-  //     controller.placeShipsNeatly(p);
-  //   } else {
-  //     controller.placeShipsRandomly(p);
-  //   }
-  // });
   controller.placeAllShips(p1);
   controller.placeAllShips(p2);
   const p1Grid = createGrid();
@@ -25,8 +18,8 @@ const setupGame = () => {
   const gameContainer = document.createElement('div');
   gameContainer.classList.add('game-container');
   gameContainer.append(p1Grid, p2Grid);
-  displayShipsOnGrid(p1, p1Grid);
-  displayShipsOnGrid(p2, p2Grid);
+  // displayShipsOnGrid(p1, p1Grid);
+  // displayShipsOnGrid(p2, p2Grid);
   const nextButton = createNextTurnButton();
   uiContainer.append(
     createNameElements(),
@@ -283,6 +276,8 @@ const switchTurns = () => {
     p1.changeTurn();
     p1.incrementTurn();
     nameElements[0].classList.add('ui-name-current');
+    displayShipsOnGrid(p1, grids[0]);
+    displayShipsOnGrid(p2, grids[1]);
     players.forEach((p, index) => {
       if (!p.isHuman) {
         toggleShipVisibility(players[index]);

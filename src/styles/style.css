@@ -2,6 +2,7 @@
   --sunk-border-width: 5px;
   --sunk-borders: var(--sunk-border-width) solid red;
   --grid-space-width: 4.5rem;
+  --grid-space-width-mobile: 2.4rem;
   --clr-pri: lightblue;
   --clr-pri-dark: rgb(92, 146, 164);
   --clr-sec: crimson;
@@ -44,9 +45,18 @@ body {
   height: 100%;
   width: 100%;
   display: grid;
-  grid-template: repeat(11, var(--grid-space-width)) / repeat(11, var(--grid-space-width));
+  grid-template: repeat(11, var(--grid-space-width-mobile)) / repeat(
+      11,
+      var(--grid-space-width-mobile)
+    );
   gap: 0.5rem;
   background: var(--clr-pri);
+}
+@media only screen and (min-width: 750px) {
+  .grid-innerContainer {
+    grid-template: repeat(11, var(--grid-space-width)) / repeat(11, var(--grid-space-width));
+    gap: 0.5rem;
+  }
 }
 .grid-innerContainer::after {
   /* content: 'Pass the game'; */
@@ -116,10 +126,16 @@ body {
   position: absolute;
   left: 25%;
   top: 25%;
-  width: calc(var(--grid-space-width) * 0.5);
-  height: calc(var(--grid-space-width) * 0.5);
-  background: goldenrod;
+  width: calc(var(--grid-space-width-mobile) * 0.5);
+  height: calc(var(--grid-space-width-mobile) * 0.5);
+  background: white;
   border-radius: 5rem;
+}
+@media only screen and (min-width: 750px) {
+  .grid-space-hit::after {
+    width: calc(var(--grid-space-width) * 0.5);
+    height: calc(var(--grid-space-width) * 0.5);
+  }
 }
 .grid-space-hit.grid-space-occupied::after,
 .grid-space-hit.grid-space-secretlyOccupied::after {

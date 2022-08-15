@@ -2,11 +2,11 @@
 
 ## A deadly game of war on the high seas
 
-Play by yourself or with a friend! Place your ships, attack your opponent, and try to sink the enemy's fleet before they can sink yours.
+Play by yourself, with a friend, or watch two AIs play each other! Place your ships, attack your opponent, and try to sink the enemy's fleet before they can sink yours.
 
 #### TODO NEXT
 
-- make player's own ships display with borders
+- figure out how to style info UI
 
 #### TODO LATER
 
@@ -16,26 +16,34 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 ##### Behavior
 
+- figure out how to turn ships on mobile
 - get ios touches to respond better when zoomed out
-- extricate game loop from view.js somehow?
 
 ##### Style
 
-- style info UI
 - style hit indication text
 - style match result
 - style instructions
+- reformat ui position for mobile
+- if mobile portrait, display note to turn landscape
 - add brief border on attacked squares
 - make sure ship pegs don't shift upon sinking
 - maybe add sounds for hits and misses?
-- figure out how to display on mobile
 
 ##### Maybe
 
+- make player's own ships display with borders
+- make out-of-bound edge highlight red when relocating your ship
+- extricate game loop from view.js somehow?
 - add ability for two people at separate computers to play by calling out coordinates
 - start game with all ships off the board instead of in corner
 
 #### DONE
+
+_0.13.1_
+
+- make ships not appear until round zero
+- add breakpoints to make grid smaller on mobile
 
 _0.13.0_
 
