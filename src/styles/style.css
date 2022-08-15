@@ -2,7 +2,16 @@
   --sunk-border-width: 5px;
   --sunk-borders: var(--sunk-border-width) solid red;
   --grid-space-width: 4.5rem;
+  --clr-pri: lightblue;
+  --clr-pri-dark: rgb(92, 146, 164);
+  --clr-sec: crimson;
+  --clr-sec-dark: rgb(181, 13, 47);
+  --clr-ship: rgb(95, 95, 95);
+  --clr-ship-light: lightgrey;
+  --clr-white: white;
   font-size: 62.5%;
+  background: rgb(33, 33, 33);
+  color: var(--clr-white);
 }
 * {
   margin: 0;
@@ -18,6 +27,7 @@ body {
 }
 .game-container {
   display: flex;
+  justify-content: space-evenly;
 }
 
 .grid-unclickable {
@@ -26,7 +36,8 @@ body {
 .grid-outerContainer {
   margin: 1rem;
   padding: 2rem;
-  background: black;
+  background: var(--clr-pri);
+  border-radius: 0.3rem;
 }
 .grid-innerContainer {
   position: relative;
@@ -35,7 +46,7 @@ body {
   display: grid;
   grid-template: repeat(11, var(--grid-space-width)) / repeat(11, var(--grid-space-width));
   gap: 0.5rem;
-  background: lightblue;
+  background: var(--clr-pri);
 }
 .grid-innerContainer::after {
   /* content: 'Pass the game'; */
@@ -62,7 +73,10 @@ body {
   display: grid;
   justify-content: center;
   align-items: center;
-  background: white;
+  color: var(--clr-pri);
+  font-family: monospace;
+  background: var(--clr-pri-dark);
+  cursor: pointer;
   -webkit-tap-highlight-color: rgb(0, 0, 0, 0);
 }
 @media (hover: hover) {
@@ -71,9 +85,8 @@ body {
   }
 }
 .grid-space-occupied:not(.grid-space-secretlyOccupied) {
-  font-weight: bold;
-  background: rgb(88, 87, 87);
-  color: white;
+  background: var(--clr-ship);
+  color: var(--clr-white);
 }
 .grid-space-empty {
   color: transparent;
@@ -89,11 +102,14 @@ body {
   border-radius: 1rem;
 }
 .grid-potentialSpace-empty {
-  background: lightgrey;
+  background: var(--clr-ship-light);
 }
 .grid-potentialSpace-occupied.grid-space-occupied {
-  border: 3px solid red;
+  border: 3px solid var(--clr-sec);
   background: rgb(153, 115, 121);
+}
+.grid-space-hit {
+  background: var(--clr-pri);
 }
 .grid-space-hit::after {
   content: '';
@@ -107,7 +123,7 @@ body {
 }
 .grid-space-hit.grid-space-occupied::after,
 .grid-space-hit.grid-space-secretlyOccupied::after {
-  background: red;
+  background: var(--clr-sec);
 }
 .grid-sunkSpace-horizontalStart {
   border-left: var(--sunk-borders);
@@ -161,7 +177,6 @@ body {
   width: 50rem;
   display: flex;
   justify-content: space-around;
-  border: 3px solid pink;
 }
 .ui-name {
   width: 15rem;
@@ -169,7 +184,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: orange;
+  background: goldenrod;
 }
 .ui-name-current {
   border: 10px solid purple;
@@ -180,8 +195,20 @@ body {
 .ui-nextButton {
   height: 7rem;
   width: 12rem;
+  border: none;
+  border-radius: 0.3rem;
+  color: var(--clr-white);
+  background: var(--clr-sec);
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  cursor: pointer;
+}
+@media only screen and (hover: hover) {
+  .ui-nextButton:hover {
+    background: var(--clr-sec-dark);
+  }
 }
 .ui-nextButton-unclickable {
+  background: var(--clr-sec-dark);
   color: grey;
   pointer-events: none;
 }

@@ -6,13 +6,13 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 #### TODO NEXT
 
-- decide on style
+- make player's own ships display with borders
 
 #### TODO LATER
 
 ##### Features
 
-- display opponent's ship statuses
+- display players' ship statuses
 
 ##### Behavior
 
@@ -21,6 +21,10 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 ##### Style
 
+- style info UI
+- style hit indication text
+- style match result
+- style instructions
 - add brief border on attacked squares
 - make sure ship pegs don't shift upon sinking
 - maybe add sounds for hits and misses?
@@ -28,10 +32,16 @@ Play by yourself or with a friend! Place your ships, attack your opponent, and t
 
 ##### Maybe
 
-- start game with all ships off the board instead of in corner
 - add ability for two people at separate computers to play by calling out coordinates
+- start game with all ships off the board instead of in corner
 
 #### DONE
+
+_0.13.0_
+
+- color grids
+- style Next button
+- make empty hit spaces have a lighter background
 
 _0.12.1_
 
