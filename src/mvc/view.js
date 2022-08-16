@@ -6,8 +6,8 @@ let p1;
 let p2;
 
 const setupGame = () => {
-  p1 = model.Player('p1');
-  p2 = model.Player('p2');
+  p1 = model.Player('Player 1');
+  p2 = model.Player('Player 2');
   controller.placeAllShips(p1);
   controller.placeAllShips(p2);
   const p1Grid = createGrid();
@@ -17,12 +17,12 @@ const setupGame = () => {
   uiContainer.classList.add('ui-container');
   const gameContainer = document.createElement('div');
   gameContainer.classList.add('game-container');
-  gameContainer.append(p1Grid, p2Grid);
+  gameContainer.append(p1Grid, p2Grid, createMatchResult());
   const nextButton = createNextTurnButton();
   uiContainer.append(createNameElement(p1), nextButton, createNameElement(p2));
   const resultsContainer = document.createElement('div');
   resultsContainer.classList.add('results-container');
-  resultsContainer.append(createAttackResult(), createMatchResult(), createInstructions());
+  resultsContainer.append(createAttackResult(), createInstructions());
 
   const { body } = document;
   body.append(gameContainer, uiContainer, resultsContainer);
@@ -125,7 +125,7 @@ const createNameElement = (player) => {
 
   const nameElement = document.createElement('div');
   nameElement.classList.add('ui-name');
-  nameElement.textContent = `Player ${playerIndex + 1}`;
+  nameElement.textContent = player.name;
   const playerTypeContainer = document.createElement('div');
   playerTypeContainer.classList.add('ui-playerTypeContainer');
   const playerTypeLabel = document.createElement('label');
@@ -193,6 +193,7 @@ const createMatchResult = () => {
   const resultEl = document.createElement('div');
   resultEl.classList.add('results-matchResult');
   resultEl.classList.add('results-matchResult-hidden');
+  resultEl.textContent = '[Player] wins!';
   return resultEl;
 };
 const createInstructions = () => {
@@ -583,6 +584,21 @@ const endGame = (winner) => {
   nextButton.addEventListener('click', restartGame, { once: true });
 };
 const restartGame = () => {
+  const matchResultEl = document.querySelector('.results-matchResult');
+  if (!matchResultEl.classList.contains('results-matchResult-hidden')) {
+    matchResultEl.classList.add('results-matchResult-hidden');
+    matchResultEl.addEventListener(
+      'transitionend',
+      () => {
+        restartGameStepTwo();
+      },
+      { once: true }
+    );
+  } else {
+    restartGameStepTwo();
+  }
+};
+const restartGameStepTwo = () => {
   let playerTypeToggles = document.querySelectorAll('.ui-playerTypeCheckbox');
   const playerTypes = [playerTypeToggles[0].checked, playerTypeToggles[1].checked];
   deleteDOMElements();

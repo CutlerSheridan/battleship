@@ -30,6 +30,7 @@ body {
   font-size: 2rem;
 }
 .game-container {
+  position: relative;
   display: flex;
   justify-content: space-evenly;
 }
@@ -185,6 +186,30 @@ body {
 .grid-sunkSpace-verticalEnd::after {
   left: calc(calc(var(--grid-space-width) * 0.25) - var(--sunk-border-width));
 }
+.results-matchResult {
+  position: absolute;
+  top: calc(100% * (1 / 3));
+  width: 100%;
+  height: calc(100% * (1 / 3));
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 6rem;
+  font-weight: bold;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  letter-spacing: 0.4rem;
+  border: 12px solid var(--clr-white);
+  border-left: none;
+  border-right: none;
+  background: var(--clr-grey);
+  opacity: 100%;
+  transition: all 0.17s;
+}
+.results-matchResult-hidden {
+  /* display: none; */
+  visibility: hidden;
+  opacity: 0%;
+}
 
 .ui-container {
   margin: 1.5rem 0;
@@ -266,19 +291,12 @@ body {
   text-align: center;
 }
 .results-turnContainer-hidden {
-  display: none;
+  /* display: none; */
 }
 .results-turnResult {
   color: red;
 }
-.results-matchResult {
-  font-size: 3rem;
-  font-weight: bold;
-  color: green;
-}
-.results-matchResult-hidden {
-  display: none;
-}
+
 .results-instructions-hidden {
-  display: none;
+  /* display: none; */
 }

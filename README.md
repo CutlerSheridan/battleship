@@ -23,7 +23,6 @@ Play by yourself, with a friend, or watch two AIs play each other! Place your sh
 ##### Style
 
 - style hit indication text
-- style match result
 - style instructions
 - reformat ui position for mobile
 - if mobile portrait, display note to turn landscape
@@ -40,6 +39,13 @@ Play by yourself, with a friend, or watch two AIs play each other! Place your sh
 - start game with all ships off the board instead of in corner
 
 #### DONE
+
+_0.13.3_
+
+- make win banner cover grids
+- make win banner fade in
+- make win banner fade out upon restarting game
+- make restarting game to change a player type work again
 
 _0.13.2_
 
