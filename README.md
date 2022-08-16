@@ -6,8 +6,7 @@ Play by yourself, with a friend, or watch two AIs play each other! Place your sh
 
 #### TODO NEXT
 
-- make Next button bigger
-- figure out how to style results UI
+- add credit
 
 #### TODO LATER
 
@@ -22,13 +21,9 @@ Play by yourself, with a friend, or watch two AIs play each other! Place your sh
 
 ##### Style
 
-- style hit indication text
-- style instructions
 - reformat ui position for mobile
 - if mobile portrait, display note to turn landscape
-- add brief border on attacked squares
 - make sure ship pegs don't shift upon sinking
-- maybe add sounds for hits and misses?
 
 ##### Maybe
 
@@ -37,8 +32,15 @@ Play by yourself, with a friend, or watch two AIs play each other! Place your sh
 - extricate game loop from view.js somehow?
 - add ability for two people at separate computers to play by calling out coordinates
 - start game with all ships off the board instead of in corner
+- add sounds for hits and misses
 
 #### DONE
+
+_0.13.4_
+
+- make Next button bigger
+- style hit indication text
+- style instructions
 
 _0.13.3_
 

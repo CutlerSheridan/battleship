@@ -225,7 +225,9 @@ const startTurn = () => {
       nameElements.forEach((el) => el.classList.remove('ui-name-current'));
       return;
     }
-    instructions.textContent = 'Click to move a ship.\nPress any key to turn it.';
+    if (p2.turnNum < 1) {
+      instructions.textContent = 'Click to move a ship.\nPress any key to turn it.';
+    }
   }
   switchTurns();
   if (isRoundZero()) {
@@ -585,6 +587,8 @@ const endGame = (winner) => {
 };
 const restartGame = () => {
   const matchResultEl = document.querySelector('.results-matchResult');
+  const turnResultEl = document.querySelector('.results-turnContainer');
+  turnResultEl.classList.add('results-turnContainer-hidden');
   if (!matchResultEl.classList.contains('results-matchResult-hidden')) {
     matchResultEl.classList.add('results-matchResult-hidden');
     matchResultEl.addEventListener(

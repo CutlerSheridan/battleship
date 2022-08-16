@@ -31,6 +31,7 @@ body {
 }
 .game-container {
   position: relative;
+  margin: 1rem 0;
   display: flex;
   justify-content: space-evenly;
 }
@@ -79,7 +80,7 @@ body {
   transition: all 0.15s;
 }
 .grid-innerContainer-transition::after {
-  background: slategrey;
+  background: var(--clr-grey);
   visibility: visible;
 }
 .grid-space {
@@ -201,18 +202,17 @@ body {
   border: 12px solid var(--clr-white);
   border-left: none;
   border-right: none;
-  background: var(--clr-grey);
+  /* background: var(--clr-grey); */
+  background: linear-gradient(var(--clr-grey), 80%, var(--clr-grey-dark));
   opacity: 100%;
   transition: all 0.17s;
 }
 .results-matchResult-hidden {
-  /* display: none; */
   visibility: hidden;
   opacity: 0%;
 }
 
 .ui-container {
-  margin: 1.5rem 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -228,7 +228,6 @@ body {
   border: 7px solid var(--clr-white);
   border-radius: 0.2rem;
   font-family: monospace;
-  /* background: var( --clr-grey); */
   background: linear-gradient(var(--clr-grey), 80%, var(--clr-grey-dark));
 }
 .ui-container > div:first-of-type {
@@ -253,7 +252,6 @@ body {
   transition: all 0.17s;
 }
 .ui-name-current {
-  /* border: 10px solid transparent; */
   font-weight: bold;
   text-decoration-color: var(--clr-white);
 }
@@ -265,14 +263,17 @@ body {
   margin-right: 1rem;
 }
 .ui-nextButton {
-  margin: 0 7%;
-  height: 7rem;
-  width: 12rem;
+  margin: 0 5%;
+  height: 8rem;
+  width: 18rem;
   border: none;
   border-radius: 0.3rem;
+  font-size: 3rem;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  letter-spacing: 0.1rem;
+  text-align: center;
   color: var(--clr-white);
   background: var(--clr-sec);
-  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
   cursor: pointer;
 }
 @media only screen and (hover: hover) {
@@ -290,13 +291,33 @@ body {
   margin: 2rem;
   text-align: center;
 }
+.results-turnContainer {
+  margin: auto;
+  padding: 1rem;
+  width: max-content;
+  font-family: monospace;
+  font-size: 3.3rem;
+  border: 5px solid var(--clr-white);
+  background: linear-gradient(var(--clr-grey), 80%, var(--clr-grey-dark));
+  transition: all 0.17s;
+}
 .results-turnContainer-hidden {
-  /* display: none; */
+  visibility: hidden;
+  opacity: 0;
 }
 .results-turnResult {
+  text-transform: uppercase;
+  font-weight: bold;
   color: red;
 }
-
+.results-instructions {
+  position: relative;
+  top: -5rem;
+  font-family: monospace;
+  font-size: 2.5rem;
+  transition: all 0.07s;
+}
 .results-instructions-hidden {
-  /* display: none; */
+  opacity: 0;
+  visibility: hidden;
 }
