@@ -6,7 +6,8 @@ Play by yourself, with a friend, or watch two AIs play each other! Place your sh
 
 #### TODO NEXT
 
-- figure out how to style info UI
+- make Next button bigger
+- figure out how to style results UI
 
 #### TODO LATER
 
@@ -39,6 +40,15 @@ Play by yourself, with a friend, or watch two AIs play each other! Place your sh
 - start game with all ships off the board instead of in corner
 
 #### DONE
+
+_0.13.2_
+
+- separate player name elements to either side of next button
+- move results and instructions into a container on the next line
+- style player indicators as sort of slanted grey boxes with white outlines
+- make player indicators both unhighlighted during player transition for two humans
+- get current player indicator to switch if 1+ player is not human
+- add gradient to name boxes
 
 _0.13.1_
 

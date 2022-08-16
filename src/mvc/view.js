@@ -18,19 +18,14 @@ const setupGame = () => {
   const gameContainer = document.createElement('div');
   gameContainer.classList.add('game-container');
   gameContainer.append(p1Grid, p2Grid);
-  // displayShipsOnGrid(p1, p1Grid);
-  // displayShipsOnGrid(p2, p2Grid);
   const nextButton = createNextTurnButton();
-  uiContainer.append(
-    createNameElements(),
-    nextButton,
-    createAttackResult(),
-    createMatchResult(),
-    createInstructions()
-  );
+  uiContainer.append(createNameElement(p1), nextButton, createNameElement(p2));
+  const resultsContainer = document.createElement('div');
+  resultsContainer.classList.add('results-container');
+  resultsContainer.append(createAttackResult(), createMatchResult(), createInstructions());
 
   const { body } = document;
-  body.append(gameContainer, uiContainer);
+  body.append(gameContainer, uiContainer, resultsContainer);
   p1Grid.classList.add('grid-unclickable');
   p2Grid.classList.add('grid-unclickable');
 
@@ -123,27 +118,27 @@ const displayHits = (player, gridElement) => {
     }
   }
 };
-const createNameElements = () => {
-  const playerNamesElement = document.createElement('div');
-  playerNamesElement.classList.add('ui-playerNames');
-  for (let i = 0; i < 2; i++) {
-    const nameElement = document.createElement('div');
-    nameElement.classList.add('ui-name');
-    nameElement.textContent = [p1.name, p2.name][i];
-    const playerTypeContainer = document.createElement('div');
-    playerTypeContainer.classList.add('ui-playerTypeContainer');
-    const playerTypeLabel = document.createElement('label');
-    playerTypeLabel.textContent = 'Computer?';
-    playerTypeLabel.setAttribute('for', `p${i + 1}-type`);
-    playerTypeLabel.classList.add('ui-playerTypeLabel');
-    const typeToggle = document.createElement('input');
-    typeToggle.type = 'checkbox';
-    typeToggle.id = `p${i + 1}-type`;
-    typeToggle.classList.add('ui-playerTypeCheckbox');
-    playerTypeContainer.append(playerTypeLabel, typeToggle);
-    playerNamesElement.append(nameElement, playerTypeContainer);
-  }
-  return playerNamesElement;
+const createNameElement = (player) => {
+  const playerNameContainer = document.createElement('div');
+  playerNameContainer.classList.add('ui-playerNameContainer');
+  const playerIndex = [p1, p2].findIndex((p) => p === player);
+
+  const nameElement = document.createElement('div');
+  nameElement.classList.add('ui-name');
+  nameElement.textContent = `Player ${playerIndex + 1}`;
+  const playerTypeContainer = document.createElement('div');
+  playerTypeContainer.classList.add('ui-playerTypeContainer');
+  const playerTypeLabel = document.createElement('label');
+  playerTypeLabel.textContent = 'Computer?';
+  playerTypeLabel.setAttribute('for', `p${playerIndex + 1}-type`);
+  playerTypeLabel.classList.add('ui-playerTypeLabel');
+  const typeToggle = document.createElement('input');
+  typeToggle.type = 'checkbox';
+  typeToggle.id = `p${playerIndex + 1}-type`;
+  typeToggle.classList.add('ui-playerTypeCheckbox');
+  playerTypeContainer.append(typeToggle, playerTypeLabel);
+  playerNameContainer.append(nameElement, playerTypeContainer);
+  return playerNameContainer;
 };
 const handlePlayerTypeToggles = () => {
   const typeToggles = document.querySelectorAll('.ui-playerTypeCheckbox');
@@ -185,25 +180,25 @@ const createNextTurnButton = () => {
 };
 const createAttackResult = () => {
   const resultContainer = document.createElement('div');
-  resultContainer.classList.add('ui-resultContainer');
+  resultContainer.classList.add('results-turnContainer');
   resultContainer.textContent = 'Target hit: ';
   const result = document.createElement('span');
-  result.classList.add('ui-result');
+  result.classList.add('results-turnResult');
   result.textContent = 'test';
   resultContainer.append(result);
-  resultContainer.classList.add('ui-resultContainer-hidden');
+  resultContainer.classList.add('results-turnContainer-hidden');
   return resultContainer;
 };
 const createMatchResult = () => {
   const resultEl = document.createElement('div');
-  resultEl.classList.add('ui-matchResult');
-  resultEl.classList.add('ui-matchResult-hidden');
+  resultEl.classList.add('results-matchResult');
+  resultEl.classList.add('results-matchResult-hidden');
   return resultEl;
 };
 const createInstructions = () => {
   const instructionsEl = document.createElement('div');
-  instructionsEl.classList.add('ui-instructions');
-  instructionsEl.classList.add('ui-instructions-hidden');
+  instructionsEl.classList.add('results-instructions');
+  instructionsEl.classList.add('results-instructions-hidden');
   instructionsEl.textContent = 'Click to move a ship.\nPress any key to turn it.';
   return instructionsEl;
 };
@@ -215,27 +210,29 @@ const enableNextTurnButton = () => {
 const startTurn = () => {
   const [grid1, grid2] = Array.from(document.querySelectorAll('.grid-outerContainer'));
   const [innerGrid1, innerGrid2] = Array.from(document.querySelectorAll('.grid-innerContainer'));
-  const instructions = document.querySelector('.ui-instructions');
+  const instructions = document.querySelector('.results-instructions');
 
-  document.querySelector('.ui-resultContainer').classList.add('ui-resultContainer-hidden');
+  document.querySelector('.results-turnContainer').classList.add('results-turnContainer-hidden');
   if (p1.turnNum !== 0 && p1.isHuman && p2.isHuman) {
     [innerGrid1, innerGrid2].forEach((g) => {
       g.classList.toggle('grid-innerContainer-transition');
     });
     if (innerGrid1.classList.contains('grid-innerContainer-transition')) {
-      instructions.classList.remove('ui-instructions-hidden');
+      instructions.classList.remove('results-instructions-hidden');
       instructions.textContent = `Pass the game to ${p1.currentTurn ? p2.name : p1.name}!`;
+      const nameElements = Array.from(document.querySelectorAll('.ui-name'));
+      nameElements.forEach((el) => el.classList.remove('ui-name-current'));
       return;
     }
     instructions.textContent = 'Click to move a ship.\nPress any key to turn it.';
   }
   switchTurns();
   if (isRoundZero()) {
-    instructions.classList.remove('ui-instructions-hidden');
+    instructions.classList.remove('results-instructions-hidden');
     startRoundZero();
     return;
   }
-  instructions.classList.add('ui-instructions-hidden');
+  instructions.classList.add('results-instructions-hidden');
   if (p1.currentTurn && p1.turnNum === 2) {
     const allSpaceEls = [];
     allSpaceEls.push(...getGridSpaceElements(grid1));
@@ -245,7 +242,7 @@ const startTurn = () => {
     });
     if (p1.isHuman && !p2.isHuman) {
       instructions.textContent = `${p1.name}, launch your first attack!`;
-      instructions.classList.remove('ui-instructions-hidden');
+      instructions.classList.remove('results-instructions-hidden');
     }
   }
   const currentPlayer = p1.currentTurn ? p1 : p2;
@@ -302,7 +299,13 @@ const switchTurns = () => {
       toggleShipVisibility(p2);
       toggleShipVisibility(p1);
     }
-    nameElements.forEach((name) => name.classList.toggle('ui-name-current'));
+    nameElements.forEach((name, index) => {
+      if (players[index].currentTurn) {
+        name.classList.add('ui-name-current');
+      } else {
+        name.classList.remove('ui-name-current');
+      }
+    });
   }
 
   if (isRoundZero()) {
@@ -564,16 +567,16 @@ const displayNewHit = (space, enemy, gridElement) => {
 const displayAttackResult = (enemy, space) => {
   const { ship } = enemy.gameboard.grid[space.dataset.row][space.dataset.col];
   if (ship) {
-    const resultElement = document.querySelector('.ui-result');
+    const resultElement = document.querySelector('.results-turnResult');
     resultElement.textContent = ship.name;
-    const resultContainer = document.querySelector('.ui-resultContainer');
-    resultContainer.classList.remove('ui-resultContainer-hidden');
+    const resultContainer = document.querySelector('.results-turnContainer');
+    resultContainer.classList.remove('results-turnContainer-hidden');
   }
 };
 const endGame = (winner) => {
-  const resultEl = document.querySelector('.ui-matchResult');
+  const resultEl = document.querySelector('.results-matchResult');
   resultEl.textContent = winner === 'tie' ? 'Tie!' : `${winner} wins!`;
-  resultEl.classList.remove('ui-matchResult-hidden');
+  resultEl.classList.remove('results-matchResult-hidden');
   const nextButton = document.querySelector('.ui-nextButton');
   nextButton.removeEventListener('click', startTurn);
   nextButton.textContent = 'New game?';
@@ -597,6 +600,7 @@ const deleteDOMElements = () => {
   const content = [
     document.querySelector('.game-container'),
     document.querySelector('.ui-container'),
+    document.querySelector('.results-container'),
   ];
   content.forEach((item) => item.remove());
 };
@@ -621,5 +625,5 @@ export {
   addAttackListeners,
   enableNextTurnButton,
   launchAttack,
-  createNameElements,
+  createNameElement as createNameElements,
 };
