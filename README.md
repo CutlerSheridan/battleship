@@ -6,7 +6,7 @@ Play by yourself, with a friend, or watch two AIs play each other! Place your sh
 
 #### TODO NEXT
 
-- if mobile portrait, display note to turn landscape
+- figure out how to turn ships on mobile
 
 #### TODO LATER
 
@@ -16,12 +16,10 @@ Play by yourself, with a friend, or watch two AIs play each other! Place your sh
 
 ##### Behavior
 
-- figure out how to turn ships on mobile
-- get ios touches to respond better when zoomed out
-
 ##### Style
 
 - make sure ship pegs don't shift upon sinking
+- decide if hits should be shown differently for mobile
 
 ##### Maybe
 
@@ -33,6 +31,13 @@ Play by yourself, with a friend, or watch two AIs play each other! Place your sh
 - add sounds for hits and misses
 
 #### DONE
+
+_0.14.1_
+
+- refactor deleteDOMElements();
+- change class name for match result
+- if mobile portrait, display note to turn landscape
+- adjust sizing breakpoints
 
 _0.14.0_
 

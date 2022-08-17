@@ -29,17 +29,26 @@ const createGame = () => {
   const nextButton = createNextTurnButton();
   uiContainer.append(createNameElement(p1), nextButton, createNameElement(p2));
   nextButton.addEventListener('click', startTurn);
-
   const resultsContainer = document.createElement('div');
   resultsContainer.classList.add('results-container');
   resultsContainer.append(createAttackResult(), createInstructions());
+
+  const sizeWarningContainer = document.createElement('div');
+  sizeWarningContainer.classList.add('sizeWarning-container');
+  const sizeWarningBanner = document.createElement('div');
+  sizeWarningBanner.classList.add('sizeWarning-banner');
+  const sizeWarning = document.createElement('p');
+  sizeWarning.textContent =
+    'Game is too wide to fit this screen.\nPlease turn your device landscape or expand this window.';
+  sizeWarningBanner.append(sizeWarning);
+  sizeWarningContainer.append(sizeWarningBanner);
 
   const gameContainer = document.createElement('div');
   gameContainer.classList.add('game-container');
   gameContainer.append(gridsContainer, uiContainer, resultsContainer);
   const contentContainer = document.createElement('div');
   contentContainer.classList.add('content-container');
-  contentContainer.append(gameContainer, createCredit());
+  contentContainer.append(gameContainer, createCredit(), sizeWarningContainer);
   return contentContainer;
 };
 const createGrid = () => {
@@ -200,8 +209,8 @@ const createAttackResult = () => {
 };
 const createMatchResult = () => {
   const resultEl = document.createElement('div');
-  resultEl.classList.add('results-matchResult');
-  resultEl.classList.add('results-matchResult-hidden');
+  resultEl.classList.add('grid-matchResult');
+  resultEl.classList.add('grid-matchResult-hidden');
   resultEl.textContent = '[Player] wins!';
   return resultEl;
 };
@@ -599,20 +608,20 @@ const displayAttackResult = (enemy, space) => {
   }
 };
 const endGame = (winner) => {
-  const resultEl = document.querySelector('.results-matchResult');
+  const resultEl = document.querySelector('.grid-matchResult');
   resultEl.textContent = winner === 'tie' ? 'Tie!' : `${winner} wins!`;
-  resultEl.classList.remove('results-matchResult-hidden');
+  resultEl.classList.remove('grid-matchResult-hidden');
   const nextButton = document.querySelector('.ui-nextButton');
   nextButton.removeEventListener('click', startTurn);
   nextButton.textContent = 'New game?';
   nextButton.addEventListener('click', restartGame, { once: true });
 };
 const restartGame = () => {
-  const matchResultEl = document.querySelector('.results-matchResult');
+  const matchResultEl = document.querySelector('.grid-matchResult');
   const turnResultEl = document.querySelector('.results-turnContainer');
   turnResultEl.classList.add('results-turnContainer-hidden');
-  if (!matchResultEl.classList.contains('results-matchResult-hidden')) {
-    matchResultEl.classList.add('results-matchResult-hidden');
+  if (!matchResultEl.classList.contains('grid-matchResult-hidden')) {
+    matchResultEl.classList.add('grid-matchResult-hidden');
     matchResultEl.addEventListener(
       'transitionend',
       () => {
@@ -638,14 +647,9 @@ const restartGameStepTwo = () => {
   });
   handlePlayerTypeToggles();
 };
-const deleteDOMElements = () => {
-  const content = [
-    document.querySelector('.game-container'),
-    document.querySelector('.ui-container'),
-    document.querySelector('.results-container'),
-  ];
-  content.forEach((item) => item.remove());
-};
+
+const deleteDOMElements = () => document.querySelector('.content-container').remove();
+
 const getGridSpaceElements = (gridElement) => {
   const spaceElements = [];
   for (let i = 0; i < 10; i++) {
