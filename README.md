@@ -6,13 +6,11 @@ Play by yourself, with a friend, or watch two AIs play each other! Place your sh
 
 #### TODO NEXT
 
-- figure out how to turn ships on mobile
+- make player's own ships display with borders
 
 #### TODO LATER
 
 ##### Features
-
-- display players' ship statuses
 
 ##### Behavior
 
@@ -23,14 +21,19 @@ Play by yourself, with a friend, or watch two AIs play each other! Place your sh
 
 ##### Maybe
 
-- make player's own ships display with borders
-- make out-of-bound edge highlight red when relocating your ship
-- extricate game loop from view.js somehow?
+- display players' ship statuses
 - add ability for two people at separate computers to play by calling out coordinates
 - start game with all ships off the board instead of in corner
+- extricate game loop from view.js somehow?
+- make out-of-bound edge highlight red when relocating your ship
 - add sounds for hits and misses
 
 #### DONE
+
+_1.0.0_
+
+- enable double-tapping to turn on mobile
+- adjust color of hovered squares
 
 _0.14.1_
 

@@ -218,7 +218,7 @@ const createInstructions = () => {
   const instructionsEl = document.createElement('div');
   instructionsEl.classList.add('results-instructions');
   instructionsEl.classList.add('results-instructions-hidden');
-  instructionsEl.textContent = 'Click to move a ship.\nPress any key to turn it.';
+  instructionsEl.textContent = 'Click to move a ship.\nPress any key or double tap to turn it.';
   return instructionsEl;
 };
 const createCredit = () => {
@@ -257,7 +257,7 @@ const startTurn = () => {
       return;
     }
     if (p2.turnNum < 1) {
-      instructions.textContent = 'Click to move a ship.\nPress any key to turn it.';
+      instructions.textContent = 'Click to move a ship.\nPress any key or double tap to turn it.';
     }
   }
   switchTurns();
@@ -410,6 +410,7 @@ const handleRelocLift = (e) => {
     space.addEventListener('mouseenter', handleLiftedHover, { useCapture: true });
   });
   document.addEventListener('keydown', handleKeyPress);
+  document.addEventListener('dblclick', handleKeyPress);
   document.querySelector('.ui-nextButton').classList.add('ui-nextButton-unclickable');
 };
 const handleKeyPress = (e) => {

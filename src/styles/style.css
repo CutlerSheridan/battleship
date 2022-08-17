@@ -141,7 +141,7 @@ body {
 }
 @media (hover: hover) {
   .grid-space:not([data-row='-1'], [data-col='-1'], .grid-potentialSpace-empty, .grid-potentialSpace-occupied):hover {
-    background: pink;
+    background: var(--clr-sec);
   }
 }
 .grid-space-occupied:not(.grid-space-secretlyOccupied) {
