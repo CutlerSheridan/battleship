@@ -10,29 +10,38 @@ const setupGame = () => {
   p2 = model.Player('Player 2');
   controller.placeAllShips(p1);
   controller.placeAllShips(p2);
+
+  const { body } = document;
+  body.append(createGame());
+
+  handlePlayerTypeToggles();
+};
+const createGame = () => {
   const p1Grid = createGrid();
   const p2Grid = createGrid();
-
+  const gridsContainer = document.createElement('div');
+  gridsContainer.classList.add('grids-container');
+  gridsContainer.append(p1Grid, p2Grid, createMatchResult());
+  p1Grid.classList.add('grid-unclickable');
+  p2Grid.classList.add('grid-unclickable');
   const uiContainer = document.createElement('div');
   uiContainer.classList.add('ui-container');
-  const gameContainer = document.createElement('div');
-  gameContainer.classList.add('game-container');
-  gameContainer.append(p1Grid, p2Grid, createMatchResult());
   const nextButton = createNextTurnButton();
   uiContainer.append(createNameElement(p1), nextButton, createNameElement(p2));
+  nextButton.addEventListener('click', startTurn);
+
   const resultsContainer = document.createElement('div');
   resultsContainer.classList.add('results-container');
   resultsContainer.append(createAttackResult(), createInstructions());
 
-  const { body } = document;
-  body.append(gameContainer, uiContainer, resultsContainer);
-  p1Grid.classList.add('grid-unclickable');
-  p2Grid.classList.add('grid-unclickable');
-
-  nextButton.addEventListener('click', startTurn);
-  handlePlayerTypeToggles();
+  const gameContainer = document.createElement('div');
+  gameContainer.classList.add('game-container');
+  gameContainer.append(gridsContainer, uiContainer, resultsContainer);
+  const contentContainer = document.createElement('div');
+  contentContainer.classList.add('content-container');
+  contentContainer.append(gameContainer, createCredit());
+  return contentContainer;
 };
-
 const createGrid = () => {
   const gridOuterContainer = document.createElement('div');
   gridOuterContainer.classList.add('grid-outerContainer');
@@ -202,6 +211,19 @@ const createInstructions = () => {
   instructionsEl.classList.add('results-instructions-hidden');
   instructionsEl.textContent = 'Click to move a ship.\nPress any key to turn it.';
   return instructionsEl;
+};
+const createCredit = () => {
+  const creditContainer = document.createElement('footer');
+  const creditFirstLine = document.createElement('p');
+  creditFirstLine.textContent = 'Made by Cutler Sheridan.';
+  const creditLabel = document.createElement('p');
+  creditLabel.textContent = 'See more ';
+  const creditLink = document.createElement('a');
+  creditLink.href = 'cutlersheridan.github.io/portfolio';
+  creditLink.textContent = 'here.';
+  creditLabel.append(creditLink);
+  creditContainer.append(creditFirstLine, creditLabel);
+  return creditContainer;
 };
 
 const enableNextTurnButton = () => {

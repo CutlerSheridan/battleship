@@ -6,7 +6,7 @@ Play by yourself, with a friend, or watch two AIs play each other! Place your sh
 
 #### TODO NEXT
 
-- add credit
+- if mobile portrait, display note to turn landscape
 
 #### TODO LATER
 
@@ -21,8 +21,6 @@ Play by yourself, with a friend, or watch two AIs play each other! Place your sh
 
 ##### Style
 
-- reformat ui position for mobile
-- if mobile portrait, display note to turn landscape
 - make sure ship pegs don't shift upon sinking
 
 ##### Maybe
@@ -35,6 +33,12 @@ Play by yourself, with a friend, or watch two AIs play each other! Place your sh
 - add sounds for hits and misses
 
 #### DONE
+
+_0.14.0_
+
+- add credit
+- reformat some styling for mobile browsers
+- find new font to replace Impact because Impact, by default, is not included in mobile browsers
 
 _0.13.4_
 
