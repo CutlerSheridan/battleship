@@ -89,7 +89,9 @@ const displayShipsOnGrid = (player, gridElement) => {
   for (let i = 0; i < pGrid.length; i++) {
     for (let n = 0; n < pGrid[0].length; n++) {
       if (!pGrid[i][n].ship) {
-        const spaceEl = gridElement.querySelector(`.grid-space[data-row="${i}"][data-col="${n}"]`);
+        const spaceEl = gridElement.querySelector(
+          `.grid-space[data-row="${i}"][data-col="${n}"]`
+        );
         spaceEl.classList.remove('grid-space-occupied');
         spaceEl.classList.add('grid-space-empty');
         const spaceElContent = spaceEl.querySelector('.grid-spaceContent');
@@ -125,7 +127,9 @@ const displayHits = (player, gridElement) => {
   for (let i = 0; i < gridObj.length; i++) {
     for (let n = 0; n < gridObj[0].length; n++) {
       if (gridObj[i][n].hasBeenHit) {
-        const space = gridElement.querySelector(`[data-row="${i}"][data-col="${n}"]`);
+        const space = gridElement.querySelector(
+          `[data-row="${i}"][data-col="${n}"]`
+        );
         space.classList.add('grid-space-hit');
         if (gridObj[i][n].ship) {
           if (!space.classList.contains('grid-space-occupied')) {
@@ -168,7 +172,9 @@ const handlePlayerTypeToggles = () => {
   typeToggles.forEach((toggle, index) => {
     toggle.addEventListener('change', () => {
       originalButtonText.push(nextButton.textContent);
-      isButtonUnclickable.push(nextButton.classList.contains('ui-nextButton-unclickable'));
+      isButtonUnclickable.push(
+        nextButton.classList.contains('ui-nextButton-unclickable')
+      );
       if (
         toggle.checked !== originalSettings[index] ||
         typeToggles[1 - index].checked !== originalSettings[1 - index]
@@ -218,7 +224,8 @@ const createInstructions = () => {
   const instructionsEl = document.createElement('div');
   instructionsEl.classList.add('results-instructions');
   instructionsEl.classList.add('results-instructions-hidden');
-  instructionsEl.textContent = 'Click to move a ship.\nPress any key or double tap to turn it.';
+  instructionsEl.textContent =
+    'Click to move a ship.\nPress any key or double tap to turn it.';
   return instructionsEl;
 };
 const createCredit = () => {
@@ -228,7 +235,7 @@ const createCredit = () => {
   const creditLabel = document.createElement('p');
   creditLabel.textContent = 'See more ';
   const creditLink = document.createElement('a');
-  creditLink.href = 'cutlersheridan.github.io/portfolio';
+  creditLink.href = 'https://cutlersheridan.github.io/portfolio';
   creditLink.textContent = 'here.';
   creditLabel.append(creditLink);
   creditContainer.append(creditFirstLine, creditLabel);
@@ -240,24 +247,33 @@ const enableNextTurnButton = () => {
   nextButton.addEventListener('click', startTurn);
 };
 const startTurn = () => {
-  const [grid1, grid2] = Array.from(document.querySelectorAll('.grid-outerContainer'));
-  const [innerGrid1, innerGrid2] = Array.from(document.querySelectorAll('.grid-innerContainer'));
+  const [grid1, grid2] = Array.from(
+    document.querySelectorAll('.grid-outerContainer')
+  );
+  const [innerGrid1, innerGrid2] = Array.from(
+    document.querySelectorAll('.grid-innerContainer')
+  );
   const instructions = document.querySelector('.results-instructions');
 
-  document.querySelector('.results-turnContainer').classList.add('results-turnContainer-hidden');
+  document
+    .querySelector('.results-turnContainer')
+    .classList.add('results-turnContainer-hidden');
   if (p1.turnNum !== 0 && p1.isHuman && p2.isHuman) {
     [innerGrid1, innerGrid2].forEach((g) => {
       g.classList.toggle('grid-innerContainer-transition');
     });
     if (innerGrid1.classList.contains('grid-innerContainer-transition')) {
       instructions.classList.remove('results-instructions-hidden');
-      instructions.textContent = `Pass the game to ${p1.currentTurn ? p2.name : p1.name}!`;
+      instructions.textContent = `Pass the game to ${
+        p1.currentTurn ? p2.name : p1.name
+      }!`;
       const nameElements = Array.from(document.querySelectorAll('.ui-name'));
       nameElements.forEach((el) => el.classList.remove('ui-name-current'));
       return;
     }
     if (p2.turnNum < 1) {
-      instructions.textContent = 'Click to move a ship.\nPress any key or double tap to turn it.';
+      instructions.textContent =
+        'Click to move a ship.\nPress any key or double tap to turn it.';
     }
   }
   switchTurns();
@@ -382,7 +398,9 @@ const addRelocShipListeners = () => {
   } else {
     shipSpaces = allShipSpaces.splice(allShipSpaces.length / 2);
   }
-  shipSpaces.forEach((space) => space.addEventListener('click', handleRelocLift));
+  shipSpaces.forEach((space) =>
+    space.addEventListener('click', handleRelocLift)
+  );
 };
 const handleRelocLift = (e) => {
   const player = p1.currentTurn ? p1 : p2;
@@ -407,11 +425,15 @@ const handleRelocLift = (e) => {
   allSpaceEls.forEach((space) => {
     space.removeEventListener('click', handleRelocLift);
     space.addEventListener('click', handleRelocPlace);
-    space.addEventListener('mouseenter', handleLiftedHover, { useCapture: true });
+    space.addEventListener('mouseenter', handleLiftedHover, {
+      useCapture: true,
+    });
   });
   document.addEventListener('keydown', handleKeyPress);
   document.addEventListener('dblclick', handleKeyPress);
-  document.querySelector('.ui-nextButton').classList.add('ui-nextButton-unclickable');
+  document
+    .querySelector('.ui-nextButton')
+    .classList.add('ui-nextButton-unclickable');
 };
 const handleKeyPress = (e) => {
   handleLiftedHover(e);
@@ -440,7 +462,10 @@ const handleLiftedHover = (e) => {
   const changingAxis = ship.isHorizontal ? 'col' : 'row';
   for (let i = 0; i < potentialCoords.length; i++) {
     const coord = potentialCoords[i];
-    if (coord[changingAxis] >= 0 && coord[changingAxis] < player.gameboard.grid.length) {
+    if (
+      coord[changingAxis] >= 0 &&
+      coord[changingAxis] < player.gameboard.grid.length
+    ) {
       const spaceEl = pGridElement.querySelector(
         `.grid-space[data-row="${coord.row}"][data-col="${coord.col}"]`
       );
@@ -476,10 +501,14 @@ const handleRelocPlace = (e) => {
     allSpaceEls.forEach((space) => {
       space.removeEventListener('click', handleRelocPlace);
       space.removeEventListener('mouseenter', handleLiftedHover);
-      space.removeEventListener('mouseleave', handleLiftedHover, { once: true });
+      space.removeEventListener('mouseleave', handleLiftedHover, {
+        once: true,
+      });
     });
     document.removeEventListener('keydown', handleKeyPress);
-    document.querySelector('.ui-nextButton').classList.remove('ui-nextButton-unclickable');
+    document
+      .querySelector('.ui-nextButton')
+      .classList.remove('ui-nextButton-unclickable');
 
     addRelocShipListeners();
   }
@@ -531,7 +560,12 @@ const addAttackListeners = () => {
           'click',
           (e) => {
             e.preventDefault();
-            attackHandler(gridElements[1 - index], p, players[1 - index], space);
+            attackHandler(
+              gridElements[1 - index],
+              p,
+              players[1 - index],
+              space
+            );
           },
           { once: true }
         )
@@ -636,7 +670,10 @@ const restartGame = () => {
 };
 const restartGameStepTwo = () => {
   let playerTypeToggles = document.querySelectorAll('.ui-playerTypeCheckbox');
-  const playerTypes = [playerTypeToggles[0].checked, playerTypeToggles[1].checked];
+  const playerTypes = [
+    playerTypeToggles[0].checked,
+    playerTypeToggles[1].checked,
+  ];
   deleteDOMElements();
   setupGame();
   playerTypeToggles = document.querySelectorAll('.ui-playerTypeCheckbox');
@@ -649,14 +686,17 @@ const restartGameStepTwo = () => {
   handlePlayerTypeToggles();
 };
 
-const deleteDOMElements = () => document.querySelector('.content-container').remove();
+const deleteDOMElements = () =>
+  document.querySelector('.content-container').remove();
 
 const getGridSpaceElements = (gridElement) => {
   const spaceElements = [];
   for (let i = 0; i < 10; i++) {
     for (let n = 0; n < 10; n++) {
       spaceElements.push(
-        gridElement.querySelector(`.grid-space[data-row="${i}"][data-col="${n}"]`)
+        gridElement.querySelector(
+          `.grid-space[data-row="${i}"][data-col="${n}"]`
+        )
       );
     }
   }

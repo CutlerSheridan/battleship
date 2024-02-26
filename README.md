@@ -30,6 +30,10 @@ Play by yourself, with a friend, or watch two AIs play each other! Place your sh
 
 #### DONE
 
+_1.0.1_
+
+- fix portfolio link
+
 _1.0.0_
 
 - enable double-tapping to turn on mobile
