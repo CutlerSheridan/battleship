@@ -30,6 +30,10 @@ Play by yourself, with a friend, or watch two AIs play each other! Place your sh
 
 #### DONE
 
+_1.0.2_
+
+- in test suites, group functions under 'describe'
+
 _1.0.1_
 
 - fix portfolio link
